@@ -1,101 +1,87 @@
-import Image from "next/image";
+"use client"
+import React from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    const sliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: false,
+        autoplaySpeed: 3000,
+    };
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    const sliders = [
+        {title: "Your Trusted Healthcare Partner", description: "Specialist Channeling, OPD, and Dental Care in Kundasale, Kandy."},
+        {title: "Comprehensive Care for All Ages", description: "From routine checkups to specialized treatments, we’ve got you covered."},
+        {title: "Serving the Community Since 2008", description: "Experience compassionate care at Binara Medical Centre."},
+    ];
+
+    const services = [
+        {
+            image: "👨‍⚕️", title: "Specialist Channeling", description: "Consult with experienced specialists in various fields. Book your appointment today.",
+            cssClass: "bg-gradient-to-r from-rose-100 to-teal-100"
+        },
+        {
+            image: "🏥",
+            title: "OPD Services",
+            description: "Outpatient services for all your general healthcare needs. Walk in or book online.",
+            cssClass: "bg-gradient-to-tr from-violet-100 to-orange-100"
+        },
+        {
+            image: "🦷",
+            title: "Dental Care",
+            description: "Comprehensive dental services for a healthy smile. From cleanings to advanced treatments.",
+            cssClass: "bg-gradient-to-r from-blue-100 to-cyan-100"
+        },
+    ];
+
+    return (
+        <div>
+            {/* Slider Section */}
+            <section className="max-w-7xl mx-auto">
+                <div className="grid grid-cols-3 gap-6 py-8">
+                    <Slider {...sliderSettings} className="col-span-2 my-24">
+                        {sliders.map((slider, index) => (
+                            <div className="slider-item" key={index}>
+                                <h1 className="text-5xl font-bold">{slider.title}</h1>
+                                <p className="text-gray-600 mt-6">{slider.description}</p>
+                                <button className=" bg-purple-900 text-white mt-8 text-sm rounded-full py-4 px-8">Book an Appointment</button>
+                            </div>
+                        ))}
+                    </Slider>
+                    <div className="rounded-3xlz"></div>
+                </div>
+            </section>
+            {/* Services Section */}
+            <section className="bg-gradient-to-br from-amber-50 via-red-50 to-violet-50 py-24">
+                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6">
+                    {services.map((service, index) => (
+                        <div className="text-center  border-gray-200 rounded-xl bg-white" key={index}>
+                            <div className={`text-9xl p-8 rounded-t-xl ${service.cssClass}`}>{service.image}</div>
+                            <h2 className="text-2xl px-4 pt-10 font-semibold">{service.title}</h2>
+                            <p className="text-gray-600 pb-12 px-6 pt-4">{service.description}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* About Us Section */}
+            <section className="about-us py-24">
+                <div className="max-w-5xl mx-auto text-center">
+                    <h2 className="text-4xl font-bold">About Binara Medical Centre</h2>
+                    <p className="text-gray-500 mt-6">
+                        Binara Medical Centre has been a trusted name in healthcare since 2008. Located in the heart of Kundasale, Kandy, we are dedicated to providing high-quality
+                        medical services to our community. Our team of experienced doctors and staff are committed to ensuring your well-being through personalized care and
+                        state-of-the-art facilities. Whether you need specialist consultations, OPD services, or dental care, we are here to serve you with compassion and
+                        expertise.
+                    </p>
+                </div>
+            </section>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    );
 }
