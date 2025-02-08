@@ -44,13 +44,13 @@ export default function Home() {
         <div>
             {/* Slider Section */}
             <section className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-3 gap-6 py-8">
-                    <Slider {...sliderSettings} className="col-span-2 my-24">
+                <div className="grid grid-cols-3 gap-6 py-8 px-4">
+                    <Slider {...sliderSettings} className="col-span-3 lg:col-span-2 lg:my-24">
                         {sliders.map((slider, index) => (
                             <div className="slider-item" key={index}>
                                 <h1 className="text-5xl font-bold">{slider.title}</h1>
                                 <p className="text-gray-600 mt-6">{slider.description}</p>
-                                <button className=" bg-purple-900 text-white mt-8 text-sm rounded-full py-4 px-8">Book an Appointment</button>
+                                <button className=" bg-purple-900 text-white mt-8 text-sm rounded-full py-4 px-8 mb-6">Book an Appointment</button>
                             </div>
                         ))}
                     </Slider>
@@ -58,8 +58,8 @@ export default function Home() {
                 </div>
             </section>
             {/* Services Section */}
-            <section className="bg-gradient-to-br from-amber-50 via-red-50 to-violet-50 py-24">
-                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6">
+            <section className="bg-gradient-to-br from-amber-50 via-red-50 to-violet-50 lg:py-24">
+                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
                     {services.map((service, index) => (
                         <div className="text-center  border-gray-200 rounded-xl bg-white" key={index}>
                             <div className={`text-9xl p-8 rounded-t-xl ${service.cssClass}`}>{service.image}</div>
@@ -71,7 +71,7 @@ export default function Home() {
             </section>
 
             {/* About Us Section */}
-            <section className="about-us py-24">
+            <section className="about-us p-4 py-12 lg:py-24">
                 <div className="max-w-5xl mx-auto text-center">
                     <h2 className="text-4xl font-bold">About Binara Medical Centre</h2>
                     <p className="text-gray-500 mt-6">
