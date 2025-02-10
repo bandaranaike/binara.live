@@ -1,10 +1,12 @@
 "use client"
-import React from 'react';
+import React, {useState} from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import DoctorBooking from "@/components/DoctorBooking";
 
 export default function Home() {
+    const [isBookingWindowOpen, setIsBookingWindowOpen] = useState<boolean>(false)
     const sliderSettings = {
         dots: true,
         infinite: true,
@@ -40,6 +42,9 @@ export default function Home() {
         },
     ];
 
+    const showBookingWindow = () => {
+        setIsBookingWindowOpen(true)
+    };
     return (
         <div>
             {/* Slider Section */}
@@ -50,7 +55,10 @@ export default function Home() {
                             <div className="slider-item" key={index}>
                                 <h1 className="text-5xl font-bold">{slider.title}</h1>
                                 <p className="text-gray-600 mt-6">{slider.description}</p>
-                                <button className=" bg-purple-900 text-white mt-8 text-sm rounded-full py-4 px-8 mb-6">Book an Appointment</button>
+                                <button
+                                    onClick={showBookingWindow}
+                                    className=" bg-purple-900 text-white mt-8 text-sm rounded-full py-4 px-8 mb-6">Book an Appointment
+                                </button>
                             </div>
                         ))}
                     </Slider>
@@ -90,6 +98,7 @@ export default function Home() {
                     </p>
                 </div>
             </section>
+            {isBookingWindowOpen && <DoctorBooking onCloseBookingWindow={() => setIsBookingWindowOpen(false)}/>}
         </div>
     );
 }

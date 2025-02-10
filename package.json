@@ -11,6 +11,9 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "axios": "^1.7.9",
+    "flowbite-react": "^0.10.2",
+    "libphonenumber-js": "^1.11.19",
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
