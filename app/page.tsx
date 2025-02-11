@@ -62,7 +62,24 @@ export default function Home() {
                             </div>
                         ))}
                     </Slider>
-                    <div className="rounded-3xlz"></div>
+                    <div className="rounded-xl border bg-gradient-to-tl from-purple-50 to-rose-50">
+                        <ul className="overflow-y-scroll max-h-fit">
+                            <li className="bg-white p-4 rounded-t-xl text-xl font-semibold border-b border-gray-200">Today&#39;s doctors list</li>
+                            {Array.from(Array(6)).map(item =>
+                                <li className="border-b border-gray-200 py-2 px-4 flex items-center justify-between" key={item}>
+                                    <div>
+                                        <h4 className="font-semibold">Doctor Alahakoon</h4>
+                                        <p className="text-sm text-gray-500">Obstetrics and Gynecology</p>
+                                    </div>
+                                    <div className="">
+                                        <div className="text-gray-500 text-xs">Today</div>
+                                        <div className="text-purple-600 text-sm font-semibold">5.30PM - 8.30PM</div>
+                                    </div>
+                                </li>
+                            )}
+                            <li className="bg-white p-3 rounded-b-xl">Full calendar</li>
+                        </ul>
+                    </div>
                 </div>
             </section>
             {/* Services Section */}
