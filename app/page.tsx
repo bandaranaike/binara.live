@@ -49,8 +49,8 @@ export default function Home() {
         <div>
             {/* Slider Section */}
             <section className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-3 gap-6 py-8 px-4 lg:px-0">
-                    <Slider {...sliderSettings} className="col-span-3 lg:col-span-2 lg:my-16">
+                <div className="lg:grid lg:grid-cols-3 lg:gap-6 py-8 px-4 lg:px-0">
+                    <Slider {...sliderSettings} className="lg:col-span-2 lg:my-16">
                         {sliders.map((slider, index) => (
                             <div className="slider-item" key={index}>
                                 <h1 className="text-5xl font-bold">{slider.title}</h1>
@@ -62,11 +62,11 @@ export default function Home() {
                             </div>
                         ))}
                     </Slider>
-                    <div className="rounded-xl border bg-gradient-to-tl from-purple-50 to-rose-50">
+                    <div className="rounded-xl border bg-gradient-to-tl mt-16 lg:mt-0 from-purple-50 to-rose-50">
                         <ul className="overflow-y-scroll max-h-fit">
                             <li className="bg-white p-4 rounded-t-xl text-xl font-semibold border-b border-gray-200">Today&#39;s doctors list</li>
-                            {Array.from(Array(6)).map(item =>
-                                <li className="border-b border-gray-200 py-2 px-4 flex items-center justify-between" key={item}>
+                            {Array.from(Array(6)).map((item, i) =>
+                                <li className="border-b border-gray-200 py-2 px-4 flex items-center justify-between" key={i}>
                                     <div>
                                         <h4 className="font-semibold">Doctor Alahakoon</h4>
                                         <p className="text-sm text-gray-500">Obstetrics and Gynecology</p>

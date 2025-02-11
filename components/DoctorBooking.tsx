@@ -166,7 +166,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-            <div className="max-w-3xl flex-grow max-h-full overflow-y-scroll mx-auto bg-white rounded-2xl">
+            <div className="max-w-2xl flex-grow max-h-full overflow-y-scroll lg:mx-auto mx-4 bg-white rounded-2xl">
                 <div>
                     <div className="p-8 pb-0 relative">
                         <button title="Close window" className="absolute right-0 mr-4 -mt-4 text-gray-400 hover:text-purple-500" onClick={onCloseBookingWindow}>
@@ -178,14 +178,14 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
                     </div>
 
                     <div className="px-8 pt-6 pb-2">
-                        <div className="grid grid-cols-4 gap-4">
+                        <div className="lg:grid lg:grid-cols-4 gap-4">
                             <div>
                                 <Select className="mb-3" value={doctorType} onChange={(e) => setDoctorType(e.target.value)}>
                                     <option value="dental">Dental</option>
                                     <option value="specialist">Specialist</option>
                                 </Select>
                             </div>
-                            <div className="col-span-3">
+                            <div className="lg:col-span-3">
                                 {!isDoctorsLoading && <Select className="mb-1" value={selectedDoctor} onChange={(e) => changeDoctor(e.target.value)}>
                                     <option value="0">Please select...</option>
                                     {doctors && doctors.map((doc) => (
@@ -200,7 +200,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
                                 </div>
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="lg:grid lg:grid-cols-2 gap-4">
 
                             <Datepicker
                                 className="mb-3"
@@ -244,10 +244,10 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
                         {phoneError && <div className="text-red-500 text-sm mb-3 -mt-2 pl-1">{phoneError}</div>}
 
                         <div className="flex">
-                            <InformationCircleIcon width={20} className="mb-2 mr-2 text-purple-600"/>
-                            <span
-                                className="text-gray-500 text-sm"> Enter the phone number you use regularly. This ensures your booking and clinical history are linked correctly.</span>
-
+                            <InformationCircleIcon width={20} className="mb-2 mr-2 text-purple-600 sm:w-14 "/>
+                            <span className="text-gray-500 text-sm">
+                                Enter the phone number you use regularly. This ensures your booking and clinical history are linked correctly.
+                            </span>
 
                         </div>
                     </div>
@@ -273,7 +273,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
                     <div className="flex gap-4 px-8">
                         <Button onClick={handleBooking} color={"purple"} className="mt-4">Make Booking</Button>
                         <Button color={'gray'} onClick={onCloseBookingWindow} className="mt-4">Close</Button>
-                        {isFormSubmitting && <Loader/>}
+                        {isFormSubmitting && <div className="pt-5"><Loader/></div>}
                         {bookingResponse &&
                             <div className="text-green-600 mt-4 flex items-center">
                                 <CheckCircleIcon width={20} className="mr-1"/> Booking success!
