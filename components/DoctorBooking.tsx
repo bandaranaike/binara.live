@@ -244,7 +244,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
                         {phoneError && <div className="text-red-500 text-sm mb-3 -mt-2 pl-1">{phoneError}</div>}
 
                         <div className="flex">
-                            <InformationCircleIcon width={20} className="mb-2 mr-2 text-purple-600 sm:w-14 "/>
+                            <InformationCircleIcon width={20} className="mb-2 mr-2 text-purple-600 w-10 lg:w-8 "/>
                             <span className="text-gray-500 text-sm">
                                 Enter the phone number you use regularly. This ensures your booking and clinical history are linked correctly.
                             </span>

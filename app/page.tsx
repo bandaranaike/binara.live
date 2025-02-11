@@ -62,10 +62,10 @@ export default function Home() {
                             </div>
                         ))}
                     </Slider>
-                    <div className="rounded-xl border bg-gradient-to-tl mt-16 lg:mt-0 from-purple-50 to-rose-50">
+                    <div className="rounded-xl border bg-gradient-to-br mt-16 lg:mt-0 from-purple-50 to-rose-50">
                         <ul className="overflow-y-scroll max-h-fit">
                             <li className="bg-white p-4 rounded-t-xl text-xl font-semibold border-b border-gray-200">Today&#39;s doctors list</li>
-                            {Array.from(Array(6)).map((item, i) =>
+                            {Array.from(Array(4)).map((item, i) =>
                                 <li className="border-b border-gray-200 py-2 px-4 flex items-center justify-between" key={i}>
                                     <div>
                                         <h4 className="font-semibold">Doctor Alahakoon</h4>
