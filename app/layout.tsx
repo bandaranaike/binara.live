@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import {ThemeModeScript} from "flowbite-react";
+import UserProvider from "@/context/UserContext";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -29,9 +30,13 @@ export default function RootLayout({children,}: Readonly<{ children: React.React
         <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white pt-24 text-gray-800`}
         >
-        <Header/>
-        {children}
-        <Footer/>
+
+        <UserProvider>
+            <Header/>
+            {children}
+            <Footer/>
+        </UserProvider>
+
         </body>
         </html>
     );

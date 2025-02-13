@@ -69,6 +69,7 @@ export default function Home() {
                                 <li className="border-b border-gray-200 py-2 px-4 flex items-center justify-between" key={i}>
                                     <div>
                                         <h4 className="font-semibold">Doctor Alahakoon</h4>
+
                                         <p className="text-sm text-gray-500">Obstetrics and Gynecology</p>
                                     </div>
                                     <div className="">

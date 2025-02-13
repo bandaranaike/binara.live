@@ -1,14 +1,21 @@
 "use client"
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import '@/app/globals.css'
 import Image from "next/image";
 import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import {Dialog, DialogPanel} from "@headlessui/react";
+import {useUserContext} from "@/context/UserContext";
+import {setAxiosToken} from "@/lib/axios";
 
 const Header: React.FC = () => {
-
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const {user, logout} = useUserContext()
+
+    useEffect(() => {
+        // Dynamically set token for Axios
+        setAxiosToken(user?.token || null);
+    }, [user]);
 
     const navigation = [
         {name: 'About us', href: 'about'},
@@ -21,7 +28,7 @@ const Header: React.FC = () => {
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <div className="flex lg:flex-1">
                         <Link href="/" className="-m-1.5 p-1.5">
-                            <span className="sr-only">Your Company</span>
+                            <span className="sr-only">{process.env.NEXT_PUBLIC_APP_TITLE}</span>
                             <Image
                                 alt=""
                                 src="/logo.png"
@@ -47,6 +54,18 @@ const Header: React.FC = () => {
                                 {item.name}
                             </Link>
                         ))}
+                        {user && (
+                            <div>
+                                <Link href="/dashboard" className="text-sm/6 font-semibold">
+                                    Dashboard
+                                </Link>
+                                <button onClick={logout}>Logout</button>
+                            </div>
+                        ) || (
+                            <Link href="/login" className="text-sm/6 font-semibold">
+                                Log in
+                            </Link>
+                        )}
                     </div>
                 </div>
             </nav>
@@ -55,9 +74,9 @@ const Header: React.FC = () => {
                 <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                     <div className="flex items-center justify-between">
                         <a href="#" className="-m-1.5 p-1.5">
-                            <span className="sr-only">Your Company</span>
+                            <span className="sr-only">{process.env.NEXT_PUBLIC_APP_TITLE}</span>
                             <Image
-                                alt=""
+                                alt={process.env.NEXT_PUBLIC_APP_TITLE ?? ''}
                                 src="/logo.png"
                                 className="w-auto h-12"
                                 width={657}
@@ -85,6 +104,14 @@ const Header: React.FC = () => {
                                         {item.name}
                                     </a>
                                 ))}
+                            </div>
+                            <div className="py-6">
+                                <a
+                                    href="#"
+                                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                                >
+                                    Log in
+                                </a>
                             </div>
                         </div>
                     </div>

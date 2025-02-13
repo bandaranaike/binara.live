@@ -3,7 +3,7 @@ import React, {useState, useEffect, ChangeEvent} from "react";
 import {Button, Select, Datepicker} from "flowbite-react";
 import {Input} from "@headlessui/react";
 import debounce from "debounce";
-import parsePhoneNumber, {isValidPhoneNumber} from "libphonenumber-js";
+import parsePhoneNumber from "libphonenumber-js";
 import {CheckCircleIcon, InformationCircleIcon, XCircleIcon} from "@heroicons/react/24/outline";
 import Loader from "@/components/Loader";
 
@@ -50,9 +50,14 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
         try {
             const res = await fetch(`/api/proxy/doctors?type=${doctorType}`);
             const data = await res.json();
-            setDoctors(data);
+            if (res.ok) {
+                setDoctors(data);
+                setDoctorSelectError("");
+            } else {
+                setDoctorSelectError("There was an error fetching doctors.");
+            }
+
             setIsDoctorsLoading(false);
-            setDoctorSelectError("");
         } catch (e) {
             const error = e as ApiError;
             setDoctorSelectError(error.response?.data?.message || "An error occurred");
@@ -77,12 +82,11 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
             setPhoneError("Phone number is required");
         } else {
             const formatedPhone = parsePhoneNumber(phone, 'LK');
-            const internationalPhone = formatedPhone?.formatInternational();
-            if (!internationalPhone || (internationalPhone && !isValidPhoneNumber(internationalPhone, 'LK'))) {
+            if (!formatedPhone || (formatedPhone && !formatedPhone.isValid())) {
                 setPhoneError("Phone number is invalid");
             } else {
                 setPhoneError("");
-                setFormData({...formData, phone: internationalPhone});
+                setFormData({...formData, phone: formatedPhone?.number});
             }
         }
 
