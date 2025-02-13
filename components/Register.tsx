@@ -43,7 +43,7 @@ const Register = () => {
 
 
         try {
-            axios.post('/register', {name, email, password, password_confirmation, phone}).then(response => {
+            axios.post('/patient/register', {name, email, password, password_confirmation, phone}).then(response => {
                 setUser(response.data);
                 router.push('/dashboard');
             }).catch(error => {

@@ -29,7 +29,7 @@ const Login = () => {
         setError('');
 
         try {
-            axios.post('/login', {username, password, remember}).then((res) => {
+            axios.post('/patient/login', {username, password, remember}).then((res) => {
                 setUser(res.data);
                 router.push('/dashboard');
             }).catch((err) => {

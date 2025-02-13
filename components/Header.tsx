@@ -2,11 +2,12 @@
 import React, {useEffect, useState} from "react";
 import '@/app/globals.css'
 import Image from "next/image";
-import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline";
+import {Bars3Icon, PowerIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import {Dialog, DialogPanel} from "@headlessui/react";
 import {useUserContext} from "@/context/UserContext";
 import {setAxiosToken} from "@/lib/axios";
+import {useRouter} from 'next/navigation';
 
 const Header: React.FC = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -22,6 +23,13 @@ const Header: React.FC = () => {
         {name: 'Contact', href: 'contacts'},
     ]
 
+
+    const router = useRouter();
+
+    const logoutUser = () => {
+        logout()
+        router.push('/login')
+    };
     return (
         <header className="absolute inset-x-0 top-0 z-50 bg-white">
             <nav aria-label="Global" className="p-6 lg:px-8 shadow">
@@ -48,19 +56,19 @@ const Header: React.FC = () => {
                             <Bars3Icon aria-hidden="true" className="size-6"/>
                         </button>
                     </div>
-                    <div className="hidden lg:flex lg:gap-x-12">
+                    <div className="hidden lg:flex lg:gap-x-12 text-sm/6 font-semibold text-gray-600">
                         {navigation.map((item) => (
-                            <Link key={item.name} href={item.href} className="text-sm/6 font-semibold text-gray-600">
+                            <Link key={item.name} href={item.href}>
                                 {item.name}
                             </Link>
                         ))}
                         {user && (
-                            <div>
-                                <Link href="/dashboard" className="text-sm/6 font-semibold">
+                            <>
+                                <Link href="/dashboard">
                                     Dashboard
                                 </Link>
-                                <button onClick={logout}>Logout</button>
-                            </div>
+                                <button onClick={logoutUser} className="flex gap-1 content-center"><PowerIcon width={16}/>Logout</button>
+                            </>
                         ) || (
                             <Link href="/login" className="text-sm/6 font-semibold">
                                 Log in
