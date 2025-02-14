@@ -8,6 +8,7 @@ import Loader from "@/components/Loader";
 
 interface ApointmentHistory {
     id: number;
+    patientName: string;
     appointmentType: string;
     doctorName: string;
     date: string;
@@ -30,7 +31,6 @@ const Dashboard: React.FC = () => {
 
     const getApointmentHistories = useCallback(debounce(() => {
         axios.get('/bookings/patients/history').then(result => {
-            console.log(result.data);
             setApointmentHistories(result.data);
         }).catch(error => setApointmentHistoriesGetError(error.response.data.message)).finally(() => setLoading(false));
     }), [user])
@@ -47,12 +47,13 @@ const Dashboard: React.FC = () => {
                                 <p className="text-gray-500 text-sm">The Appointment History table provides a detailed overview of all your past and upcoming appointments. Use this
                                     table to monitor your healthcare activities and manage your appointments effectively.</p>
                             </div>
-                            {apointmentHistoriesGetError && <div className="p-6 border-b border-gray-200 text-red-600">{apointmentHistoriesGetError}</div>}
+                            {apointmentHistoriesGetError && <div className="p-6 border-b border-gray-200 text-yellow-600">{apointmentHistoriesGetError}</div>}
                             {loading && <div className="p-6 border-t border-gray-200"><Loader/></div>}
                             {apointmentHistories.length &&
                                 <table className="w-full">
                                     <thead>
                                     <tr className="border-b-2 border-gray-200 text-left">
+                                        <th className="py-2 px-4 border-r">Patient name</th>
                                         <th className="py-2 px-4 border-r">Appointment type</th>
                                         <th className="py-2 px-4 border-r">Doctor&apos;s Name</th>
                                         <th className="py-2 px-4 border-r">Date</th>
@@ -63,6 +64,7 @@ const Dashboard: React.FC = () => {
                                     <tbody>
                                     {apointmentHistories.map((appointment) => (
                                         <tr key={appointment.id} className="border-b border-gray-200 last:border-b-0 text-sm">
+                                            <td className="py-2 px-4 border-r">{appointment.patientName}</td>
                                             <td className="py-2 px-4 border-r">{appointment.appointmentType}</td>
                                             <td className="py-2 px-4 border-r">{appointment.doctorName}</td>
                                             <td className="py-2 px-4 border-r">{appointment.date}</td>

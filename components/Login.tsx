@@ -17,7 +17,6 @@ const Login = () => {
     const {setUser, user} = useUserContext()
 
     useEffect(() => {
-        console.log("user?.token", user?.token)
         if (user?.token) {
             router.push('/dashboard');
         }
