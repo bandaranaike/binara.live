@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from "react";
-import {LoggedUser} from "@/context/UserContext";
 import Loader from "@/components/form/Loader";
 import axios from "@/lib/axios";
 import {PencilSquareIcon, PlusIcon, TrashIcon} from "@heroicons/react/24/outline";
@@ -14,7 +13,7 @@ interface Patient {
     gender: string;
 }
 
-const UserPatientsList: React.FC<{ user: LoggedUser }> = ({user}) => {
+const UserPatientsList: React.FC = () => {
     const [patients, setPatients] = useState<Patient[]>([]);
     const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);

@@ -1,7 +1,6 @@
 import axios from "@/lib/axios";
-import { NextApiRequest } from "next"; // If using Next.js
 
-export async function GET(request: NextApiRequest) {
+export async function GET(request: Request) {
     try {
         // Parse the URL
         if (!request.url) {

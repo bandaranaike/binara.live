@@ -62,12 +62,12 @@ const Dashboard: React.FC = () => {
                             <UserAppointmentsList user={user}/>
                         )}
                         {activeTab === "patients" && (
-                            <UserPatientsList user={user}/>
+                            <UserPatientsList/>
                         )}
                         {activeTab === "edit-profile" && (
                             <div className="grid grid-cols-2 gap-4">
 
-                                <EditProfile user={user}/>
+                                <EditProfile/>
                                 <ChangePassword/>
                             </div>
                         )}

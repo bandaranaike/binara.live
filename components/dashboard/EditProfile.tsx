@@ -1,4 +1,4 @@
-import React, {useState, useEffect, FC} from "react";
+import React, { useState, useEffect, FC } from "react";
 import axios from "axios";
 import Loader from "@/components/form/Loader";
 
@@ -11,11 +11,12 @@ export interface User {
     phone: string;
 }
 
-const EditProfile: FC<{ user: User }> = ({user}) => {
+const EditProfile: FC = () => {
+    const [user, setUser] = useState<User | null>(null);
     const [formData, setFormData] = useState({
-        name: user.name,
-        phone: user.phone,
-        email: user.email,
+        name: "",
+        phone: "",
+        email: "",
     });
     const [errors, setErrors] = useState({
         name: "",
@@ -23,18 +24,27 @@ const EditProfile: FC<{ user: User }> = ({user}) => {
         email: ""
     });
     const [successMessage, setSuccessMessage] = useState("");
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setFormData({
-            name: user.name,
-            phone: user.phone,
-            email: user.email,
-        });
-    }, [user]);
+        const fetchUser = async () => {
+            try {
+                const response = await axios.get("patient/user");
+                setUser(response.data);
+                setFormData({
+                    name: response.data.name,
+                    phone: response.data.phone,
+                    email: response.data.email,
+                });
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+        fetchUser();
+    }, []);
 
-    const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
         setFormData({
             ...formData,
             [name]: value,
@@ -43,21 +53,21 @@ const EditProfile: FC<{ user: User }> = ({user}) => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setErrors({
-            name: "",
-            phone: "",
-            email: ""
-        });
+        setErrors({ name: "", phone: "", email: "" });
         setSuccessMessage("");
+        setLoading(true);
 
         try {
-            axios.put(`/api/users/${user.id}`, formData)
-                .then(() => setSuccessMessage("Profile updated successfully!"))
-                .finally(() => setLoading(false));
+            await axios.put(`/api/users/${user?.id}`, formData);
+            setSuccessMessage("Profile updated successfully!");
         } catch (error) {
             console.error("Error updating profile:", error);
+        } finally {
+            setLoading(false);
         }
     };
+
+    if (!user) return <Loader />;
 
     return (
         <div className="p-4 bg-white rounded-lg border max-w-4xl shadow-sm border-gray-200">
@@ -78,7 +88,7 @@ const EditProfile: FC<{ user: User }> = ({user}) => {
                         className="mt-1 block w-full px-3 py-2 border shadow-sm border-gray-200 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                     />
                     {errors.name && (
-                        <p className="mt-2 text-sm text-red-600">{errors.name[0]}</p>
+                        <p className="mt-2 text-sm text-red-600">{errors.name}</p>
                     )}
                 </div>
 
@@ -92,12 +102,11 @@ const EditProfile: FC<{ user: User }> = ({user}) => {
                         className="mt-1 block w-full px-3 py-2 border shadow-sm border-gray-200 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                         disabled={user.phone_verified_at}
                     />
-
                     {user.phone_verified_at && (
                         <p className="mt-2 text-sm text-gray-500">Phone number is verified and cannot be changed.</p>
                     )}
                     {errors.phone && (
-                        <p className="mt-2 text-sm text-red-600">{errors.phone[0]}</p>
+                        <p className="mt-2 text-sm text-red-600">{errors.phone}</p>
                     )}
                 </div>
 
@@ -115,14 +124,12 @@ const EditProfile: FC<{ user: User }> = ({user}) => {
                         <p className="mt-2 text-sm text-gray-500">Email is verified and cannot be changed.</p>
                     )}
                     {errors.email && (
-                        <p className="mt-2 text-sm text-red-600">{errors.email[0]}</p>
+                        <p className="mt-2 text-sm text-red-600">{errors.email}</p>
                     )}
                 </div>
 
                 <div className="flex justify-end gap-2">
-                    <div className="">
-                        {loading && <Loader/>}
-                    </div>
+                    {loading && <Loader />}
                     <button
                         type="submit"
                         className="px-4 py-3 bg-purple-700 text-white rounded-lg hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
