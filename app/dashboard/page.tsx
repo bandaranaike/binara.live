@@ -66,7 +66,6 @@ const Dashboard: React.FC = () => {
                         )}
                         {activeTab === "edit-profile" && (
                             <div className="grid grid-cols-2 gap-4">
-
                                 <EditProfile/>
                                 <ChangePassword/>
                             </div>

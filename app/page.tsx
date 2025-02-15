@@ -7,6 +7,7 @@ import DoctorBooking from "@/components/DoctorBooking";
 
 export default function Home() {
     const [isBookingWindowOpen, setIsBookingWindowOpen] = useState<boolean>(false)
+    const [todayDoctorsList] = useState([])
     const sliderSettings = {
         dots: true,
         infinite: true,
@@ -62,7 +63,7 @@ export default function Home() {
                             </div>
                         ))}
                     </Slider>
-                    <div className="rounded-xl border bg-gradient-to-br mt-16 lg:mt-0 from-purple-50 to-rose-50">
+                    { todayDoctorsList.length > 0  && <div className="rounded-xl border bg-gradient-to-br mt-16 lg:mt-0 from-purple-50 to-rose-50">
                         <ul className="overflow-y-scroll max-h-fit">
                             <li className="bg-white p-4 rounded-t-xl text-xl font-semibold border-b border-gray-200">Today&#39;s doctors list</li>
                             {Array.from(Array(4)).map((item, i) =>
@@ -80,7 +81,7 @@ export default function Home() {
                             )}
                             <li className="bg-white p-3 rounded-b-xl">Full calendar</li>
                         </ul>
-                    </div>
+                    </div> }
                 </div>
             </section>
             {/* Services Section */}

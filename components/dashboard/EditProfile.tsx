@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FC } from "react";
-import axios from "axios";
 import Loader from "@/components/form/Loader";
+import axios from "@/lib/axios";
 
 export interface User {
     email_verified_at: boolean | undefined;
@@ -29,7 +29,7 @@ const EditProfile: FC = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.get("patient/user");
+                const response = await axios.get("/patient/user");
                 setUser(response.data);
                 setFormData({
                     name: response.data.name,
@@ -79,13 +79,13 @@ const EditProfile: FC = () => {
             )}
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Name</label>
+                    <label className="block text-sm text-gray-600 mb-2">Name</label>
                     <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className="mt-1 block w-full px-3 py-2 border shadow-sm border-gray-200 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                        className="border border-gray-300 rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline"
                     />
                     {errors.name && (
                         <p className="mt-2 text-sm text-red-600">{errors.name}</p>
@@ -93,13 +93,13 @@ const EditProfile: FC = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Phone</label>
+                    <label className="block text-sm text-gray-600 mb-2">Phone</label>
                     <input
                         type="text"
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="mt-1 block w-full px-3 py-2 border shadow-sm border-gray-200 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                        className="border border-gray-300 rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline"
                         disabled={user.phone_verified_at}
                     />
                     {user.phone_verified_at && (
@@ -111,13 +111,13 @@ const EditProfile: FC = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Email</label>
+                    <label className="block text-sm text-gray-600 mb-2">Email</label>
                     <input
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="mt-1 block w-full px-3 py-2 shadow-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                        className="border border-gray-300 rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline"
                         disabled={user.email_verified_at}
                     />
                     {user.email_verified_at && (
@@ -132,7 +132,7 @@ const EditProfile: FC = () => {
                     {loading && <Loader />}
                     <button
                         type="submit"
-                        className="px-4 py-3 bg-purple-700 text-white rounded-lg hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="px-4 py-3 bg-purple-700 text-white rounded-lg font-bold hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     >
                         Save Changes
                     </button>

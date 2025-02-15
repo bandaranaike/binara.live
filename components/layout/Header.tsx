@@ -35,7 +35,7 @@ const Header: React.FC = () => {
             <nav aria-label="Global" className="p-3 lg:px-8 shadow">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <div className="flex lg:flex-1">
-                        <Link href="/public" className="-m-1.5 p-1.5">
+                        <Link href="/" className="-m-1.5 p-1.5">
                             <span className="sr-only">{process.env.NEXT_PUBLIC_APP_TITLE}</span>
                             <Image
                                 alt=""

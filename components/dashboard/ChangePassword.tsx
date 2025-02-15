@@ -45,58 +45,56 @@ const ChangePassword = () => {
     };
 
     return (
-        <div className="flex justify-center items-center  shadow-sm">
-            <div className="bg-white p-12 rounded-2xl border border-gray-200 shadow-sm w-dvw max-w-2xl">
-                <h2 className="text-2xl font-bold mb-4">Change Password</h2>
-                {error && <div className="text-red-500 mb-4">{error}</div>}
-                {message && <div className="text-green-500 mb-4">{message}</div>}
+        <div className="p-4 bg-white rounded-lg border max-w-4xl shadow-sm border-gray-200">
+            <h3 className="text-xl font-bold mb-4">Change Password</h3>
+            {error && <div className="text-red-500 mb-4">{error}</div>}
+            {message && <div className="text-green-500 mb-4">{message}</div>}
 
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label htmlFor="currentPassword" className="block text-gray-600 font-bold mb-2">Current Password</label>
-                        <input
-                            type="password"
-                            id="currentPassword"
-                            className="border border-gray-300 rounded-lg w-full py-3 px-6 leading-tight focus:outline-none focus:shadow-outline"
-                            value={currentPassword}
-                            onChange={(e) => setCurrentPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="newPassword" className="block text-gray-600 font-bold mb-2">New Password</label>
-                        <input
-                            type="password"
-                            id="newPassword"
-                            className="border border-gray-300 rounded-lg w-full py-3 px-6 leading-tight focus:outline-none focus:shadow-outline"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="confirmPassword" className="block text-gray-600 font-bold mb-2">Confirm New Password</label>
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            className="border border-gray-300 rounded-lg w-full py-3 px-6 leading-tight focus:outline-none focus:shadow-outline"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <button
-                            type="submit"
-                            className={`bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-6 rounded-full focus:outline-none focus:shadow-outline ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                            disabled={loading}
-                        >
-                            {loading ? 'Updating...' : 'Update Password'}
-                        </button>
-                        {loading && <Loader/>}
-                    </div>
-                </form>
-            </div>
+            <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                    <label htmlFor="currentPassword" className="block text-sm text-gray-600 mb-2">Current Password</label>
+                    <input
+                        type="password"
+                        id="currentPassword"
+                        className="border border-gray-300 rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline"
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <label htmlFor="newPassword" className="block text-sm text-gray-600 mb-2">New Password</label>
+                    <input
+                        type="password"
+                        id="newPassword"
+                        className="border border-gray-300 rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <label htmlFor="confirmPassword" className="block text-sm text-gray-600 mb-2">Confirm New Password</label>
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        className="border border-gray-300 rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="flex justify-end gap-2">
+                    <button
+                        type="submit"
+                        className={`bg-purple-700 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        disabled={loading}
+                    >
+                        {loading ? 'Updating...' : 'Update Password'}
+                    </button>
+                    {loading && <Loader/>}
+                </div>
+            </form>
         </div>
     );
 };
