@@ -3,8 +3,8 @@ import {useEffect, useState} from 'react';
 import axios from "@/lib/axios";
 import {useUserContext} from "@/context/UserContext";
 import {useRouter} from 'next/navigation';
-import CustomCheckbox from "@/components/CustomCheckbox";
-import Loader from "@/components/Loader";
+import CustomCheckbox from "@/components/form/CustomCheckbox";
+import Loader from "@/components/form/Loader";
 
 const Login = () => {
     const router = useRouter();
@@ -41,7 +41,7 @@ const Login = () => {
     };
 
     return (
-        <div className="flex justify-center items-center py-24 bg-gray-100">
+        <div className="flex justify-center items-center py-24 shadow-sm">
             <div className="bg-white p-12 rounded-2xl border border-gray-200 shadow-sm w-dvw max-w-2xl">
                 <h2 className="text-2xl font-bold mb-4">Login</h2>
 
@@ -51,7 +51,8 @@ const Login = () => {
                         <input
                             type="username"
                             id="username"
-                            className="border border-gray-300 rounded-lg w-full py-3 px-6 leading-tight focus:outline-none focus:shadow-outline"
+                            placeholder="Email or Phone"
+                            className="border border-gray-300 rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             required
@@ -62,7 +63,8 @@ const Login = () => {
                         <input
                             type="password"
                             id="password"
-                            className="border border-gray-300 rounded-lg w-full py-3 px-6 leading-tight focus:outline-none focus:shadow-outline"
+                            placeholder="Password"
+                            className="border border-gray-300 rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -83,9 +85,14 @@ const Login = () => {
                             {loading && <Loader/>}
                             {error && <div className="text-red-500">{error}</div>}
                         </div>
-                        <a href="/register" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-700">
-                            Register
-                        </a>
+                        <div className="flex gap-6">
+                            <a href="/forget-password" className="inline-block align-baseline text-sm text-blue-600 hover:text-blue-700">
+                                Forget password
+                            </a>
+                            <a href="/register" className="inline-block align-baseline text-sm text-blue-600 hover:text-blue-700">
+                                Register
+                            </a>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -16,7 +16,7 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({label, checked, setCheck
         <div className="flex items-center cursor-pointer" onClick={toggleChecked}>
             <div
                 className={`w-6 h-6 rounded-md flex items-center justify-center transition-all duration-200 ${
-                    checked ? "bg-purple-500" : "bg-gray-50 border border-purple-400"
+                    checked ? "bg-purple-500" : "bg-gray-50 border border-purple-300"
                 }`}
             >
                 {checked && <div className="w-2 h-2 bg-white rounded"></div>}

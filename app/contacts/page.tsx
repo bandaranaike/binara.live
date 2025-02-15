@@ -33,10 +33,13 @@ const Contacts = () => {
                     <div className="lg:col-span-2">
                         <ContactUs/>
                     </div>
-                    <div className="mt-8 lg:mt-0 overflow-hidden rounded-lg border-gray-300 border content-center relative">
-                        <div className="border-gray-300 bottom-1/2 -mb-6 -mr-6 mt-6 right-1/2 h-12 w-12 animate-spin rounded-full border-2 border-t-purple-600 absolute z-10"></div>
-                        <div className="z-20 relative">
-                            <ContactMap iframeWidth={iframeWidth}/>
+                    <div>
+                        <div className="mt-8 lg:mt-0 overflow-hidden rounded-lg border-gray-300 border content-center relative">
+                            <div
+                                className="border-gray-300 bottom-1/2 -mb-6 -mr-6 mt-6 right-1/2 h-12 w-12 animate-spin rounded-full border-2 border-t-purple-600 absolute z-10"></div>
+                            <div className="z-20 relative">
+                                <ContactMap iframeWidth={iframeWidth}/>
+                            </div>
                         </div>
                     </div>
                 </div>

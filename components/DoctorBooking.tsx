@@ -5,7 +5,7 @@ import {Input} from "@headlessui/react";
 import debounce from "debounce";
 import parsePhoneNumber from "libphonenumber-js";
 import {CheckCircleIcon, InformationCircleIcon, XCircleIcon} from "@heroicons/react/24/outline";
-import Loader from "@/components/Loader";
+import Loader from "@/components/form/Loader";
 
 interface DoctorBookingProps {
     onCloseBookingWindow: () => void;

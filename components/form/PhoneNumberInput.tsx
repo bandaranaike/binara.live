@@ -30,9 +30,10 @@ const PhoneNumberInput: React.FC<PhoneNUmberInputProps> = ({onValidPhoneNumber, 
     return (
         <div>
             <Input
-                className="mb-3 w-full border border-gray-200 py-2 px-4 rounded-lg"
+                className="mb-3 w-full border border-gray-300 py-2 px-4 rounded-lg"
                 name="phone"
                 placeholder="Your phone number"
+                required={isPhoneRequired}
                 onChange={handlePhoneChange}/>
 
             {phoneError && <div className="text-red-500 text-sm mb-3 -mt-2 pl-1">{phoneError}</div>}

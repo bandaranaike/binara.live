@@ -32,17 +32,17 @@ const Header: React.FC = () => {
     };
     return (
         <header className="absolute inset-x-0 top-0 z-50 bg-white">
-            <nav aria-label="Global" className="p-6 lg:px-8 shadow">
+            <nav aria-label="Global" className="p-3 lg:px-8 shadow">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <div className="flex lg:flex-1">
-                        <Link href="/" className="-m-1.5 p-1.5">
+                        <Link href="/public" className="-m-1.5 p-1.5">
                             <span className="sr-only">{process.env.NEXT_PUBLIC_APP_TITLE}</span>
                             <Image
                                 alt=""
-                                src="/logo.png"
-                                className="w-auto h-12"
-                                width={657}
-                                height={179}
+                                src="/original-logo.png"
+                                className="w-auto h-16"
+                                width={683}
+                                height={251}
                             />
                         </Link>
                     </div>
@@ -56,7 +56,7 @@ const Header: React.FC = () => {
                             <Bars3Icon aria-hidden="true" className="size-6"/>
                         </button>
                     </div>
-                    <div className="hidden lg:flex lg:gap-x-12 text-sm/6 font-semibold text-gray-600">
+                    <div className="hidden lg:flex lg:gap-x-8 text-sm/6 font-semibold text-gray-600">
                         {navigation.map((item) => (
                             <Link key={item.name} href={item.href}>
                                 {item.name}
@@ -70,9 +70,14 @@ const Header: React.FC = () => {
                                 <button onClick={logoutUser} className="flex gap-1 content-center"><PowerIcon width={16}/>Logout</button>
                             </>
                         ) || (
-                            <Link href="/login" className="text-sm/6 font-semibold">
-                                Log in
-                            </Link>
+                            <>
+                                <Link href="/login" className="text-sm/6 font-semibold">
+                                    Log in
+                                </Link>
+                                <Link href="/register" className="text-sm/6 font-semibold">
+                                    Register
+                                </Link>
+                            </>
                         )}
                     </div>
                 </div>

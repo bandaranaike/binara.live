@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import Loader from "@/components/Loader";
+import Loader from "@/components/form/Loader";
 
 const ContactMap: React.FC<{ iframeWidth: string | number }> = ({iframeWidth}) => {
     const [mapLoaded, setMapLoaded] = useState(false);

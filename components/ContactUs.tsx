@@ -1,6 +1,6 @@
 "use client"
 import React, {useState} from 'react';
-import Loader from "@/components/Loader";
+import Loader from "@/components/form/Loader";
 import {useUserContext} from "@/context/UserContext";
 
 const ContactUs: React.FC = () => {
@@ -65,10 +65,10 @@ const ContactUs: React.FC = () => {
             <form onSubmit={handleSubmit}>
                 <div className="lg:grid lg:grid-cols-3 lg:gap-4">
                     <div>
-                        <label htmlFor="name">Name: <span className="text-red-500">*</span> </label>
+                        <label className="text-gray-700" htmlFor="name">Name: <span className="text-red-500">*</span> </label>
                         <input
                             type="text"
-                            className="border border-gray-300 rounded-lg bg-gray-50 w-full focus:ring-purple-400 focus:border-purple-400"
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                             id="name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
@@ -79,7 +79,7 @@ const ContactUs: React.FC = () => {
                         <label htmlFor="phone">Phone: <span className="text-yellow-400">*</span></label>
                         <input
                             type="tel"
-                            className="border border-gray-300 rounded-lg bg-gray-50 w-full focus:ring-purple-400 focus:border-purple-400"
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                             id="phone"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
@@ -89,7 +89,7 @@ const ContactUs: React.FC = () => {
                         <label htmlFor="email">Email:<span className="text-yellow-400">*</span></label>
                         <input
                             type="email"
-                            className="border border-gray-300 rounded-lg bg-gray-50 w-full focus:ring-purple-400 focus:border-purple-400"
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                             id="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -99,7 +99,7 @@ const ContactUs: React.FC = () => {
                         <label htmlFor="message">Message: <span className="text-red-500">*</span></label>
                         <textarea
                             id="message"
-                            className="border border-gray-300 rounded-lg bg-gray-50 w-full focus:ring-purple-400 focus:border-purple-400"
+                            className="border shadow-sm  border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             required
