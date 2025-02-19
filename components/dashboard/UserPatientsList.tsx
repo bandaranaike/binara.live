@@ -15,7 +15,15 @@ interface Patient {
 
 const UserPatientsList: React.FC = () => {
     const [patients, setPatients] = useState<Patient[]>([]);
-    const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+    const [selectedPatient, setSelectedPatient] = useState<Patient |null>({
+        id: "",
+        name: "",
+        age: 0,
+        address: "",
+        telephone: "",
+        birthday: "",
+        gender: "",
+    });
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -214,7 +222,7 @@ const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) =
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded w-1/3">
+            <div className="bg-white p-6 rounded-xl w-1/3">
                 <h2 className="text-xl font-bold mb-4">{patient ? "Edit Patient" : "Add New Patient"}</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
@@ -222,9 +230,10 @@ const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) =
                         <input
                             type="text"
                             name="name"
-                            value={formData.name}
+                            placeholder="Patient name"
+                            value={formData.name || ''}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded"
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                             required
                         />
                     </div>
@@ -232,10 +241,11 @@ const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) =
                         <label className="block text-sm font-medium mb-2">Age</label>
                         <input
                             type="number"
+                            placeholder="Patient age"
                             name="age"
-                            value={formData.age}
+                            value={formData.age || ''}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded"
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                             required
                         />
                     </div>
@@ -243,10 +253,11 @@ const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) =
                         <label className="block text-sm font-medium mb-2">Address</label>
                         <input
                             type="text"
+                            placeholder="Address"
                             name="address"
-                            value={formData.address}
+                            value={formData.address || ''}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded"
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                             required
                         />
                     </div>
@@ -255,9 +266,10 @@ const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) =
                         <input
                             type="text"
                             name="telephone"
-                            value={formData.telephone}
+                            placeholder="Telephone"
+                            value={formData.telephone || ''}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded"
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                             required
                         />
                     </div>
@@ -266,9 +278,10 @@ const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) =
                         <input
                             type="date"
                             name="birthday"
-                            value={formData.birthday}
+                            placeholder="Birthday"
+                            value={formData.birthday || ''}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded"
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                             required
                         />
                     </div>
@@ -277,21 +290,22 @@ const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) =
                         <input
                             type="text"
                             name="gender"
-                            value={formData.gender}
+                            placeholder="Gender"
+                            value={formData.gender || ''}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded"
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                             required
                         />
                     </div>
-                    <div className="flex justify-end">
+                    <div className="flex justify-end gap-4">
                         <button
                             type="button"
                             onClick={onClose}
-                            className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+                            className="px-6 py-2 border rounded-lg border-gray-600 bg-white inline-block"
                         >
                             Cancel
                         </button>
-                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+                        <button type="submit" className="font-semibold px-8 py-2 border rounded-lg border-purple-800 bg-purple-700 text-white inline-block">
                             Save
                         </button>
                     </div>

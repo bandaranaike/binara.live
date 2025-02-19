@@ -22,7 +22,9 @@ const Footer: React.FC = () => {
                 <div className="p-4 lg:p-0">
                     <h3 className="text-2xl font-semibold mb-2">Quick Links</h3>
                     <p>
-                        {user && user.token && (<><a href="/login">Login </a> | <a href="/register"> Register </a> |</>)} <a href="/about">About Us</a>
+                        {!user?.token &&
+                            (<><a href="/login">Login </a> | <a href="/register"> Register </a> |</>) ||
+                            (<><a href="/dashboard">Dashboard</a> |</>)} <a href="/about">About Us</a>
                     </p>
                 </div>
             </div>

@@ -3,9 +3,8 @@ import React, {useState, useEffect} from 'react';
 import axios from '@/lib/axios';
 import '@/app/calendar-styles.css';
 import DoctorsSearch from "@/components/form/DoctorsSearch";
-import {monthsInYear} from "date-fns/constants";
-import {param} from "ts-interface-checker";
-import Loader from "@/components/form/Loader"; // Custom styles
+import Loader from "@/components/form/Loader";
+import getDoctorColor from "@/lib/doctor_color"; // Custom styles
 
 interface DoctorAvailability {
     id: number;
@@ -25,10 +24,12 @@ const DoctorsAvailability: React.FC = () => {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [loading, setLoading] = useState(false);
     const [loadingError, setLoadingError] = useState("");
-    const [clearDataKey, setclearDataKey] = useState("");
+    const [clearDataKey, setClearDataKey] = useState("");
+    const [prevMonthAvailable, setPrevMonthAvailable] = useState(false)
 
     useEffect(() => {
         fetchAvailability(currentMonth, []);
+        togglePrevMonthActiveStatus();
     }, [currentMonth]);
 
     const fetchAvailability = (date: Date, ids: number[]) => {
@@ -41,16 +42,19 @@ const DoctorsAvailability: React.FC = () => {
                 month,
                 doctor_ids: ids
             }
-        })
-            .then(response => {
-                setAvailability(response.data);
-                // setSelectedDoctorIds([])
-                setclearDataKey((Math.random() + 1).toString(36).substring(7))
-            })
-            .catch(error => {
-                setLoadingError('Error fetching data:' + error.response.data);
-            }).finally(() => setLoading(false));
+        }).then(response => {
+            setAvailability(response.data);
+            setClearDataKey((Math.random() + 1).toString(36).substring(7))
+        }).catch(error => {
+            setLoadingError('Error fetching data:' + error.response.data);
+        }).finally(() => setLoading(false));
     };
+
+    const togglePrevMonthActiveStatus = () => {
+        const thisMonth = (new Date).getMonth();
+        const activeMonth = currentMonth.getMonth();
+        setPrevMonthAvailable(thisMonth < activeMonth)
+    }
 
     const getDaysInMonth = (date: Date) => {
         const year = date.getFullYear();
@@ -66,15 +70,6 @@ const DoctorsAvailability: React.FC = () => {
         const startOffset = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
 
         const days = [];
-
-        const doctorColors = [
-            "bg-gray-200", "bg-blue-200", "bg-green-200", "bg-yellow-100",
-            "bg-red-200", "bg-purple-200", "bg-pink-200", "bg-indigo-200",
-            "bg-teal-200", "bg-orange-200", "bg-amber-200", "bg-lime-200",
-            "bg-emerald-200", "bg-cyan-200", "bg-sky-200", "bg-violet-200",
-            "bg-fuchsia-200", "bg-rose-200", "bg-slate-200", "bg-zinc-200",
-            "bg-stone-200", "bg-neutral-200"
-        ];
 
 
         // Add empty slots before the first day to align with Monday
@@ -93,15 +88,16 @@ const DoctorsAvailability: React.FC = () => {
                     {dayAvailability.length > 0 ? (
                         <ul className="">
                             {dayAvailability.map(avail => {
-                                const doctorColor = doctorColors[avail.doctor.id % doctorColors.length]; // Assign a color
+                                const doctorColor = getDoctorColor(avail.doctor.id) // Assign a color
                                 return (
-                                    <li key={avail.id} className={`text-xs flex content-center text-gray-700 border border-gray-200 rounded-lg mb-1 ${doctorColor}`}>
+                                    <li key={avail.id}
+                                        className={`text-xs flex content-center text-gray-700 border border-${doctorColor}-200 rounded mb-1 bg-${doctorColor}-100`}>
                                         <div className="px-2 py-1 flex-grow">{avail.doctor?.name} </div>
-                                        <div className="flex items-center px-1 py-1 border-l text-xs text-gray-500">
+                                        <div className={`flex items-center px-1 py-1 border-l text-xs border-${doctorColor}-200`}>
                                             {avail.time.substring(0, 5)}
                                         </div>
                                         {avail.seats > 0 && (
-                                            <div className="flex items-center px-1 py-1 border-l text-xs text-gray-500">
+                                            <div className={`flex items-center px-1 py-1 border-l text-xs border-${doctorColor}-200`}>
                                                 {avail.available_seats}/{avail.seats}
                                             </div>
                                         )}
@@ -120,8 +116,10 @@ const DoctorsAvailability: React.FC = () => {
     };
 
     const handlePrevMonth = () => {
-        const prevMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
-        setCurrentMonth(prevMonth);
+        if (prevMonthAvailable) {
+            const prevMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
+            setCurrentMonth(prevMonth);
+        }
     };
 
     const handleNextMonth = () => {
@@ -142,7 +140,9 @@ const DoctorsAvailability: React.FC = () => {
             <div className="border border-gray-200 rounded-xl shadow-sm relative">
                 {loading && <div className="absolute right-0 -mt-12"><Loader/></div>}
                 <div className="flex justify-between content-center p-4">
-                    <button onClick={handlePrevMonth} className="border border-gray-300 py-2 px-4 rounded-lg hover:border-purple-500">Previous</button>
+                    <button onClick={handlePrevMonth} className={`border border-gray-300 py-2 px-4 rounded-lg ${prevMonthAvailable ? 'hover:border-purple-500' : 'text-gray-400'}`}>
+                        Previous
+                    </button>
                     <div className="font-bold text-xl p-2">
                         {currentMonth.toLocaleString('default', {month: 'long'})} {currentMonth.getFullYear()}
                     </div>
@@ -157,7 +157,9 @@ const DoctorsAvailability: React.FC = () => {
                     {renderDays()}
                 </div>
                 <div className="p-4 calendar-bottom border-t border-gray-200 flex justify-between content-center">
-                    <button onClick={handlePrevMonth} className="border border-gray-300 py-2 px-4 rounded-lg hover:border-purple-500">Previous</button>
+                    <button onClick={handlePrevMonth} className={`border border-gray-300 py-2 px-4 rounded-lg ${prevMonthAvailable ? 'hover:border-purple-500' : 'text-gray-400'}`}>
+                        Previous
+                    </button>
                     <div className="font-bold text-xl p-2">
                         {currentMonth.toLocaleString('default', {month: 'long'})} {currentMonth.getFullYear()}
                     </div>

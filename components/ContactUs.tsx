@@ -107,7 +107,7 @@ const ContactUs: React.FC = () => {
                     </div>
                 </div>
                 <div className="flex gap-4 mt-6 items-center">
-                    <button type="submit" disabled={loading} className="px-6 py-3 border rounded-full border-purple-600 bg-purple-600 text-white inline-block">
+                    <button type="submit" disabled={loading} className="px-6 py-3 border rounded-lg border-purple-800 bg-purple-700 text-white font-semibold inline-block">
                         {loading ? 'Sending...' : 'Send Message'}
                     </button>
                     {loading && <Loader/>}

@@ -2,7 +2,7 @@ import React, {useState, useEffect, useCallback, useRef} from 'react';
 import axios from '@/lib/axios';
 import debounce from 'debounce';
 import CustomCheckbox from "@/components/form/CustomCheckbox";
-import {XCircleIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import {XCircleIcon} from "@heroicons/react/24/outline";
 
 interface Doctor {
     id: number;

@@ -7,6 +7,7 @@ export interface LoggedUser {
     token: string;
     phone: string;
     email: string;
+    id: string;
 }
 
 // Define the context type

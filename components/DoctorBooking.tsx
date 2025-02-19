@@ -6,6 +6,8 @@ import debounce from "debounce";
 import parsePhoneNumber from "libphonenumber-js";
 import {CheckCircleIcon, InformationCircleIcon, XCircleIcon} from "@heroicons/react/24/outline";
 import Loader from "@/components/form/Loader";
+import axios from "@/lib/axios";
+import {useUserContext} from "@/context/UserContext";
 
 interface DoctorBookingProps {
     onCloseBookingWindow: () => void;
@@ -21,6 +23,12 @@ interface BookingResponse {
     bill_id: string;
 }
 
+interface Doctor {
+    id: number;
+    name: string;
+    specialty_name: string
+}
+
 interface ApiError {
     response?: {
         data?: {
@@ -29,10 +37,9 @@ interface ApiError {
     };
 }
 
-
 const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => {
     const [doctorType, setDoctorType] = useState("specialist");
-    const [doctors, setDoctors] = useState<{ id: number, name: string }[]>([]);
+    const [doctors, setDoctors] = useState<Doctor[]>([]);
     const [selectedDoctor, setSelectedDoctor] = useState("");
     const [date, setDate] = useState<Date | null>(new Date());
     const [formData, setFormData] = useState({name: "", phone: "", age: "", email: ""});
@@ -46,23 +53,26 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
     const [isDoctorsLoading, setIsDoctorsLoading] = useState<boolean>(false)
     const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false)
 
+    const {user} = useUserContext();
+
     const fetchDoctors = debounce(async (doctorType, setDoctors, setDoctorSelectError) => {
         try {
-            const res = await fetch(`/api/proxy/doctors?type=${doctorType}`);
-            const data = await res.json();
-            if (res.ok) {
-                setDoctors(data);
+            axios.get("doctor-availabilities/search-booking-doctors", {
+                params: {
+                    type: doctorType,
+                }
+            }).then(response => {
+                setDoctors(response.data);
                 setDoctorSelectError("");
-            } else {
-                setDoctorSelectError("There was an error fetching doctors.");
-            }
+            }).catch(error => {
+                setDoctorSelectError('Error fetching data:' + error.response.data.message);
+            }).finally(() => setIsDoctorsLoading(false));
 
-            setIsDoctorsLoading(false);
         } catch (e) {
             const error = e as ApiError;
             setDoctorSelectError(error.response?.data?.message || "An error occurred");
         }
-    }, 200); // Debounce for 500ms
+    }, 200);
 
     useEffect(() => {
         setIsDoctorsLoading(true)
@@ -140,26 +150,21 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
                 setPhoneError("")
                 setDoctorSelectError("")
 
-                const response = await fetch('/api/proxy/bills', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        ...formData,
-                        doctor_id: selectedDoctor,
-                        doctor_type: doctorType,
-                        date: date ? date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-                    }),
-                });
-
-                if (!response.ok) {
-                    setBookingCreateError('Failed to submit bill');
+                const body = {
+                    ...formData,
+                    doctor_id: selectedDoctor,
+                    doctor_type: doctorType,
+                    user_id: user?.id,
+                    date: date ? date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
                 }
 
-                const data = await response.json();
-                setBookingResponse(data)
-                setIsFormSubmitting(false);
+                axios.post('/bookings/make-appointment', body).then(response => {
+                    setBookingResponse(response.data)
+                    setIsFormSubmitting(false);
+                }).catch(error => {
+                    setBookingCreateError(error.response.data.message);
+                });
+
             } catch (e) {
                 const error = e as ApiError;
                 setBookingCreateError(error.response?.data?.message || "An error occurred");
@@ -177,7 +182,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
                             <XCircleIcon width={30}/>
                         </button>
                         <h2 className="text-2xl font-bold mb-2">Doctor Appointment</h2>
-                        <p className="text-gray-500">If you&#39;re logged in, you can also view your booking history for easy
+                        <p className="text-gray-500">{!user?.token ? 'If you\'re logged in' : 'If you visit the dashboard'}, you can also view your booking history for easy
                             access and management.</p>
                     </div>
 
@@ -258,7 +263,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
 
                     {bookingCreateError && <div className="text-red-500 text-sm px-8 py-3">{bookingCreateError}</div>}
 
-                    {bookingResponse && (
+                    {bookingResponse && bookingResponse.bill_id && (
                         <div className="mx-8 my-1 rounded-lg border-2 border-green-500">
                             <div className="pt-5 pb-4 px-6">
                                 <h3 className="text-lg font-bold mb-2">Booking Details</h3>
@@ -278,7 +283,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
                         <Button onClick={handleBooking} color={"purple"} className="mt-4">Make Booking</Button>
                         <Button color={'gray'} onClick={onCloseBookingWindow} className="mt-4">Close</Button>
                         {isFormSubmitting && <div className="pt-5"><Loader/></div>}
-                        {bookingResponse &&
+                        {bookingResponse && bookingResponse.bill_id &&
                             <div className="text-green-600 mt-4 flex items-center">
                                 <CheckCircleIcon width={20} className="mr-1"/> Booking success!
                             </div>
@@ -287,9 +292,9 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
                 </div>
                 <div className="px-8 pb-8 pt-6 flex justify-between">
                     <div className="text-sm">For inquiries, please contact us at {process.env.NEXT_PUBLIC_APP_TELEPHONE}</div>
-                    <div className="text-right">
+                    {!user?.token && <div className="text-right text-sm">
                         <a href="/login" className="mr-4 text-blue-500">Login</a>
-                        <a href="/register" className="text-blue-500">Register</a></div>
+                        <a href="/register" className="text-blue-500">Register</a></div>}
                 </div>
             </div>
         </div>
