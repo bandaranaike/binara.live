@@ -1,18 +1,11 @@
-.react-calendar {
-    width: 100%;
-    border: none;
-    border-radius: 1rem;
-}
-
-.react-calendar__tile--now {
-    background: #cbd5e0;
-}
-
-.react-calendar__tile--active {
-    background: #a0aec0;
-    color: white;
-}
-
 .day {
     min-height: 100px;
+}
+
+.calendar-bottom {
+    margin-top: -1px;
+}
+
+.last-item-rb-0 > div {
+    margin-right: -1px;
 }

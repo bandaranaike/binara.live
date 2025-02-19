@@ -21,6 +21,7 @@ const Header: React.FC = () => {
     const navigation = [
         {name: 'About us', href: 'about'},
         {name: 'Contact', href: 'contacts'},
+        {name: 'Doctors availability', href: 'availability-calendar'},
     ]
 
 
