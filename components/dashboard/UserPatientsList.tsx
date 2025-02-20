@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import Loader from "@/components/form/Loader";
 import axios from "@/lib/axios";
 import {PencilSquareIcon, PlusIcon, TrashIcon} from "@heroicons/react/24/outline";
+import {compileNonPath} from "next/dist/shared/lib/router/utils/prepare-destination";
 
 interface Patient {
     id: string;
@@ -15,13 +16,23 @@ interface Patient {
 
 const UserPatientsList: React.FC = () => {
     const [patients, setPatients] = useState<Patient[]>([]);
-    const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+    const [selectedPatient, setSelectedPatient] = useState<Patient | null>({
+        id: "",
+        name: "",
+        age: 0,
+        address: "",
+        telephone: "",
+        birthday: "",
+        gender: "",
+    });
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [patientToDelete, setPatientToDelete] = useState<string | null>(null);
     const [patientsFetchError, setPatientsFetchError] = useState<string | null>(null);
+    const [patientsSaveError, setPatientsSaveError] = useState<string | null>(null);
+    const [patientsDeleteError, setPatientsDeleteError] = useState<string | null>(null);
 
     // Fetch patients from API
     useEffect(() => {
@@ -43,6 +54,7 @@ const UserPatientsList: React.FC = () => {
     };
 
     const handleDelete = (id: string) => {
+        setPatientsDeleteError("")
         setPatientToDelete(id);
         setIsDeleteModalOpen(true);
     };
@@ -50,28 +62,34 @@ const UserPatientsList: React.FC = () => {
     const confirmDelete = async () => {
         if (patientToDelete) {
             // Replace with your API call
-            await fetch(`/api/patients/${patientToDelete}`, {method: "DELETE"});
-            fetchPatients(); // Refresh the list
-            setIsDeleteModalOpen(false);
-            setPatientToDelete(null);
+            await axios.delete(`/patient/delete-patient/${patientToDelete}`).then(() => {
+                fetchPatients(); // Refresh the list
+                setIsDeleteModalOpen(false);
+                setPatientToDelete(null);
+            }).catch(e => {
+                setPatientsDeleteError(e.response.data.message)
+            });
+
         }
     };
 
     const savePatient = async (patient: Patient) => {
-        const url = patient.id ? `/api/patients/${patient.id}` : "/api/patients";
+        const url = patient.id ? `/patient/update-patient/${patient.id}` : "/patient/create-patient";
         const method = patient.id ? "PUT" : "POST";
-
+        setPatientsSaveError("")
         // Replace with your API call
-        await fetch(url, {
+        axios({
             method,
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(patient),
+            url,
+            data: patient
+        }).then(() => {
+            setSelectedPatient(null);
+            fetchPatients();
+            setIsEditModalOpen(false);
+            setIsCreateModalOpen(false);
+        }).catch(e => {
+            setPatientsSaveError(e.response.data.message)
         });
-
-        fetchPatients(); // Refresh the list
-        setIsEditModalOpen(false);
-        setIsCreateModalOpen(false);
-        setSelectedPatient(null);
     };
 
     return (
@@ -145,6 +163,7 @@ const UserPatientsList: React.FC = () => {
                 <PatientModal
                     patient={selectedPatient}
                     onSave={savePatient}
+                    patientsSaveError={patientsSaveError}
                     onClose={() => setIsEditModalOpen(false)}
                 />
             )}
@@ -153,6 +172,7 @@ const UserPatientsList: React.FC = () => {
             {isCreateModalOpen && (
                 <PatientModal
                     onSave={savePatient}
+                    patientsSaveError={patientsSaveError}
                     onClose={() => setIsCreateModalOpen(false)}
                 />
             )}
@@ -160,22 +180,25 @@ const UserPatientsList: React.FC = () => {
             {/* Delete Confirmation Modal */}
             {isDeleteModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white p-6 rounded">
-                        <p>Are you sure you want to delete this patient?</p>
-                        <div className="flex justify-end mt-4">
+                    <div className="bg-white p-6 rounded-xl max-w-xl mx-auto">
+                        <h3 className="text-2xl font-semibold mb-2">Are you sure you want to delete this patient?</h3>
+                        <p className="text-gray-500">This action cannot be undone. Once deleted, all related data will be permanently removed</p>
+                        {patientsDeleteError && <div className="text-red-500 my-3">{patientsDeleteError}</div>}
+                        <div className="flex justify-end mt-2">
                             <button
                                 onClick={() => setIsDeleteModalOpen(false)}
-                                className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+                                className="border border-gray-400 px-4 py-2 rounded-lg mr-2"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={confirmDelete}
-                                className="bg-red-500 text-white px-4 py-2 rounded"
+                                className="bg-red-600 text-white px-4 py-2 rounded-lg"
                             >
                                 Delete
                             </button>
                         </div>
+
                     </div>
                 </div>
             )}
@@ -189,7 +212,7 @@ interface PatientModalProps {
     onClose: () => void;
 }
 
-const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) => {
+const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose, patientsSaveError}) => {
     const [formData, setFormData] = useState<Patient>(
         patient || {
             id: "",
@@ -214,7 +237,7 @@ const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) =
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded w-1/3">
+            <div className="bg-white p-6 rounded-xl w-1/3">
                 <h2 className="text-xl font-bold mb-4">{patient ? "Edit Patient" : "Add New Patient"}</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
@@ -222,9 +245,10 @@ const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) =
                         <input
                             type="text"
                             name="name"
-                            value={formData.name}
+                            placeholder="Patient name"
+                            value={formData.name || ''}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded"
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                             required
                         />
                     </div>
@@ -232,10 +256,11 @@ const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) =
                         <label className="block text-sm font-medium mb-2">Age</label>
                         <input
                             type="number"
+                            placeholder="Patient age"
                             name="age"
-                            value={formData.age}
+                            value={formData.age || ''}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded"
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                             required
                         />
                     </div>
@@ -243,11 +268,11 @@ const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) =
                         <label className="block text-sm font-medium mb-2">Address</label>
                         <input
                             type="text"
+                            placeholder="Address"
                             name="address"
-                            value={formData.address}
+                            value={formData.address || ''}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded"
-                            required
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                         />
                     </div>
                     <div className="mb-4">
@@ -255,9 +280,10 @@ const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) =
                         <input
                             type="text"
                             name="telephone"
-                            value={formData.telephone}
+                            placeholder="Telephone"
+                            value={formData.telephone || ''}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded"
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                             required
                         />
                     </div>
@@ -266,10 +292,10 @@ const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) =
                         <input
                             type="date"
                             name="birthday"
-                            value={formData.birthday}
+                            placeholder="Birthday"
+                            value={formData.birthday || ''}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded"
-                            required
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                         />
                     </div>
                     <div className="mb-4">
@@ -277,24 +303,25 @@ const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose}) =
                         <input
                             type="text"
                             name="gender"
-                            value={formData.gender}
+                            placeholder="Gender"
+                            value={formData.gender || ''}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded"
-                            required
+                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
                         />
                     </div>
-                    <div className="flex justify-end">
+                    <div className="flex justify-end gap-4">
                         <button
                             type="button"
                             onClick={onClose}
-                            className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+                            className="px-6 py-2 border rounded-lg border-gray-600 bg-white inline-block"
                         >
                             Cancel
                         </button>
-                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+                        <button type="submit" className="font-semibold px-8 py-2 border rounded-lg border-purple-800 bg-purple-700 text-white inline-block">
                             Save
                         </button>
                     </div>
+                    {patientsSaveError && <div className="my-3 text-red-500">{patientsSaveError}</div>}
                 </form>
             </div>
         </div>

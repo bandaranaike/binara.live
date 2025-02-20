@@ -1,13 +1,30 @@
 "use client"
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import DoctorBooking from "@/components/DoctorBooking";
+import axios from "@/lib/axios";
+import Link from "next/link";
+import {DoctorBookingData} from "@/types/interfaces";
+
+interface TodayDoctors {
+    id: string;
+    doctor: string;
+    doctor_id: number;
+    doctor_type: string;
+    specialty: string;
+    time: string;
+    seats: string;
+    available_seats: string;
+}
 
 export default function Home() {
     const [isBookingWindowOpen, setIsBookingWindowOpen] = useState<boolean>(false)
-    const [todayDoctorsList] = useState([])
+    const [todayDoctorsList, setTodayDoctorsList] = useState<TodayDoctors[]>([])
+    const [todayDoctorsListError, setTodayDoctorsListError] = useState("")
+    const [channelingDoctor, setChannelingDoctor] = useState<DoctorBookingData>()
+
     const sliderSettings = {
         dots: true,
         infinite: true,
@@ -43,7 +60,22 @@ export default function Home() {
         },
     ];
 
-    const showBookingWindow = () => {
+    useEffect(() => {
+        fetchDoctors()
+
+    }, []);
+
+    const fetchDoctors = useCallback(() => {
+        axios.get(`/doctor-availabilities/get-today-doctors`).then(response => {
+            setTodayDoctorsList(response.data);
+        }).catch(error => {
+            setTodayDoctorsListError('Error fetching doctors:' + error.response.data.message);
+        });
+    }, []);
+
+
+    const showBookingWindow = (id: number = 0, type: string = "", name: string = "") => {
+        setChannelingDoctor({id, type, name})
         setIsBookingWindowOpen(true)
     };
     return (
@@ -54,34 +86,47 @@ export default function Home() {
                     <Slider {...sliderSettings} className="lg:col-span-2 lg:my-16">
                         {sliders.map((slider, index) => (
                             <div className="slider-item" key={index}>
-                                <h1 className="text-5xl font-bold">{slider.title}</h1>
+                                <h1 className="text-4xl lg:text-5xl font-bold">{slider.title}</h1>
                                 <p className="text-gray-600 mt-6">{slider.description}</p>
                                 <button
-                                    onClick={showBookingWindow}
+                                    onClick={() => showBookingWindow()}
                                     className=" bg-purple-900 text-white mt-8 text-sm rounded-full py-4 px-8 mb-6">Book an Appointment
                                 </button>
                             </div>
                         ))}
                     </Slider>
-                    { todayDoctorsList.length > 0  && <div className="rounded-xl border bg-gradient-to-br mt-16 lg:mt-0 from-purple-50 to-rose-50">
-                        <ul className="overflow-y-scroll max-h-fit">
-                            <li className="bg-white p-4 rounded-t-xl text-xl font-semibold border-b border-gray-200">Today&#39;s doctors list</li>
-                            {Array.from(Array(4)).map((item, i) =>
-                                <li className="border-b border-gray-200 py-2 px-4 flex items-center justify-between" key={i}>
-                                    <div>
-                                        <h4 className="font-semibold">Doctor Alahakoon</h4>
-
-                                        <p className="text-sm text-gray-500">Obstetrics and Gynecology</p>
-                                    </div>
-                                    <div className="">
-                                        <div className="text-gray-500 text-xs">Today</div>
-                                        <div className="text-purple-600 text-sm font-semibold">5.30PM - 8.30PM</div>
-                                    </div>
+                    <div className="">
+                        {todayDoctorsList.length > 0 && <div className="rounded-xl border  mt-16 lg:mt-0 bg-gradient-to-br from-gray-50 to-purple-50">
+                            <ul className="overflow-y-scroll max-h-fit">
+                                <li className="bg-white py-3 px-4 rounded-t-xl border-b border-gray-200">
+                                    <h3 className="font-semibold text-xl">Today&#39;s doctors list</h3>
+                                    <div className="text-gray-500 text-xs">View available doctors and their specialties. Book your appointment now!</div>
                                 </li>
-                            )}
-                            <li className="bg-white p-3 rounded-b-xl">Full calendar</li>
-                        </ul>
-                    </div> }
+                                {todayDoctorsList.map((todayDoctor) => {
+                                        return (
+                                            <li
+                                                className={`border-b border-gray-200 py-1 px-3 flex items-center justify-between cursor-pointer`}
+                                                key={todayDoctor.id}
+                                                onClick={() => showBookingWindow(todayDoctor.doctor_id, todayDoctor.doctor_type, todayDoctor.doctor)}
+                                            >
+                                                <div>
+                                                    <h4 className="font-semibold">{todayDoctor.doctor}</h4>
+                                                    <p className="text-sm text-gray-500">{todayDoctor.specialty}</p>
+                                                </div>
+                                                <div className="">
+                                                    <div className="text-gray-500 text-xs">Today</div>
+                                                    <div className="text-purple-600 text-sm font-semibold">{todayDoctor.time.substring(0, 5)}</div>
+                                                </div>
+                                            </li>)
+                                    }
+                                )}
+                                <li className="bg-white p-3 rounded-b-xl"><Link href={'availability-calendar'}>Full calendar</Link></li>
+                            </ul>
+                        </div>}
+                        {todayDoctorsListError && <div className="rounded-xl border bg-gradient-to-br mt-16 lg:mt-0 from-purple-50 to-rose-50">
+                            <div className="text-red-500">{todayDoctorsListError}</div>
+                        </div>}
+                    </div>
                 </div>
             </section>
             {/* Services Section */}
@@ -117,7 +162,7 @@ export default function Home() {
                     </p>
                 </div>
             </section>
-            {isBookingWindowOpen && <DoctorBooking onCloseBookingWindow={() => setIsBookingWindowOpen(false)}/>}
+            {isBookingWindowOpen && channelingDoctor && <DoctorBooking doctorData={channelingDoctor} onCloseBookingWindow={() => setIsBookingWindowOpen(false)}/>}
         </div>
     );
 }

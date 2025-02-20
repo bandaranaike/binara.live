@@ -1,5 +1,5 @@
 "use client"
-import {useState} from 'react';
+import React, {useState} from 'react';
 import axios from "@/lib/axios";
 import Loader from "@/components/form/Loader";
 
@@ -28,17 +28,14 @@ const ChangePassword = () => {
                 current_password: currentPassword,
                 new_password: newPassword,
                 new_password_confirmation: confirmPassword
-            })
-                .then((res) => {
-                    setMessage(res.data.message);
-                    setCurrentPassword('');
-                    setNewPassword('');
-                    setConfirmPassword('');
-                })
-                .catch((err) => {
-                    setError(err.response?.data?.message || "Something went wrong.");
-                })
-                .finally(() => setLoading(false));
+            }).then((res) => {
+                setMessage(res.data.message);
+                setCurrentPassword('');
+                setNewPassword('');
+                setConfirmPassword('');
+            }).catch((err) => {
+                setError(err.response?.data?.message || "Something went wrong.");
+            }).finally(() => setLoading(false));
         } catch (err) {
             console.error("Change Password Error:", err);
         }
@@ -47,8 +44,16 @@ const ChangePassword = () => {
     return (
         <div className="p-4 bg-white rounded-lg border max-w-4xl shadow-sm border-gray-200">
             <h3 className="text-xl font-bold mb-4">Change Password</h3>
-            {error && <div className="text-red-500 mb-4">{error}</div>}
-            {message && <div className="text-green-500 mb-4">{message}</div>}
+            {error && (
+                <div className="mb-4 p-4 bg-red-50 border border-red-500 text-red-700 rounded-lg">
+                    {error}
+                </div>
+            )}
+            {message && (
+                <div className="mb-4 p-4 bg-green-50 border border-green-500 text-green-700 rounded-lg">
+                    {message}
+                </div>
+            )}
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">

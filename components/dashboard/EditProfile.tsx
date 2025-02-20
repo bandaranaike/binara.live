@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from "react";
+import React, {useState, useEffect, FC} from "react";
 import Loader from "@/components/form/Loader";
 import axios from "@/lib/axios";
 
@@ -21,6 +21,7 @@ const EditProfile: FC = () => {
     const [errors, setErrors] = useState({
         name: "",
         phone: "",
+        submit: "",
         email: ""
     });
     const [successMessage, setSuccessMessage] = useState("");
@@ -44,7 +45,7 @@ const EditProfile: FC = () => {
     }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData({
             ...formData,
             [name]: value,
@@ -53,28 +54,31 @@ const EditProfile: FC = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setErrors({ name: "", phone: "", email: "" });
+        setErrors({name: "", phone: "", email: "", submit: ""});
         setSuccessMessage("");
         setLoading(true);
 
-        try {
-            await axios.put(`/api/users/${user?.id}`, formData);
-            setSuccessMessage("Profile updated successfully!");
-        } catch (error) {
-            console.error("Error updating profile:", error);
-        } finally {
-            setLoading(false);
-        }
+        axios.put(`/patient/update-profile/`, formData).then(
+            () => setSuccessMessage("Profile updated successfully!"))
+            .catch(e => setErrors({
+                ...errors,
+                submit: e.response.data.message
+            })).finally(() => setLoading(false))
     };
 
-    if (!user) return <Loader />;
+    if (!user) return <Loader/>;
 
     return (
         <div className="p-4 bg-white rounded-lg border max-w-4xl shadow-sm border-gray-200">
             <h3 className="text-xl font-bold mb-4">Edit Profile</h3>
             {successMessage && (
-                <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg">
+                <div className="mb-4 p-4 bg-green-50 border border-green-500 text-green-700 rounded-lg">
                     {successMessage}
+                </div>
+            )}
+            {errors.submit && (
+                <div className="mb-4 p-4 bg-red-50 border border-red-500 text-red-700 rounded-lg">
+                    {errors.submit}
                 </div>
             )}
             <form onSubmit={handleSubmit}>
@@ -129,7 +133,7 @@ const EditProfile: FC = () => {
                 </div>
 
                 <div className="flex justify-end gap-2">
-                    {loading && <Loader />}
+                    {loading && <Loader/>}
                     <button
                         type="submit"
                         className="px-4 py-3 bg-purple-700 text-white rounded-lg font-bold hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"

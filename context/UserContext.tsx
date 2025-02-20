@@ -1,5 +1,6 @@
 "use client"
 import React, {createContext, useContext, useState, useEffect} from "react";
+import axios from "@/lib/axios";
 
 export interface LoggedUser {
     role: string;
@@ -7,6 +8,7 @@ export interface LoggedUser {
     token: string;
     phone: string;
     email: string;
+    id: string;
 }
 
 // Define the context type
@@ -51,6 +53,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
 
     // Logout function
     const logout = () => {
+        axios.post('patient/logout')
         setUserWithStorage(null);
     };
 

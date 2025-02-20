@@ -7,18 +7,14 @@ export async function POST(request: Request) {
         const body = await request.json();
 
         // Forward the request to the critical API
-        const response = await axios.post('/bookings/make-appointment', body);
+        axios.post('/bookings/make-appointment', body).then(response => {
+            return NextResponse.json(response.data);
+        }).catch(error => {
+            return NextResponse.json({error: error.response.data.message}, {status: error.response.status});
+        });
 
-        // Handle errors from the critical API
-        if (response.status !== 200) {
-            const errorData = await response.data;
-            return NextResponse.json({error: errorData}, {status: response.status});
-        }
-
-        // Return the response to the client
-        return NextResponse.json(response.data);
     } catch (error) {
         console.error('Error in proxy route:', error);
-        return NextResponse.json({error: 'Internal Server Error'}, {status: 500});
+        return NextResponse.json({error: 'Internal Server Error', e: error}, {status: 500});
     }
 }
