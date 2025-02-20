@@ -187,7 +187,7 @@ const DoctorsAvailability: React.FC = () => {
                     <button onClick={handleNextMonth} className="border border-gray-300 py-1 px-3 text-sm rounded-lg hover:border-purple-500">Next</button>
                 </div>
             </div>
-            {loadingError && <div className="text-red-500 mx-3">{loadingError}</div>}
+            {loadingError && <div className="text-red-500 my-3">{loadingError}</div>}
             {isBookingWindowOpen && channelingDoctor &&
                 <DoctorBooking onAppointmentBooked={() => fetchAvailability(currentMonth, [])} doctorData={channelingDoctor} onCloseBookingWindow={() => setIsBookingWindowOpen(false)}/>}
         </div>
