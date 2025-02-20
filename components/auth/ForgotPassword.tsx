@@ -29,7 +29,6 @@ const ForgotPassword = () => {
         try {
             axios.post('/patient/forgot-password', {email})
                 .then((res) => {
-                    console.log(res.data)
                     setMessage(res.data);
                 })
                 .catch((err) => {

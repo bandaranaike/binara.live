@@ -4,12 +4,14 @@ import axios from '@/lib/axios';
 import '@/app/calendar-styles.css';
 import DoctorsSearch from "@/components/form/DoctorsSearch";
 import Loader from "@/components/form/Loader";
-import getDoctorColor from "@/lib/doctor_color"; // Custom styles
+import getDoctorColor from "@/lib/doctor_color";
+import DoctorBooking from "@/components/DoctorBooking";
+import {DoctorBookingData} from "@/types/interfaces"; // Custom styles
 
 interface DoctorAvailability {
     id: number;
     doctor_id: number;
-    doctor: { id: number, name: string };
+    doctor: { id: number, name: string, doctor_type: string };
     date: string;
     time: string;
     seats: number;
@@ -26,6 +28,8 @@ const DoctorsAvailability: React.FC = () => {
     const [loadingError, setLoadingError] = useState("");
     const [clearDataKey, setClearDataKey] = useState("");
     const [prevMonthAvailable, setPrevMonthAvailable] = useState(false)
+    const [channelingDoctor, setChannelingDoctor] = useState<DoctorBookingData>()
+    const [isBookingWindowOpen, setIsBookingWindowOpen] = useState<boolean>(false)
 
     useEffect(() => {
         fetchAvailability(currentMonth, []);
@@ -62,6 +66,11 @@ const DoctorsAvailability: React.FC = () => {
         return new Date(year, month + 1, 0).getDate();
     };
 
+    const showBookingWindow = (data: DoctorBookingData) => {
+        setChannelingDoctor(data)
+        setIsBookingWindowOpen(true)
+    };
+
     const renderDays = () => {
         const daysInMonth = getDaysInMonth(currentMonth);
         const firstDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay();
@@ -78,27 +87,29 @@ const DoctorsAvailability: React.FC = () => {
         }
 
         for (let i = 1; i <= daysInMonth; i++) {
-            const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), i);
+            const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), i + 1);
             const formattedDate = date.toISOString().split('T')[0];
-            const dayAvailability = availability.filter(avail => avail.date === formattedDate);
+            const dayAvailability = availability.filter(item => item.date === formattedDate);
 
             days.push(
                 <div key={i} className="min-h-24 border-b border-r border-gray-200 p-2">
                     <div className="font-bold mb-2">{i}</div>
                     {dayAvailability.length > 0 ? (
                         <ul className="">
-                            {dayAvailability.map(avail => {
-                                const doctorColor = getDoctorColor(avail.doctor.id) // Assign a color
+                            {dayAvailability.map(item => {
+                                const doctorColor = getDoctorColor(item.doctor.id) // Assign a color
                                 return (
-                                    <li key={avail.id}
-                                        className={`text-xs flex content-center text-gray-700 border border-${doctorColor}-200 rounded mb-1 bg-${doctorColor}-100`}>
-                                        <div className="px-2 py-1 flex-grow">{avail.doctor?.name} </div>
+                                    <li key={item.id}
+                                        className={`text-xs flex content-center text-gray-700 border border-${doctorColor}-200 rounded mb-1 bg-${doctorColor}-100 cursor-pointer`}
+                                        onClick={() => showBookingWindow({id: item.doctor_id, type: item.doctor.doctor_type, date: item.date, name: item.doctor?.name})}
+                                    >
+                                        <div className="px-2 py-1 flex-grow">{item.doctor?.name} </div>
                                         <div className={`flex items-center px-1 py-1 border-l text-xs border-${doctorColor}-200`}>
-                                            {avail.time.substring(0, 5)}
+                                            {item.time.substring(0, 5)}
                                         </div>
-                                        {avail.seats > 0 && (
+                                        {item.seats > 0 && (
                                             <div className={`flex items-center px-1 py-1 border-l text-xs border-${doctorColor}-200`}>
-                                                {avail.available_seats}/{avail.seats}
+                                                {item.available_seats}/{item.seats}
                                             </div>
                                         )}
                                     </li>
@@ -168,6 +179,7 @@ const DoctorsAvailability: React.FC = () => {
                 </div>
             </div>
             {loadingError && <div className="text-red-500 mx-3">{loadingError}</div>}
+            {isBookingWindowOpen && channelingDoctor && <DoctorBooking doctorData={channelingDoctor} onCloseBookingWindow={() => setIsBookingWindowOpen(false)}/>}
         </div>
     );
 };

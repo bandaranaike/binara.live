@@ -4,13 +4,16 @@ import {Button, Select, Datepicker} from "flowbite-react";
 import {Input} from "@headlessui/react";
 import debounce from "debounce";
 import parsePhoneNumber from "libphonenumber-js";
-import {CheckCircleIcon, InformationCircleIcon, XCircleIcon} from "@heroicons/react/24/outline";
+import {CheckCircleIcon, InformationCircleIcon, MinusCircleIcon, XCircleIcon} from "@heroicons/react/24/outline";
 import Loader from "@/components/form/Loader";
 import axios from "@/lib/axios";
 import {useUserContext} from "@/context/UserContext";
+import {DoctorBookingData} from "@/types/interfaces";
 
 interface DoctorBookingProps {
     onCloseBookingWindow: () => void;
+    channelingDate?: string;
+    doctorData: DoctorBookingData
 }
 
 interface BookingResponse {
@@ -37,11 +40,11 @@ interface ApiError {
     };
 }
 
-const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => {
-    const [doctorType, setDoctorType] = useState("specialist");
+const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doctorData}) => {
+    const [doctorType, setDoctorType] = useState(doctorData.type ?? "specialist");
     const [doctors, setDoctors] = useState<Doctor[]>([]);
-    const [selectedDoctor, setSelectedDoctor] = useState("");
-    const [date, setDate] = useState<Date | null>(new Date());
+    const [selectedDoctor, setSelectedDoctor] = useState(doctorData.id);
+    const [date, setDate] = useState<Date | null>(doctorData.date ? new Date(Date.parse(doctorData.date)) : new Date());
     const [formData, setFormData] = useState({name: "", phone: "", age: "", email: ""});
     const [bookingResponse, setBookingResponse] = useState<BookingResponse | null>(null);
     const [doctorSelectError, setDoctorSelectError] = useState("");
@@ -53,6 +56,8 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
     const [isDoctorsLoading, setIsDoctorsLoading] = useState<boolean>(false)
     const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false)
 
+    const [searchQuery, setSearchQuery] = useState(doctorData.name ?? "");
+
     const {user} = useUserContext();
 
     const fetchDoctors = debounce(async (doctorType, setDoctors, setDoctorSelectError) => {
@@ -60,6 +65,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
             axios.get("doctor-availabilities/search-booking-doctors", {
                 params: {
                     type: doctorType,
+                    query: searchQuery
                 }
             }).then(response => {
                 setDoctors(response.data);
@@ -80,6 +86,16 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
             fetchDoctors(doctorType, setDoctors, setDoctorSelectError);
         }
     }, [doctorType]);
+
+    useEffect(() => {
+        fetchDoctors(doctorType, setDoctors, setDoctorSelectError)
+    }, [searchQuery]);
+
+    useEffect(() => {
+        if (formData.phone) setPhoneError("")
+        if (formData.age) setAgeError("")
+        if (formData.name) setNameError("")
+    }, [formData]);
 
     const handleChange = debounce((e: ChangeEvent<HTMLInputElement>) => { // Type the event argument
         setFormData({...formData, [e.target.name]: e.target.value});
@@ -111,11 +127,17 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
         setSelectedDoctor(doctorId);
     }
 
+
     const areAllInputsValid = () => {
         let valid = true;
         // Validate all fields
         if (!selectedDoctor) {
             setDoctorSelectError("Please select a doctor");
+            valid = false;
+        }
+
+        if (!user && !formData.phone) {
+            setPhoneError('Phone number is required')
             valid = false;
         }
 
@@ -173,12 +195,16 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
         }
     };
 
+    const removeSelectedDoctor = () => {
+        setSelectedDoctor(0)
+        setSearchQuery("")
+    };
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
             <div className="max-w-2xl flex-grow max-h-full overflow-y-scroll lg:mx-auto mx-4 bg-white rounded-2xl">
                 <div>
                     <div className="p-8 pb-0 relative">
-                        <button title="Close window" className="absolute right-0 mr-4 -mt-4 text-gray-400 hover:text-purple-500" onClick={onCloseBookingWindow}>
+                        <button title="Close window" className="absolute right-0 mr-4 -mt-4 text-gray-500 hover:text-purple-500" onClick={onCloseBookingWindow}>
                             <XCircleIcon width={30}/>
                         </button>
                         <h2 className="text-2xl font-bold mb-2">Doctor Appointment</h2>
@@ -194,7 +220,13 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
                                     <option value="specialist">Specialist</option>
                                 </Select>
                             </div>
-                            <div className="lg:col-span-3">
+                            <div className="lg:col-span-3 relative">
+                                {(selectedDoctor && selectedDoctor != 0) ? <div
+                                    className="absolute text-gray-600 -mt-6 right-2 flex gap-1 text-xs hover:text-yellow-700 cursor-pointer "
+                                    onClick={() => removeSelectedDoctor()}
+                                >
+                                    <MinusCircleIcon width={16}/>Clear Doctor
+                                </div> : ''}
                                 {!isDoctorsLoading && <Select className="mb-1" value={selectedDoctor} onChange={(e) => changeDoctor(e.target.value)}>
                                     <option value="0">Please select...</option>
                                     {doctors && doctors.map((doc) => (
@@ -247,7 +279,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow}) => 
                         <Input
                             className="mb-3 w-full border border-gray-200 py-2 px-4 rounded-lg"
                             name="phone"
-                            placeholder="Your's phone number *"
+                            placeholder={`Your phone number ${user ? '' : '*'}`}
                             onChange={handlePhoneChange}/>
 
                         {phoneError && <div className="text-red-500 text-sm mb-3 -mt-2 pl-1">{phoneError}</div>}
