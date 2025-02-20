@@ -12,6 +12,7 @@ import {DoctorBookingData} from "@/types/interfaces";
 
 interface DoctorBookingProps {
     onCloseBookingWindow: () => void;
+    onAppointmentBooked?: () => void;
     channelingDate?: string;
     doctorData: DoctorBookingData
 }
@@ -40,7 +41,9 @@ interface ApiError {
     };
 }
 
-const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doctorData}) => {
+const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doctorData, onAppointmentBooked}) => {
+    const {user} = useUserContext();
+
     const [doctorType, setDoctorType] = useState(doctorData.type ?? "specialist");
     const [doctors, setDoctors] = useState<Doctor[]>([]);
     const [selectedDoctor, setSelectedDoctor] = useState(doctorData.id);
@@ -58,7 +61,6 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
 
     const [searchQuery, setSearchQuery] = useState(doctorData.name ?? "");
 
-    const {user} = useUserContext();
 
     const fetchDoctors = debounce(async (doctorType, setDoctors, setDoctorSelectError) => {
         try {
@@ -171,9 +173,11 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                 setBookingCreateError("")
                 setPhoneError("")
                 setDoctorSelectError("")
+                setBookingResponse(null)
 
                 const body = {
                     ...formData,
+                    phone: user && !formData.phone ? user.phone : formData.phone,
                     doctor_id: selectedDoctor,
                     doctor_type: doctorType,
                     user_id: user?.id,
@@ -181,11 +185,12 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                 }
 
                 axios.post('/bookings/make-appointment', body).then(response => {
+                    if (onAppointmentBooked) onAppointmentBooked();
                     setBookingResponse(response.data)
-                    setIsFormSubmitting(false);
                 }).catch(error => {
-                    setBookingCreateError(error.response.data.message);
-                });
+                    if (error.response?.data?.message) setBookingCreateError(error.response.data.message);
+                    else if (error.response?.data) setBookingCreateError(error.response.data);
+                }).finally(() => setIsFormSubmitting(false));
 
             } catch (e) {
                 const error = e as ApiError;

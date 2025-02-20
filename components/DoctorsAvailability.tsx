@@ -11,7 +11,12 @@ import {DoctorBookingData} from "@/types/interfaces"; // Custom styles
 interface DoctorAvailability {
     id: number;
     doctor_id: number;
-    doctor: { id: number, name: string, doctor_type: string };
+    doctor: {
+        id: number,
+        name: string,
+        doctor_type: string,
+        specialty: { id: number, name: string }
+    };
     date: string;
     time: string;
     seats: number;
@@ -103,7 +108,10 @@ const DoctorsAvailability: React.FC = () => {
                                         className={`text-xs flex content-center text-gray-700 border border-${doctorColor}-200 rounded mb-1 bg-${doctorColor}-100 cursor-pointer`}
                                         onClick={() => showBookingWindow({id: item.doctor_id, type: item.doctor.doctor_type, date: item.date, name: item.doctor?.name})}
                                     >
-                                        <div className="px-2 py-1 flex-grow">{item.doctor?.name} </div>
+                                        <div className="px-2 py-1 flex-grow">
+                                            <div className="font-semibold">{item.doctor.name} </div>
+                                            {item.doctor.specialty && <div className="text-gray-500">{item.doctor.specialty.name} </div>}
+                                        </div>
                                         <div className={`flex items-center px-1 py-1 border-l text-xs border-${doctorColor}-200`}>
                                             {item.time.substring(0, 5)}
                                         </div>
@@ -150,14 +158,15 @@ const DoctorsAvailability: React.FC = () => {
 
             <div className="border border-gray-200 rounded-xl shadow-sm relative">
                 {loading && <div className="absolute right-0 -mt-12"><Loader/></div>}
-                <div className="flex justify-between content-center p-4">
-                    <button onClick={handlePrevMonth} className={`border border-gray-300 py-2 px-4 rounded-lg ${prevMonthAvailable ? 'hover:border-purple-500' : 'text-gray-400'}`}>
+                <div className="flex justify-between content-center p-2">
+                    <button onClick={handlePrevMonth}
+                            className={`border border-gray-300 py-1 px-3 text-sm rounded-lg ${prevMonthAvailable ? 'hover:border-purple-500' : 'text-gray-400'}`}>
                         Previous
                     </button>
-                    <div className="font-bold text-xl p-2">
+                    <div className="font-bold text-lg p-1">
                         {currentMonth.toLocaleString('default', {month: 'long'})} {currentMonth.getFullYear()}
                     </div>
-                    <button onClick={handleNextMonth} className="border border-gray-300 py-2 px-4 rounded-lg hover:border-purple-500">Next</button>
+                    <button onClick={handleNextMonth} className="border border-gray-300 py-1 px-3 text-sm rounded-lg hover:border-purple-500">Next</button>
                 </div>
                 <div className="hidden lg:grid last-item-rb-0 grid-cols-2 lg:grid-cols-7 border-t border-gray-200">
                     {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
@@ -167,19 +176,20 @@ const DoctorsAvailability: React.FC = () => {
                 <div className="grid last-item-rb-0 grid-cols-2 border-t lg:grid-cols-7 border-gray-200">
                     {renderDays()}
                 </div>
-                <div className="p-4 calendar-bottom border-t border-gray-200 flex justify-between content-center">
-                    <button onClick={handlePrevMonth} className={`border border-gray-300 py-2 px-4 rounded-lg ${prevMonthAvailable ? 'hover:border-purple-500' : 'text-gray-400'}`}>
+                <div className="p-2 calendar-bottom border-t border-gray-200 flex justify-between content-center">
+                    <button onClick={handlePrevMonth}
+                            className={`border border-gray-300 py-1 px-3 text-sm rounded-lg ${prevMonthAvailable ? 'hover:border-purple-500' : 'text-gray-400'}`}>
                         Previous
                     </button>
-                    <div className="font-bold text-xl p-2">
+                    <div className="font-bold text-lg p-1">
                         {currentMonth.toLocaleString('default', {month: 'long'})} {currentMonth.getFullYear()}
                     </div>
-                    <button onClick={handleNextMonth} className="border border-gray-300 py-2 px-4 rounded-lg hover:border-purple-500">Next</button>
-
+                    <button onClick={handleNextMonth} className="border border-gray-300 py-1 px-3 text-sm rounded-lg hover:border-purple-500">Next</button>
                 </div>
             </div>
             {loadingError && <div className="text-red-500 mx-3">{loadingError}</div>}
-            {isBookingWindowOpen && channelingDoctor && <DoctorBooking doctorData={channelingDoctor} onCloseBookingWindow={() => setIsBookingWindowOpen(false)}/>}
+            {isBookingWindowOpen && channelingDoctor &&
+                <DoctorBooking onAppointmentBooked={() => fetchAvailability(currentMonth, [])} doctorData={channelingDoctor} onCloseBookingWindow={() => setIsBookingWindowOpen(false)}/>}
         </div>
     );
 };

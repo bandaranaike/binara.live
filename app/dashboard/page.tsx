@@ -7,6 +7,7 @@ import UserPatientsList from "@/components/dashboard/UserPatientsList";
 import UserAppointmentsList from "@/components/dashboard/UserAppointmentsList";
 import EditProfile from "@/components/dashboard/EditProfile";
 import ChangePassword from "@/components/dashboard/ChangePassword";
+import Loader from "@/components/form/Loader";
 
 const Dashboard: React.FC = () => {
     const {user} = useUserContext();
@@ -72,7 +73,8 @@ const Dashboard: React.FC = () => {
                         )}
                     </div>
                 ) : (
-                    <div className="text-yellow-500 mt-6">
+                    <div className="text-yellow-500 mt-6 mx-auto content-center">
+                        <div className="my-12"><Loader/></div>
                         Please <Link href="/login" className="underline">Login</Link>
                     </div>
                 )}

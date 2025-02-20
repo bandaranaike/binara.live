@@ -27,7 +27,9 @@ const Contacts = () => {
     return (
         <div className="lg:px-8">
             <div className="bg-white max-w-7xl mx-auto py-12 px-4 lg:px-0">
-                <h1 className="text-4xl font-semibold">Contact us</h1>
+                <h1 className="text-4xl mb-3 font-semibold">Contact us</h1>
+                <p className="text-gray-600">Have questions or need assistance? We&#39;re here to help! Reach out to us via the form below or contact us directly. We’ll get back to
+                    you as soon as possible</p>
 
                 <div className="lg:grid lg:grid-cols-3 lg:gap-4 mt-12">
                     <div className="lg:col-span-2">

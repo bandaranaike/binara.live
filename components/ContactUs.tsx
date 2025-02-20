@@ -95,7 +95,7 @@ const ContactUs: React.FC = () => {
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
-                    <div className="col-span-3 mt-2">
+                    <div className="col-span-3">
                         <label htmlFor="message">Message: <span className="text-red-500">*</span></label>
                         <textarea
                             id="message"
@@ -106,7 +106,7 @@ const ContactUs: React.FC = () => {
                         />
                     </div>
                 </div>
-                <div className="flex gap-4 mt-6 items-center">
+                <div className="flex gap-4 mt-4 items-center">
                     <button type="submit" disabled={loading} className="px-6 py-3 border rounded-lg border-purple-800 bg-purple-700 text-white font-semibold inline-block">
                         {loading ? 'Sending...' : 'Send Message'}
                     </button>

@@ -100,13 +100,13 @@ const DoctorsSearch: React.FC<DoctorsSearchProps> = ({year, month, onDoctorsSele
                 <div className="relative">
                     <input
                         type="text"
-                        className={`border border-gray-200 rounded-lg w-full px-4 py-3 focus:ring-gray-200 focus:border-gray-200 ${showDropDown ? 'pb-5 mb-0' : 'mb-2 pb-3'}`}
+                        className={`border border-gray-200 rounded-lg w-full px-4 py-2 focus:ring-gray-200 focus:border-gray-200 ${showDropDown ? 'pb-4 mb-0' : 'mb-1 pb-2'}`}
                         placeholder="Search for doctors or specialties..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onClick={(e) => e.stopPropagation()} // Prevent event propagation
                     />
-                    <XCircleIcon className="absolute right-4 top-4 hover:text-red-500" width={20} onClick={handleCancel}/>
+                    <XCircleIcon className="absolute right-3 top-3 hover:text-red-500" width={20} onClick={handleCancel}/>
                 </div>
 
                 {showDropDown && (

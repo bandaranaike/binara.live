@@ -105,7 +105,7 @@ export default function Home() {
                                 {todayDoctorsList.map((todayDoctor) => {
                                         return (
                                             <li
-                                                className={`border-b border-gray-200 py-1 px-2 flex items-center justify-between cursor-pointer`}
+                                                className={`border-b border-gray-200 py-1 px-3 flex items-center justify-between cursor-pointer`}
                                                 key={todayDoctor.id}
                                                 onClick={() => showBookingWindow(todayDoctor.doctor_id, todayDoctor.doctor_type, todayDoctor.doctor)}
                                             >
@@ -115,7 +115,7 @@ export default function Home() {
                                                 </div>
                                                 <div className="">
                                                     <div className="text-gray-500 text-xs">Today</div>
-                                                    <div className="text-purple-600 text-sm font-semibold">{todayDoctor.time}</div>
+                                                    <div className="text-purple-600 text-sm font-semibold">{todayDoctor.time.substring(0, 5)}</div>
                                                 </div>
                                             </li>)
                                     }
