@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import Loader from "@/components/form/Loader";
 import axios from "@/lib/axios";
 import {PencilSquareIcon, PlusIcon, TrashIcon} from "@heroicons/react/24/outline";
-import {compileNonPath} from "next/dist/shared/lib/router/utils/prepare-destination";
 
 interface Patient {
     id: string;
@@ -210,6 +209,7 @@ interface PatientModalProps {
     patient?: Patient;
     onSave: (patient: Patient) => void;
     onClose: () => void;
+    patientsSaveError: string | null;
 }
 
 const PatientModal: React.FC<PatientModalProps> = ({patient, onSave, onClose, patientsSaveError}) => {
