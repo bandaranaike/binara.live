@@ -97,7 +97,7 @@ const DoctorsAvailability: React.FC = () => {
             const dayAvailability = availability.filter(item => item.date === formattedDate);
 
             days.push(
-                <div key={i} className="min-h-24 border-b border-r border-gray-200 p-2">
+                <div key={i} className="min-h-24 border-b border-r border-gray-200 p-1 pb-0">
                     <div className="font-bold mb-2">{i}</div>
                     {dayAvailability.length > 0 ? (
                         <ul className="">
@@ -168,12 +168,12 @@ const DoctorsAvailability: React.FC = () => {
                     </div>
                     <button onClick={handleNextMonth} className="border border-gray-300 py-1 px-3 text-sm rounded-lg hover:border-purple-500">Next</button>
                 </div>
-                <div className="hidden lg:grid last-item-rb-0 grid-cols-2 lg:grid-cols-7 border-t border-gray-200">
+                <div className="hidden lg:grid last-item-rb-0 sm:grid-cols-2 lg:grid-cols-7 border-t border-gray-200">
                     {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
                         <div key={day} className="border-r text-gray-500 text-sm text-center border-gray-200 p-2">{day}</div>
                     ))}
                 </div>
-                <div className="grid last-item-rb-0 grid-cols-2 border-t lg:grid-cols-7 border-gray-200">
+                <div className="grid last-item-rb-0 sm:grid-cols-2 border-t lg:grid-cols-7 border-gray-200">
                     {renderDays()}
                 </div>
                 <div className="p-2 calendar-bottom border-t border-gray-200 flex justify-between content-center">

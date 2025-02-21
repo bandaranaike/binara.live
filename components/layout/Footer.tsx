@@ -40,6 +40,7 @@ const Footer: React.FC = () => {
             <div className="text-center text-gray-500 text-sm p-6">
                 <p>
                     &copy; 2025 Binara.live. All rights reserved.
+                    <a href="https://erbitron.com/" target="_blank"> Built by Erbitron </a>
                     | <a href="/term-of-use">Terms of Service </a>
                     | <a href="/privacy-policy">Privacy Policy </a>
                     | <a href="/cookie-policy">Cookie Policy </a>

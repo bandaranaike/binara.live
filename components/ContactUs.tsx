@@ -113,7 +113,7 @@ const ContactUs: React.FC = () => {
                     {loading && <Loader/>}
                 </div>
                 <div className="">
-                    {error && <div className="text-red-500">{error}</div>}
+                    {error && <div className="text-red-500 my-3">{error}</div>}
                     {response && <div className="text-green-600 border border-green-400 bg-green-50 rounded-lg py-3 px-6 mt-4">
                         {response.message} Your reference is : <span className="font-semibold">{response.reference}</span>
                     </div>}
