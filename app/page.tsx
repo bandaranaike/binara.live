@@ -97,7 +97,7 @@ export default function Home() {
                     </Slider>
                     <div className="">
                         {todayDoctorsList.length > 0 && <div className="rounded-xl border  mt-16 lg:mt-0 bg-gradient-to-br from-gray-50 to-purple-50">
-                            <ul className="overflow-y-scroll max-h-fit">
+                            <ul className="overflow-y-scroll max-h-fit no-scrollbar">
                                 <li className="bg-white py-3 px-4 rounded-t-xl border-b border-gray-200">
                                     <h3 className="font-semibold text-xl">Today&#39;s doctors list</h3>
                                     <div className="text-gray-500 text-xs">View available doctors and their specialties. Book your appointment now!</div>

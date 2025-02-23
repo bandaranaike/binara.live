@@ -206,7 +206,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     };
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-            <div className="max-w-2xl flex-grow max-h-full overflow-y-scroll lg:mx-auto mx-4 bg-white rounded-2xl">
+            <div className="max-w-2xl flex-grow max-h-full no-scrollbar overflow-y-scroll lg:mx-auto mx-4 bg-white rounded-2xl">
                 <div>
                     <div className="p-8 pb-0 relative">
                         <button title="Close window" className="absolute right-0 mr-4 -mt-4 text-gray-500 hover:text-purple-500" onClick={onCloseBookingWindow}>
@@ -227,7 +227,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                             </div>
                             <div className="lg:col-span-3 relative">
                                 {(selectedDoctor && selectedDoctor != 0) ? <div
-                                    className="absolute text-gray-600 -mt-6 right-2 flex gap-1 text-xs hover:text-yellow-700 cursor-pointer "
+                                    className="absolute text-gray-600 -mt-20 lg:-mt-6 right-2 flex gap-1 text-xs hover:text-yellow-700 cursor-pointer "
                                     onClick={() => removeSelectedDoctor()}
                                 >
                                     <MinusCircleIcon width={16}/>Clear Doctor
@@ -327,9 +327,9 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                         }
                     </div>
                 </div>
-                <div className="px-8 pb-8 pt-6 flex justify-between">
+                <div className="px-8 pb-8 pt-6 lg:flex justify-between">
                     <div className="text-sm">For inquiries, please contact us at {process.env.NEXT_PUBLIC_APP_TELEPHONE}</div>
-                    {!user?.token && <div className="text-right text-sm">
+                    {!user?.token && <div className="text-right text-sm lg:mt-0 mt-3">
                         <a href="/login" className="mr-4 text-blue-500">Login</a>
                         <a href="/register" className="text-blue-500">Register</a></div>}
                 </div>

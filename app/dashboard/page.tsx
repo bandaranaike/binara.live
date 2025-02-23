@@ -1,8 +1,8 @@
 "use client"
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useUserContext} from "@/context/UserContext";
 import Link from "next/link";
-
+import {useRouter} from 'next/navigation';
 import UserPatientsList from "@/components/dashboard/UserPatientsList";
 import UserAppointmentsList from "@/components/dashboard/UserAppointmentsList";
 import EditProfile from "@/components/dashboard/EditProfile";
@@ -12,6 +12,13 @@ import Loader from "@/components/form/Loader";
 const Dashboard: React.FC = () => {
     const {user} = useUserContext();
     const [activeTab, setActiveTab] = useState("appointments"); // Default tab
+
+    const router = useRouter();
+    useEffect(() => {
+        if (!user?.token) {
+            router.push('/login');
+        }
+    }, [user, router])
 
     return (
         <div className="p-4 lg:pt-0 lg:pb-12">
@@ -73,9 +80,9 @@ const Dashboard: React.FC = () => {
                         )}
                     </div>
                 ) : (
-                    <div className="text-yellow-500 mt-6 mx-auto content-center">
+                    <div className="text-yellow-500 mt-6 mx-auto content-center text-center">
                         <div className="my-12"><Loader/></div>
-                        Please <Link href="/login" className="underline">Login</Link>
+                        Please <Link href="/login" className="text-purple-600">Login</Link>
                     </div>
                 )}
             </div>
