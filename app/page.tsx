@@ -7,6 +7,7 @@ import DoctorBooking from "@/components/DoctorBooking";
 import axios from "@/lib/axios";
 import Link from "next/link";
 import {DoctorBookingData} from "@/types/interfaces";
+import Loader from "@/components/form/Loader";
 
 interface TodayDoctors {
     id: string;
@@ -24,6 +25,7 @@ export default function Home() {
     const [todayDoctorsList, setTodayDoctorsList] = useState<TodayDoctors[]>([])
     const [todayDoctorsListError, setTodayDoctorsListError] = useState("")
     const [channelingDoctor, setChannelingDoctor] = useState<DoctorBookingData>()
+    const [loadingTodayList, setLoadingTodayList] = useState<boolean>(true)
 
     const sliderSettings = {
         dots: true,
@@ -61,16 +63,16 @@ export default function Home() {
     ];
 
     useEffect(() => {
+        setLoadingTodayList(true)
         fetchDoctors()
-
     }, []);
 
     const fetchDoctors = useCallback(() => {
         axios.get(`/doctor-availabilities/get-today-doctors`).then(response => {
             setTodayDoctorsList(response.data);
         }).catch(error => {
-            setTodayDoctorsListError('Error fetching doctors:' + error.response.data.message);
-        });
+            setTodayDoctorsListError('Error fetching doctors: ' + error.response.data);
+        }).finally(() => setLoadingTodayList(false));
     }, []);
 
 
@@ -95,13 +97,13 @@ export default function Home() {
                             </div>
                         ))}
                     </Slider>
-                    <div className="">
+                    <div className="content-center">
                         {todayDoctorsList.length > 0 && <div className="rounded-xl border  mt-16 lg:mt-0 bg-gradient-to-br from-gray-50 to-purple-50">
-                            <ul className="overflow-y-scroll max-h-fit no-scrollbar">
-                                <li className="bg-white py-3 px-4 rounded-t-xl border-b border-gray-200">
-                                    <h3 className="font-semibold text-xl">Today&#39;s doctors list</h3>
-                                    <div className="text-gray-500 text-xs">View available doctors and their specialties. Book your appointment now!</div>
-                                </li>
+                            <div className="bg-white py-3 px-4 rounded-t-xl border-b border-gray-200">
+                                <h3 className="font-semibold text-xl">Today&#39;s doctors list</h3>
+                                <div className="text-gray-500 text-xs">View available doctors and their specialties. Book your appointment now!</div>
+                            </div>
+                            <ul className="overflow-y-scroll no-scrollbar max-h-72">
                                 {todayDoctorsList.map((todayDoctor) => {
                                         return (
                                             <li
@@ -120,12 +122,13 @@ export default function Home() {
                                             </li>)
                                     }
                                 )}
-                                <li className="bg-white p-3 rounded-b-xl"><Link href={'availability-calendar'}>Full calendar</Link></li>
                             </ul>
+                            <div className="bg-white p-3 rounded-b-xl"><Link href={'availability-calendar'}>Full calendar</Link></div>
                         </div>}
                         {todayDoctorsListError && <div className="rounded-xl border bg-gradient-to-br mt-16 lg:mt-0 from-purple-50 to-rose-50">
-                            <div className="text-red-500">{todayDoctorsListError}</div>
+                            <div className="text-red-500 py-6 px-8 text-xs">{todayDoctorsListError}</div>
                         </div>}
+                        {loadingTodayList && <Loader/>}
                     </div>
                 </div>
             </section>

@@ -206,7 +206,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     };
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-            <div className="max-w-2xl flex-grow max-h-full no-scrollbar overflow-y-scroll lg:mx-auto mx-4 bg-white rounded-2xl">
+            <div className="max-w-2xl flex-grow max-h-full no-scrollbar overflow-y-scroll lg:mx-auto m-4 bg-white rounded-2xl">
                 <div>
                     <div className="p-8 pb-0 relative">
                         <button title="Close window" className="absolute right-0 mr-4 -mt-4 text-gray-500 hover:text-purple-500" onClick={onCloseBookingWindow}>
