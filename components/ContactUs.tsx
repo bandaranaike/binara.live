@@ -2,6 +2,7 @@
 import React, {useState} from 'react';
 import Loader from "@/components/form/Loader";
 import {useUserContext} from "@/context/UserContext";
+import axios from "@/lib/axios";
 
 const ContactUs: React.FC = () => {
     const {user} = useUserContext()
@@ -33,30 +34,18 @@ const ContactUs: React.FC = () => {
         try {
             setError("")
             setResponse(undefined)
-            const response = await fetch('/api/proxy/contacts', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({name, phone, email, message}),
-            });
-
-            if (!response.ok) {
-                setError('There was a problem with this request.');
-            } else {
-                const result = await response.json();
-                setResponse(result);
+            axios.post('/contacts', {name, phone, email, message}).then(response => {
+                setResponse(response.data);
                 setName('');
                 setPhone('');
                 setEmail('');
                 setMessage('');
-            }
-
+            }).catch(error => setError('There was a problem with this request : ' + error.response.data)).finally(() => {
+                setLoading(false);
+            })
         } catch (error) {
             console.error('Error:', error);
             setError('Failed to send message. Please try again.');
-        } finally {
-            setLoading(false);
         }
     };
 

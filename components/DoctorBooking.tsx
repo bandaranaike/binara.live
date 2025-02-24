@@ -43,8 +43,7 @@ interface ApiError {
 
 const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doctorData, onAppointmentBooked}) => {
     const {user} = useUserContext();
-
-    const [doctorType, setDoctorType] = useState(doctorData.type ?? "specialist");
+    const [doctorType, setDoctorType] = useState(doctorData.type ?? "0");
     const [doctors, setDoctors] = useState<Doctor[]>([]);
     const [selectedDoctor, setSelectedDoctor] = useState(doctorData.id);
     const [date, setDate] = useState<Date | null>(doctorData.date ? new Date(Date.parse(doctorData.date)) : new Date());
@@ -221,6 +220,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                         <div className="lg:grid lg:grid-cols-4 gap-4">
                             <div>
                                 <Select className="mb-3" value={doctorType} onChange={(e) => setDoctorType(e.target.value)}>
+                                    <option value="0">Please select...</option>
                                     <option value="dental">Dental</option>
                                     <option value="specialist">Specialist</option>
                                 </Select>
