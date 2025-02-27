@@ -61,6 +61,10 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     const [searchQuery, setSearchQuery] = useState(doctorData.name ?? "");
 
 
+    const today = new Date();
+    const maxDate = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+
+
     const fetchDoctors = debounce(async (doctorType, setDoctors, setDoctorSelectError) => {
         try {
             axios.get("doctor-availabilities/search-booking-doctors", {
@@ -253,7 +257,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                                 value={date}
                                 onChange={handleDateChange}
                                 minDate={new Date()}
-                                maxDate={new Date(2025, 2, 20)}
+                                maxDate={maxDate}
                             />
                             <div>
                                 <Input
