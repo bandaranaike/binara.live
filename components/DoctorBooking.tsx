@@ -1,14 +1,16 @@
 import React, {useState, useEffect, ChangeEvent} from "react";
 
-import {Button, Select, Datepicker} from "flowbite-react";
+import {Button, Select} from "flowbite-react";
 import {Input} from "@headlessui/react";
 import debounce from "debounce";
 import parsePhoneNumber from "libphonenumber-js";
-import {CheckCircleIcon, InformationCircleIcon, MinusCircleIcon, XCircleIcon} from "@heroicons/react/24/outline";
+import {CalendarIcon, CheckCircleIcon, InformationCircleIcon, MinusCircleIcon, XCircleIcon} from "@heroicons/react/24/outline";
 import Loader from "@/components/form/Loader";
 import axios from "@/lib/axios";
 import {useUserContext} from "@/context/UserContext";
 import {DoctorBookingData} from "@/types/interfaces";
+import Link from "next/link";
+import AvailabilityDatePicker from "@/components/form/AvailabilityDatePicker";
 
 interface DoctorBookingProps {
     onCloseBookingWindow: () => void;
@@ -59,10 +61,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false)
 
     const [searchQuery, setSearchQuery] = useState(doctorData.name ?? "");
-
-
-    const today = new Date();
-    const maxDate = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+    const [availableDates, setAvailableDates] = useState([]);
 
 
     const fetchDoctors = debounce(async (doctorType, setDoctors, setDoctorSelectError) => {
@@ -85,6 +84,22 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
         }
     }, 200);
 
+    const fetchDoctorDates = debounce(async (doctorId) => {
+        try {
+            axios.get(`doctor-availabilities/doctor/${doctorId}/get-dates`).then(response => {
+                const availableDates = response.data.map((dateData: { date: string }) => dateData.date);
+                setAvailableDates(availableDates)
+                setSelectedDate(availableDates[0])
+            }).catch(error => {
+                console.error('Error fetching data:' + error.response.data.message);
+            });
+
+        } catch (e) {
+            const error = e as ApiError;
+            console.error(error.response?.data?.message || "An error occurred");
+        }
+    }, 200);
+
     useEffect(() => {
         setIsDoctorsLoading(true)
         if (doctorType) {
@@ -102,10 +117,13 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
         if (formData.name) setNameError("")
     }, [formData]);
 
+    useEffect(() => {
+        fetchDoctorDates(selectedDoctor)
+    }, [selectedDoctor]);
+
     const handleChange = debounce((e: ChangeEvent<HTMLInputElement>) => { // Type the event argument
         setFormData({...formData, [e.target.name]: e.target.value});
     }, 300);
-
 
     const handlePhoneChange = debounce((e: ChangeEvent<HTMLInputElement>) => {
         const phone = e.target.value;
@@ -125,13 +143,14 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
 
     const handleDateChange = (date: Date | null) => {
         setDate(date);
+        setSelectedDate(date);
     }
 
     const changeDoctor = (doctorId: string) => {
+        fetchDoctorDates(doctorId);
         setDoctorSelectError("")
         setSelectedDoctor(doctorId);
     }
-
 
     const areAllInputsValid = () => {
         let valid = true;
@@ -207,6 +226,10 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
         setSelectedDoctor(0)
         setSearchQuery("")
     };
+
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
             <div className="max-w-2xl flex-grow max-h-full no-scrollbar overflow-y-scroll lg:mx-auto m-4 bg-white rounded-2xl">
@@ -216,8 +239,10 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                             <XCircleIcon width={30}/>
                         </button>
                         <h2 className="text-2xl font-bold mb-2">Doctor Appointment</h2>
-                        <p className="text-gray-500">{!user?.token ? 'If you\'re logged in' : 'If you visit the dashboard'}, you can also view your booking history for easy
-                            access and management.</p>
+                        <div className="text-gray-500 flex-grow">{!user?.token ? 'If you\'re logged in' : 'If you visit the dashboard'}, you can also view your booking history for
+                            easy
+                            access and management.
+                        </div>
                     </div>
 
                     <div className="px-8 pt-6 pb-2">
@@ -252,13 +277,15 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                         </div>
                         <div className="lg:grid lg:grid-cols-2 gap-4">
 
-                            <Datepicker
-                                className="mb-3"
-                                value={date}
-                                onChange={handleDateChange}
-                                minDate={new Date()}
-                                maxDate={maxDate}
-                            />
+                            <div className="">
+                                <AvailabilityDatePicker
+                                    disabled={!selectedDoctor}
+                                    selectedDate={selectedDate}
+                                    onDateChange={handleDateChange}
+                                    availableDates={availableDates}
+                                />
+                            </div>
+
                             <div>
                                 <Input
                                     className="w-full border border-gray-200 py-2 mb-3 px-4 rounded-lg"
@@ -319,16 +346,21 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                             </div>
                         </div>
                     )}
-
-                    <div className="flex gap-4 px-8">
-                        <Button onClick={handleBooking} color={"purple"} className="mt-4">Make Booking</Button>
-                        <Button color={'gray'} onClick={onCloseBookingWindow} className="mt-4">Close</Button>
-                        {isFormSubmitting && <div className="pt-5"><Loader/></div>}
-                        {bookingResponse && bookingResponse.bill_id &&
-                            <div className="text-green-600 mt-4 flex items-center">
-                                <CheckCircleIcon width={20} className="mr-1"/> Booking success!
-                            </div>
-                        }
+                    <div className="flex justify-between px-8">
+                        <div className="pt-4">
+                            {doctorData.id == "0" && <Link href="/availability-calendar" className="font-semibold text-sm" title="Full Calendar">
+                                <CalendarIcon width={38} className="text-gray-300 hover:text-purple-600"/></Link>}
+                        </div>
+                        <div className="flex gap-4 justify-end">
+                            {bookingResponse && bookingResponse.bill_id &&
+                                <div className="text-green-600 mt-4 flex items-center">
+                                    <CheckCircleIcon width={20} className="mr-1"/> Booking success!
+                                </div>
+                            }
+                            {isFormSubmitting && <div className="pt-5"><Loader/></div>}
+                            <Button color={'gray'} onClick={onCloseBookingWindow} className="mt-4">Close</Button>
+                            <Button onClick={handleBooking} color={"purple"} className="mt-4">Make Booking</Button>
+                        </div>
                     </div>
                 </div>
                 <div className="px-8 pb-8 pt-6 lg:flex justify-between">
