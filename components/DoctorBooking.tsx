@@ -51,7 +51,6 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     const [doctorType, setDoctorType] = useState(doctorData.type ?? "0");
     const [doctors, setDoctors] = useState<Doctor[]>([]);
     const [selectedDoctor, setSelectedDoctor] = useState(doctorData.id ?? 0);
-    const [date, setDate] = useState<Date | null>(doctorData.date ? new Date(Date.parse(doctorData.date)) : new Date());
     const [formData, setFormData] = useState({name: "", phone: "", age: "", email: ""});
     const [bookingResponse, setBookingResponse] = useState<BookingResponse | null>(null);
     const [doctorSelectError, setDoctorSelectError] = useState("");
@@ -159,7 +158,6 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     useEffect(() => {
         setIsDoctorsLoading(true)
         setSelectedDoctor(0)
-        setDate(null)
         setSelectedDate(null)
         if (doctorType) {
             fetchDoctors(doctorType, setDoctors, setDoctorSelectError);
@@ -209,7 +207,6 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     }, 300)
 
     const handleDateChange = (date: Date | null) => {
-        setDate(date);
         setSelectedDate(date);
     }
 
