@@ -4,13 +4,13 @@ import {ArrowLeftIcon} from "@heroicons/react/24/solid";
 import {ArrowRightIcon, CalendarIcon} from "@heroicons/react/24/outline";
 
 interface DatePickerProps {
-    selectedDate: Date | null;
-    onDateChange: (date: Date | null) => void;
-    availableDates: string[]; // Array of ISO date strings
+    selectedDate?: Date | null;
+    onDateChange?: (date: Date | null) => void;
+    availableDates?: string[]; // Array of ISO date strings
     disabled?: boolean; // Array of ISO date strings
 }
 
-const AvailabilityDatePicker: React.FC<DatePickerProps> = ({selectedDate, onDateChange, availableDates, disabled = false}) => {
+const AvailabilityDatePicker: React.FC<DatePickerProps> = ({selectedDate, onDateChange, availableDates = [], disabled = false}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [currentMonth, setCurrentMonth] = useState(selectedDate ? startOfMonth(selectedDate) : startOfMonth(new Date()));
     const datePickerRef = useRef<HTMLDivElement>(null);
@@ -23,7 +23,7 @@ const AvailabilityDatePicker: React.FC<DatePickerProps> = ({selectedDate, onDate
 
     const handleDateClick = (date: Date) => {
         if (isDateAvailable(date)) {
-            onDateChange(date);
+            if (onDateChange) onDateChange(date);
             setIsOpen(false);
         }
     };
@@ -75,14 +75,20 @@ const AvailabilityDatePicker: React.FC<DatePickerProps> = ({selectedDate, onDate
                         key={day.toISOString()}
                         className="p-px"
                     >
-                        <div className={`text-center text-sm font-semibold leading-9 ${
-                            !isCurrentMonthDay ?
-                                'text-gray-500 cursor-not-allowed ' :
-                                isDisabled ?
-                                    'text-gray-500 cursor-not-allowed' :
-                                    'hover:text-white cursor-pointer rounded-lg bg-purple-100 hover:bg-purple-700'
-                        } ${isSelected ? 'bg-purple-600 text-white rounded-lg' : ''}`}
-                             onClick={() => !isDisabled && handleDateClick(cloneDay)}> {format(day, 'd')}</div>
+                        <div
+                            className={
+                                `text-center text-sm font-semibold leading-9 transition-colors rounded bg-gray-50
+                                ${isDisabled
+                                    ? 'cursor-not-allowed' // Disabled state
+                                    : isSelected
+                                        ? 'bg-purple-700 text-white cursor-pointer' // Selected state
+                                        : 'cursor-pointer bg-purple-100 hover:bg-purple-200' // Default selectable state
+                                 } 
+                                ${!isCurrentMonthDay
+                                    ? 'text-gray-400' // Not current month but selectable
+                                    : 'text-gray-600'} 
+                                `}
+                            onClick={() => !isDisabled && handleDateClick(cloneDay)}> {format(day, 'd')}</div>
                     </td>
                 );
                 day = addDays(day, 1);
@@ -99,18 +105,19 @@ const AvailabilityDatePicker: React.FC<DatePickerProps> = ({selectedDate, onDate
             <button
                 disabled={disabled}
                 type="button"
-                className={`border border-gray-200 rounded-lg py-2 px-3 w-full text-left flex gap-2 ${disabled ? 'cursor-not-allowed':''}`}
+                className={`min-w-72 text-sm border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 rounded-lg py-2.5 px-3 w-full text-left flex gap-2 
+                ${disabled ? 'cursor-not-allowed dark:text-gray-500 text-gray-300' : ''}`}
                 onClick={handleToggle}
             >
-                <CalendarIcon width={20} className="text-gray-600"/> {selectedDate ? format(selectedDate, 'yyyy-MM-dd') : 'Select date'}
+                <CalendarIcon width={20} className=""/> {selectedDate ? format(selectedDate, 'yyyy-MM-dd') : 'Select date'}
             </button>
             {isOpen && (
-                <div className="absolute z-10 bg-white border rounded-xl shadow-lg mt-1 pb-2">
+                <div className="absolute z-10 bg-white dark:bg-gray-800 dark:border-gray-700 border rounded-xl min-w-max shadow-lg mt-1 pb-2">
                     <div className="p-4">
                         <div className="flex justify-between content-center items-center mt-2 mb-6">
-                            <ArrowLeftIcon width={20} className="ml-2 cursor-pointer" onClick={prevMonth}/>
-                            <span className="font-semibold text-sm mx-auto">{format(currentMonth, 'MMMM yyyy')}</span>
-                            <ArrowRightIcon width={20} className="mr-2 cursor-pointer" onClick={nextMonth}/>
+                            <ArrowLeftIcon width={20} className="ml-2 cursor-pointer dark:text-gray-400" onClick={prevMonth}/>
+                            <span className="dark:text-gray-400 font-semibold text-sm mx-auto">{format(currentMonth, 'MMMM yyyy')}</span>
+                            <ArrowRightIcon width={20} className="mr-2 cursor-pointer dark:text-gray-400" onClick={nextMonth}/>
                         </div>
                         <table className="w-full">
                             <thead>

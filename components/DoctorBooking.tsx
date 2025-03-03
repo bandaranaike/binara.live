@@ -11,6 +11,9 @@ import {useUserContext} from "@/context/UserContext";
 import {DoctorBookingData} from "@/types/interfaces";
 import Link from "next/link";
 import AvailabilityDatePicker from "@/components/form/AvailabilityDatePicker";
+import {dateToYmdFormat} from "@/lib/date-format";
+import OTPInput from "@/components/auth/OTPInput";
+import {CheckBadgeIcon} from "@heroicons/react/24/solid";
 
 interface DoctorBookingProps {
     onCloseBookingWindow: () => void;
@@ -54,15 +57,21 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     const [doctorSelectError, setDoctorSelectError] = useState("");
     const [bookingCreateError, setBookingCreateError] = useState("");
     const [emailError, setEmailError] = useState("");
+    const [dateError, setDateError] = useState("");
     const [phoneError, setPhoneError] = useState<string | undefined>()
     const [nameError, setNameError] = useState<string | undefined>()
     const [ageError, setAgeError] = useState<string | undefined>()
     const [isDoctorsLoading, setIsDoctorsLoading] = useState<boolean>(false)
     const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false)
-
     const [searchQuery, setSearchQuery] = useState(doctorData.name ?? "");
     const [availableDates, setAvailableDates] = useState([]);
-
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [phoneIsBusy, setPhoneIsBusy] = useState<boolean>(false)
+    const [showOTPWindow, setShowOTPWindow] = useState<boolean>(false)
+    const [OTPToken, setOTPToken] = useState("")
+    const [OTP, setOTP] = useState("")
+    const [OTPVerified, setOTPVerified] = useState(false)
+    const [hasValidPhone, setHasValidPhone] = useState(false)
 
     const fetchDoctors = debounce(async (doctorType, setDoctors, setDoctorSelectError) => {
         try {
@@ -91,7 +100,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                 setAvailableDates(availableDates)
                 setSelectedDate(availableDates[0])
             }).catch(error => {
-                console.error('Error fetching data:' + error.response.data.message);
+                console.error('Error fetching data: ' + error.response.data.message);
             });
 
         } catch (e) {
@@ -100,8 +109,58 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
         }
     }, 200);
 
+    const sendOTPRequest = () => {
+        setPhoneIsBusy(true);
+        setPhoneError("");
+        try {
+            axios.post(`otp/request/`, {phone_number: formData.phone}).then(response => {
+                setOTPToken(response.data.token);
+                setShowOTPWindow(true);
+            }).catch(error => {
+                setPhoneError('Error sending the OTP: ' + error.response.data.message);
+            }).finally(() => setPhoneIsBusy(false));
+
+        } catch (e) {
+            const error = e as ApiError;
+            setPhoneError(error.response?.data?.message || "An error occurred");
+        }
+    };
+
+    const handleOTPVerify = () => {
+        setPhoneError("")
+        setPhoneIsBusy(true)
+        try {
+            axios.post(`otp/validate/${OTPToken}`, {otp: OTP}).then(() => {
+                setOTPVerified(true)
+                setShowOTPWindow(false)
+            }).catch(error => {
+                setPhoneError(error.response.data.message);
+            }).finally(() => setPhoneIsBusy(false));
+
+        } catch (e) {
+            const error = e as ApiError;
+            setPhoneError(error.response?.data?.message || "An error occurred");
+        }
+    };
+
+    const handleOTPResend = () => {
+        setPhoneIsBusy(true)
+        setPhoneError("")
+        try {
+            axios.post(`otp/resend/${OTPToken}`).catch(error => {
+                setPhoneError('Error sending the OTP: ' + error.response.data.message);
+            }).finally(() => setPhoneIsBusy(false));
+        } catch (e) {
+            const error = e as ApiError;
+            setPhoneError(error.response?.data?.message || "An error occurred");
+        }
+    };
+
     useEffect(() => {
         setIsDoctorsLoading(true)
+        setSelectedDoctor(0)
+        setDate(null)
+        setSelectedDate(null)
         if (doctorType) {
             fetchDoctors(doctorType, setDoctors, setDoctorSelectError);
         }
@@ -118,6 +177,10 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     }, [formData]);
 
     useEffect(() => {
+        if (selectedDate) setDateError("")
+    }, [selectedDate]);
+
+    useEffect(() => {
         fetchDoctorDates(selectedDoctor)
     }, [selectedDoctor]);
 
@@ -126,6 +189,9 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     }, 300);
 
     const handlePhoneChange = debounce((e: ChangeEvent<HTMLInputElement>) => {
+        setOTPToken("")
+        setOTPVerified(false)
+        setHasValidPhone(false)
         const phone = e.target.value;
         if (!phone) {
             setPhoneError("Phone number is required");
@@ -135,6 +201,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                 setPhoneError("Phone number is invalid");
             } else {
                 setPhoneError("");
+                setHasValidPhone(true)
                 setFormData({...formData, phone: formatedPhone?.number});
             }
         }
@@ -165,8 +232,13 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
             valid = false;
         }
 
-        if (!date) {
-            setBookingCreateError("Please select a date");
+        if (!OTPVerified) {
+            setPhoneError('Phone OTP validation is required')
+            valid = false;
+        }
+
+        if (!selectedDate) {
+            setDateError("Please select a date");
             valid = false;
         }
 
@@ -203,7 +275,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                     doctor_id: selectedDoctor,
                     doctor_type: doctorType,
                     user_id: user?.id,
-                    date: date ? date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+                    date: dateToYmdFormat(selectedDate),
                 }
 
                 axios.post('/bookings/make-appointment', body).then(response => {
@@ -226,8 +298,6 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
         setSelectedDoctor(0)
         setSearchQuery("")
     };
-
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
 
     return (
@@ -261,14 +331,22 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                                 >
                                     <MinusCircleIcon width={16}/>Clear Doctor
                                 </div> : ''}
-                                {!isDoctorsLoading && <Select className="mb-1" value={selectedDoctor} onChange={(e) => changeDoctor(e.target.value)}>
-                                    <option value="0">Please select...</option>
-                                    {doctors && doctors.map((doc) => (
-                                        <option key={doc.id} value={doc.id}>
-                                            {doc.name}
-                                        </option>
-                                    ))}
-                                </Select> || <div className="pt-1.5 pb-1"><Loader/></div>}
+                                {!isDoctorsLoading &&
+                                    <Select
+                                        disabled={doctorType == "0"}
+                                        className="mb-1"
+                                        value={selectedDoctor}
+                                        onChange={(e) => changeDoctor(e.target.value)}
+                                    >
+                                        <option value="0">Please select...</option>
+                                        {doctors && doctors.map((doc) => (
+                                            <option key={doc.id} value={doc.id}>
+                                                {doc.name}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                    ||
+                                    <div className="pt-1.5 pb-1"><Loader/></div>}
 
                                 <div className="mb-3">
                                     {doctorSelectError && (<div className="text-red-500 text-sm">{doctorSelectError}</div>)}
@@ -284,6 +362,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                                     onDateChange={handleDateChange}
                                     availableDates={availableDates}
                                 />
+                                {dateError && <div className="text-red-500 text-sm my-1 pl-1">{dateError}</div>}
                             </div>
 
                             <div>
@@ -311,22 +390,47 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                             onChange={handleChange}/>
 
                         {emailError && <div className="text-red-500 text-sm mb-3 -mt-2 pl-1">{emailError}</div>}
-
-                        <Input
-                            className="mb-3 w-full border border-gray-200 py-2 px-4 rounded-lg"
-                            name="phone"
-                            placeholder={`Your phone number ${user ? '' : '*'}`}
-                            onChange={handlePhoneChange}/>
-
+                        <div className="flex items-center justify-between mb-3 relative">
+                            <Input
+                                className="flex-grow border focus-visible:border-gray-300 focus-visible:outline-none  border-gray-200 py-2 px-4 rounded-l-lg"
+                                name="phone"
+                                disabled={OTPVerified}
+                                placeholder={`Your phone number ${user ? '' : '*'}`}
+                                onChange={handlePhoneChange}/>
+                            {phoneIsBusy && <div className="absolute right-28"><Loader/></div>}
+                            {!OTPVerified ?
+                                <button
+                                    onClick={sendOTPRequest}
+                                    disabled={!hasValidPhone || !!OTPToken}
+                                    className={`border-y border-r bg-gray-50 
+                                    ${!hasValidPhone || !!OTPToken ? 'text-gray-300' : 'text-gray-500 hover:text-purple-800 hover:bg-purple-100'}
+                                     font-semibold text-sm rounded-r-lg border-gray-200 py-2.5 px-4`}
+                                >
+                                    Send OTP
+                                </button>
+                                :
+                                <button
+                                    onClick={sendOTPRequest}
+                                    className="border-y border-r bg-green-100 hover:bg-purple-100 text-green-500 font-semibold text-sm rounded-r-lg border-gray-200 py-2.5 px-4"
+                                >
+                                    <CheckBadgeIcon width={20}/>
+                                </button>
+                            }
+                        </div>
                         {phoneError && <div className="text-red-500 text-sm mb-3 -mt-2 pl-1">{phoneError}</div>}
 
                         <div className="flex">
                             <InformationCircleIcon width={20} className="mb-2 mr-2 text-purple-600 w-10 lg:w-8 "/>
                             <span className="text-gray-500 text-sm">
-                                Enter the phone number you use regularly. This ensures your booking and clinical history are linked correctly.
+                                Please enter your regular phone number
+                               <br/><span className="text-gray-400">This links your booking to your clinical history for accurate records.</span>
+                                <br/>We’ll send an <strong>OTP</strong> to verify your number.
                             </span>
 
                         </div>
+                        {showOTPWindow && <div className="border-dashed border rounded-xl border-gray-300 mt-3 p-4">
+                            <OTPInput onOtpComplete={setOTP} emailOrPhone="phone" title='' resendEnabled={true} timer={30} onResend={handleOTPResend} onVerify={handleOTPVerify}/>
+                        </div>}
                     </div>
 
                     {bookingCreateError && <div className="text-red-500 text-sm px-8 py-3">{bookingCreateError}</div>}
