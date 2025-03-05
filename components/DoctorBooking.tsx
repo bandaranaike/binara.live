@@ -72,7 +72,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     const [OTPVerified, setOTPVerified] = useState(false)
     const [hasValidPhone, setHasValidPhone] = useState(false)
 
-    const fetchDoctors = debounce(async (doctorType, setDoctors, setDoctorSelectError) => {
+    const fetchDoctors = debounce(async () => {
         try {
             axios.get("doctor-availabilities/search-booking-doctors", {
                 params: {
@@ -97,7 +97,8 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
             axios.get(`doctor-availabilities/doctor/${doctorId}/get-dates`).then(response => {
                 const availableDates = response.data.map((dateData: { date: string }) => dateData.date);
                 setAvailableDates(availableDates)
-                setSelectedDate(availableDates[0])
+                setSelectedDate(doctorData.date ?? availableDates[0])
+                setSelectedDoctor(doctorId)
             }).catch(error => {
                 console.error('Error fetching data: ' + error.response.data.message);
             });
@@ -160,12 +161,12 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
         setSelectedDoctor(0)
         setSelectedDate(null)
         if (doctorType) {
-            fetchDoctors(doctorType, setDoctors, setDoctorSelectError);
+            fetchDoctors();
         }
     }, [doctorType]);
 
     useEffect(() => {
-        fetchDoctors(doctorType, setDoctors, setDoctorSelectError)
+        fetchDoctors()
     }, [searchQuery]);
 
     useEffect(() => {
@@ -175,12 +176,8 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     }, [formData]);
 
     useEffect(() => {
-        if (selectedDate) setDateError("")
-    }, [selectedDate]);
-
-    useEffect(() => {
         fetchDoctorDates(selectedDoctor)
-    }, [selectedDoctor]);
+    }, [doctorData]);
 
     const handleChange = debounce((e: ChangeEvent<HTMLInputElement>) => { // Type the event argument
         setFormData({...formData, [e.target.name]: e.target.value});
@@ -298,7 +295,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
 
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 py-4">
             <div className="max-w-2xl flex-grow max-h-full no-scrollbar overflow-y-scroll lg:mx-auto m-4 bg-white rounded-2xl">
                 <div>
                     <div className="p-8 pb-0 relative">
@@ -312,7 +309,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                         </div>
                     </div>
 
-                    <div className="px-8 pt-6 pb-2">
+                    <div className="px-4 md:px-8 pt-6 pb-2">
                         <div className="lg:grid lg:grid-cols-4 gap-4">
                             <div>
                                 <Select className="mb-3" value={doctorType} onChange={(e) => setDoctorType(e.target.value)}>
@@ -352,7 +349,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                         </div>
                         <div className="lg:grid lg:grid-cols-2 gap-4">
 
-                            <div className="">
+                            <div className="mb-3">
                                 <AvailabilityDatePicker
                                     disabled={!selectedDoctor}
                                     selectedDate={selectedDate}
@@ -399,11 +396,11 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                                 <button
                                     onClick={sendOTPRequest}
                                     disabled={!hasValidPhone || !!OTPToken}
-                                    className={`border-y border-r bg-gray-50 
+                                    className={`border-y border-r bg-gray-50
                                     ${!hasValidPhone || !!OTPToken ? 'text-gray-300' : 'text-gray-500 hover:text-purple-800 hover:bg-purple-100'}
                                      font-semibold text-sm rounded-r-lg border-gray-200 py-2.5 px-4`}
                                 >
-                                    Send OTP
+                                    <span className="hidden md:inline-block lg:inline-block">Send</span> OTP
                                 </button>
                                 :
                                 <button
@@ -417,15 +414,18 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                         {phoneError && <div className="text-red-500 text-sm mb-3 -mt-2 pl-1">{phoneError}</div>}
 
                         <div className="flex">
-                            <InformationCircleIcon width={20} className="mb-2 mr-2 text-purple-600 w-10 lg:w-8 "/>
+                            <InformationCircleIcon width={24} className="mb-2 mr-2 text-purple-600 lg:w-8 "/>
                             <span className="text-gray-500 text-sm">
-                                Please enter your regular phone number
-                               <br/><span className="text-gray-400">This links your booking to your clinical history for accurate records.</span>
-                                <br/>We’ll send an <strong>OTP</strong> to verify your number.
+                                Please enter your regular phone number.
+                                <span className="hidden md:inline-block text-gray-400">This links your booking to your clinical history for accurate records.</span>
+                                <span className="inline-block">We’ll send an <strong>OTP</strong>
+                                    <span className="md:inline-block hidden">to verify your number.</span>
+                                </span>
                             </span>
 
                         </div>
-                        {showOTPWindow && <div className="border-dashed border rounded-xl border-gray-300 mt-3 p-4">
+                        {/* OTP Input */}
+                        {showOTPWindow && <div className="border-dashed border rounded-xl border-gray-300 mt-3 p-3 md:py-4">
                             <OTPInput onOtpComplete={setOTP} emailOrPhone="phone" title='' resendEnabled={true} timer={30} onResend={handleOTPResend} onVerify={handleOTPVerify}/>
                         </div>}
                     </div>
@@ -465,7 +465,11 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                     </div>
                 </div>
                 <div className="px-8 pb-8 pt-6 lg:flex justify-between">
-                    <div className="text-sm">For inquiries, please contact us at {process.env.NEXT_PUBLIC_APP_TELEPHONE}</div>
+                    <div className="text-sm">
+                        <span className="hidden md:inline-block">For inquiries, please contact us at </span>
+                        <span className="md:hidden">Inquiries: </span>
+                        {process.env.NEXT_PUBLIC_APP_TELEPHONE}
+                    </div>
                     {!user?.token && <div className="text-right text-sm lg:mt-0 mt-3">
                         <a href="/login" className="mr-4 text-blue-500">Login</a>
                         <a href="/register" className="text-blue-500">Register</a></div>}

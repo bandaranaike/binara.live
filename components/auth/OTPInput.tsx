@@ -24,7 +24,7 @@ const OTPInput: React.FC<OTPInputProps> = ({
                                                emailOrPhone,
                                                title = 'Please Enter the OTP',
                                                otpLength = 6,
-                                               inputClassName = 'w-12 h-12 text-center text-xl border border-gray-200 rounded-lg',
+                                               inputClassName = 'w-10 h-10 md:w-12 md:h-12 text-center text-xl border border-gray-200 rounded-lg',
                                                resendLabel = 'Resend',
                                                resendDisabledLabel = 'Resend OTP in {countdown} seconds',
                                                resendEnabled = false,
@@ -171,7 +171,7 @@ const OTPInput: React.FC<OTPInputProps> = ({
                         )}
                     </div>}
                 </div>
-                <div>
+                <div className="pt-3">
                     <button
                         className={`border border-gray-200 shadow-sm hover:text-purple-600 hover:bg-purple-50 text-sm font-semibold text-gray-600 rounded-lg px-4 py-2 flex gap-2`}
                         disabled={loading}
