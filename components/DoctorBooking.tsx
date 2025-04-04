@@ -303,7 +303,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                             <XCircleIcon width={30}/>
                         </button>
                         <h2 className="text-2xl font-bold mb-2">Doctor Appointment</h2>
-                        <div className="text-gray-500 flex-grow">{!user?.token ? 'If you\'re logged in' : 'If you visit the dashboard'}, you can also view your booking history for
+                        <div className="text-gray-500 flex-grow hidden md:block">{!user?.token ? 'If you\'re logged in' : 'If you visit the dashboard'}, you can also view your booking history for
                             easy
                             access and management.
                         </div>
@@ -468,7 +468,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                     <div className="text-sm">
                         <span className="hidden md:inline-block">For inquiries, please contact us at </span>
                         <span className="md:hidden">Inquiries: </span>
-                        {process.env.NEXT_PUBLIC_APP_TELEPHONE}
+                        <span className="ml-0.5">{process.env.NEXT_PUBLIC_APP_TELEPHONE}</span>
                     </div>
                     {!user?.token && <div className="text-right text-sm lg:mt-0 mt-3">
                         <a href="/login" className="mr-4 text-blue-500">Login</a>
