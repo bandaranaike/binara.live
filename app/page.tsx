@@ -33,14 +33,13 @@ export default function Home() {
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
-        autoplay: false,
-        autoplaySpeed: 3000,
+        autoplay: true,
+        autoplaySpeed: 10000,
     };
 
     const sliders = [
-        {title: "Your Trusted Healthcare Partner", description: "Specialist Channeling, OPD, and Dental Care in Kundasale, Kandy."},
-        {title: "Comprehensive Care for All Ages", description: "From routine checkups to specialized treatments, we’ve got you covered."},
-        {title: "Serving the Community Since 2008", description: "Experience compassionate care at Binara Medical Centre."},
+        {title: "Your Trusted Healthcare Partner", image: "gallery-1.jpg"},
+        {title: "Comprehensive Care for All Ages", image: "gallery-2.jpg"},
     ];
 
     const services = [
@@ -84,42 +83,36 @@ export default function Home() {
         <div>
             {/* Slider Section */}
             <section className="max-w-7xl mx-auto">
-                <div className="lg:grid lg:grid-cols-3 lg:gap-6 py-8 px-4 lg:px-0">
-                    <Slider {...sliderSettings} className="lg:col-span-2 lg:my-16">
+                <div className="lg:grid lg:grid-cols-3 lg:gap-6 pb-12 px-4 lg:px-0">
+                    <Slider {...sliderSettings} className="lg:col-span-2 lg:my-0">
                         {sliders.map((slider, index) => (
-                            <div className="slider-item" key={index}>
-                                <h1 className="text-4xl lg:text-5xl font-bold">{slider.title}</h1>
-                                <p className="text-gray-600 mt-6">{slider.description}</p>
-                                <button
-                                    onClick={() => showBookingWindow()}
-                                    className=" bg-purple-900 text-white mt-8 text-sm rounded-full py-4 px-8 mb-6">Book an Appointment
-                                </button>
+                            <div className="relative" key={index}>
+                                <img src={`/images/${slider.image}`} alt={slider.title}/>
                             </div>
                         ))}
                     </Slider>
                     <div className="content-center">
-                        {todayDoctorsList.length > 0 && <div className="rounded-xl border  mt-16 lg:mt-0 bg-gradient-to-br from-gray-50 to-purple-50">
+                        {todayDoctorsList.length > 0 && <div className="rounded-xl border mt-16 lg:mt-0 bg-gradient-to-br from-gray-50 to-purple-50">
                             <div className="bg-white py-3 px-4 rounded-t-xl border-b border-gray-200">
                                 <h3 className="font-semibold text-xl">Today&#39;s doctors list</h3>
                                 <div className="text-gray-500 text-xs">View available doctors and their specialties. Book your appointment now!</div>
                             </div>
-                            <ul className="overflow-y-scroll no-scrollbar max-h-72">
+                            <ul className="overflow-y-scroll no-scrollbar max-h-96">
                                 {todayDoctorsList.map((todayDoctor) => {
-                                        return (
-                                            <li
-                                                className={`border-b border-gray-200 py-1 px-3 flex items-center justify-between cursor-pointer`}
-                                                key={todayDoctor.id}
-                                                onClick={() => showBookingWindow(todayDoctor.doctor_id, todayDoctor.doctor_type, todayDoctor.doctor)}
-                                            >
-                                                <div>
-                                                    <h4 className="font-semibold">{todayDoctor.doctor}</h4>
-                                                    <p className="text-sm text-gray-500">{todayDoctor.specialty}</p>
-                                                </div>
-                                                <div className="">
-                                                    <div className="text-gray-500 text-xs">Today</div>
-                                                    <div className="text-purple-600 text-sm font-semibold">{todayDoctor.time.substring(0, 5)}</div>
-                                                </div>
-                                            </li>)
+                                        return (<li
+                                            className={`border-b border-gray-200 py-1 px-3 flex items-center justify-between cursor-pointer`}
+                                            key={todayDoctor.id}
+                                            onClick={() => showBookingWindow(todayDoctor.doctor_id, todayDoctor.doctor_type, todayDoctor.doctor)}
+                                        >
+                                            <div>
+                                                <h4 className="font-semibold">{todayDoctor.doctor}</h4>
+                                                <p className="text-sm text-gray-500">{todayDoctor.specialty}</p>
+                                            </div>
+                                            <div className="">
+                                                <div className="text-gray-500 text-xs">Today</div>
+                                                <div className="text-purple-600 text-sm font-semibold">{todayDoctor.time.substring(0, 5)}</div>
+                                            </div>
+                                        </li>)
                                     }
                                 )}
                             </ul>
@@ -163,6 +156,7 @@ export default function Home() {
                         state-of-the-art facilities. Whether you need specialist consultations, OPD services, or dental care, we are here to serve you with compassion and
                         expertise.
                     </p>
+                    <a href={'/about'} className="mt-8 inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 px-4 rounded-lg hover:bg-gradient-to-l transition duration-300">Learn More</a>
                 </div>
             </section>
             {isBookingWindowOpen && channelingDoctor && <DoctorBooking doctorData={channelingDoctor} onCloseBookingWindow={() => setIsBookingWindowOpen(false)}/>}
