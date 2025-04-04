@@ -15,7 +15,7 @@ export default function About() {
         '/images/about-us/9.jpg',
         '/images/about-us/10.jpg',
         '/images/about-us/11.jpg',
-        '/images/about-us/12.jpg',
+        '/images/about-us/14.jpg',
         '/images/about-us/15.jpg',
         '/images/about-us/16.jpg',
         '/images/about-us/17.jpg',
