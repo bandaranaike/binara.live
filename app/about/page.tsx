@@ -16,8 +16,6 @@ export default function About() {
         '/images/about-us/10.jpg',
         '/images/about-us/11.jpg',
         '/images/about-us/12.jpg',
-        '/images/about-us/13.jpg',
-        '/images/about-us/14.jpg',
         '/images/about-us/15.jpg',
         '/images/about-us/16.jpg',
         '/images/about-us/17.jpg',
@@ -28,9 +26,9 @@ export default function About() {
     ];
 
     return (
-        <div className="bg-white max-w-7xl mx-auto py-12 mt-4 px-4 lg:px-4">
+        <div className="bg-white max-w-7xl mx-auto lg:py-12 py-4 mt-4 px-4 lg:px-4">
             <h1 className="text-3xl font-extrabold text-center text-gray-900 sm:text-4xl">About Us</h1>
-            <p className="text-gray-500 pt-10">Binara Medical Centre has been a
+            <p className="text-gray-500 pt-6 lg:pt-10">Binara Medical Centre has been a
                 trusted name in healthcare since 2008. Located in the heart of Kundasale, Kandy, we are
                 dedicated to
                 providing high-quality medical services to our community. Our team of experienced doctors and staff are committed to ensuring your well-being through

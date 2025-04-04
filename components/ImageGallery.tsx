@@ -8,6 +8,29 @@ interface ImageGalleryProps {
 
 export default function ImageGallery({images}: ImageGalleryProps) {
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [touchStartX, setTouchStartX] = useState(0);
+    const [touchEndX, setTouchEndX] = useState(0);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        setTouchStartX(e.changedTouches[0].clientX);
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        setTouchEndX(e.changedTouches[0].clientX);
+    };
+
+    const handleTouchEnd = () => {
+        const deltaX = touchEndX - touchStartX;
+
+        if (deltaX > 50 && selectedIndex > 0) {
+            // Swipe right
+            setSelectedIndex(selectedIndex - 1);
+        } else if (deltaX < -50 && selectedIndex < images.length - 1) {
+            // Swipe left
+            setSelectedIndex(selectedIndex + 1);
+        }
+    };
+
 
     const handleSelect = (index: number) => {
         setSelectedIndex(index);
@@ -27,14 +50,18 @@ export default function ImageGallery({images}: ImageGalleryProps) {
     return (
         <div className="w-full flex flex-col items-center space-y-4" tabIndex={0} onKeyDown={handleKeyDown}>
             {/* Selected Large Image */}
-            <div className="w-full">
+            <div
+                className="w-full"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+            >
                 <img
                     src={images[selectedIndex]}
                     alt="Selected"
-                    className="w-full min-h-96 object-cover rounded-xl shadow-lg max-h-[600px]"
+                    className="w-full object-cover rounded-xl shadow-lg max-h-[600px]"
                 />
             </div>
-
             {/* Thumbnails */}
             <div className="relative w-full flex items-center justify-around">
                 {/* Left Arrow */}
@@ -47,7 +74,7 @@ export default function ImageGallery({images}: ImageGalleryProps) {
                     </button>
                 )}
 
-                <div className="flex lg:space-x-2 space-x-1 overflow-hidden py-1 lg:px-12">
+                <div className="flex lg:space-x-2 space-x-1 overflow-y-auto py-1 lg:px-12">
                     {(() => {
                         const half = Math.floor(maxThumbnails / 2);
                         let start = selectedIndex - half;
