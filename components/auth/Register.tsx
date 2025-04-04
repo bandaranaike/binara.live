@@ -40,7 +40,7 @@ const Register = () => {
         if (!phone) {
             setError('Please provide a valid phone number.');
             return;
-        }else{
+        } else {
             const formatedPhone = parsePhoneNumber(phone, 'LK');
             if (!formatedPhone || (formatedPhone && !formatedPhone.isValid())) {
                 setError('Please provide a valid phone number.');
@@ -64,9 +64,9 @@ const Register = () => {
     };
 
     return (
-        <div className="flex justify-center items-center py-24 shadow-sm">
-            <div className="bg-white p-12 rounded-2xl border border-gray-200 shadow-sm w-dvw max-w-2xl">
-                <h2 className="text-2xl font-bold mb-4">Register</h2>
+        <div className="flex justify-center items-center lg:py-24 p-4 shadow-sm">
+            <div className="bg-white lg:p-12 p-4 rounded-2xl border border-gray-200 shadow-sm w-dvw max-w-2xl">
+                <h2 className="text-2xl font-bold mb-4 mt-2 lg:mt-0">Register</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="">
                         <label htmlFor="name" className="block text-gray-600 font-bold mb-2">Name <span className="text-red-500">*</span></label>
@@ -134,7 +134,7 @@ const Register = () => {
                             {loading && <Loader/>}
                         </div>
                         <a href="/login" className="inline-block align-baseline text-sm text-blue-600 hover:text-blue-700">
-                            Already have an account? Log in
+                            <span className="hidden lg:inline-block">Already have an account?</span> Log in
                         </a>
                     </div>
                 </form>

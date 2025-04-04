@@ -1,5 +1,5 @@
 "use client"
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from "@/lib/axios";
 import {useUserContext} from "@/context/UserContext";
 import {useRouter} from 'next/navigation';
@@ -41,9 +41,9 @@ const Login = () => {
     };
 
     return (
-        <div className="flex justify-center items-center py-24 shadow-sm">
-            <div className="bg-white p-12 rounded-2xl border border-gray-200 shadow-sm w-dvw max-w-2xl">
-                <h2 className="text-2xl font-bold mb-4">Login</h2>
+        <div className="flex justify-center items-center lg:py-24 p-4 shadow-sm">
+            <div className="bg-white lg:p-12 p-4 rounded-2xl border border-gray-200 shadow-sm w-dvw max-w-2xl">
+                <h2 className="text-2xl font-bold mb-4 mt-2 lg:mt-0">Login</h2>
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
