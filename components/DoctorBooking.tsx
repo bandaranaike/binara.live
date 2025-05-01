@@ -310,7 +310,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                     </div>
 
                     <div className="px-4 md:px-8 pt-6 pb-2">
-                        <div className="lg:grid lg:grid-cols-4 gap-4">
+                         <div className="lg:grid lg:grid-cols-4 gap-4">
                             <div>
                                 <Select className="mb-3" value={doctorType} onChange={(e) => setDoctorType(e.target.value)}>
                                     <option value="0">Please select...</option>
