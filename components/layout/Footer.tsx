@@ -11,7 +11,8 @@ const Footer: React.FC = () => {
                 <div className="p-4 lg:p-0">
                     <h3 className="text-2xl font-semibold mb-2">Contact Us</h3>
                     <p>Binara Medical Centre, No82. New Town, Kundasale</p>
-                    <p>Phone: +94 817 213 239 / +94 812 421 942</p>
+                    <p>Phone: <span> 0812 424 499 </span>/ <span> 0706 421 421 </span>  <span className="block md:inline"></span>
+                        <span> 0742 666 794 </span> / <span> 0812 421942 </span></p>
                     <p>Fax: +94 812 421 942 </p>
                     <p>Email: info@binara.live / binara82@gmail.com</p>
                 </div>
