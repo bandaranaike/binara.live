@@ -1,6 +1,10 @@
 import AboutUsTimeline from "@/components/AboutUsTimeLine";
 import ImageGallery from "@/components/ImageGallery";
 
+export const metadata = {
+    title: "About us - " + process.env.NEXT_PUBLIC_APP_TITLE,
+};
+
 export default function About() {
 
     const images = [

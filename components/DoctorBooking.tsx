@@ -77,7 +77,8 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
             axios.get("doctor-availabilities/search-booking-doctors", {
                 params: {
                     type: doctorType,
-                    query: searchQuery
+                    query: searchQuery,
+                    date: selectedDate,
                 }
             }).then(response => {
                 setDoctors(response.data);
@@ -204,6 +205,10 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     }, 300)
 
     const handleDateChange = (date: Date | null) => {
+        // If the selected doctor is not set, and doctorType is set, fetch doctors for the selected type and selected data.
+        if (!selectedDoctor && doctorType) {
+            fetchDoctors();
+        }
         setSelectedDate(date);
     }
 
@@ -303,14 +308,15 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                             <XCircleIcon width={30}/>
                         </button>
                         <h2 className="text-2xl font-bold mb-2">Doctor Appointment</h2>
-                        <div className="text-gray-500 flex-grow hidden md:block">{!user?.token ? 'If you\'re logged in' : 'If you visit the dashboard'}, you can also view your booking history for
+                        <div className="text-gray-500 flex-grow hidden md:block">{!user?.token ? 'If you\'re logged in' : 'If you visit the dashboard'}, you can also view your
+                            booking history for
                             easy
                             access and management.
                         </div>
                     </div>
 
                     <div className="px-4 md:px-8 pt-6 pb-2">
-                         <div className="lg:grid lg:grid-cols-4 gap-4">
+                        <div className="lg:grid lg:grid-cols-4 gap-4">
                             <div>
                                 <Select className="mb-3" value={doctorType} onChange={(e) => setDoctorType(e.target.value)}>
                                     <option value="0">Please select...</option>

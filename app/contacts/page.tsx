@@ -16,7 +16,7 @@ const Contacts = () => {
 
         const debouncedResizeHandler = debounce(handleResize, 300);
         // Initial resize and event listener
-        handleResize();  // Set initial width
+        handleResize();  // Set the initial width
         window.addEventListener('resize', debouncedResizeHandler);
 
         return () => {

@@ -1,3 +1,6 @@
+export const metadata = {
+    title: "Terms of Use - " + process.env.NEXT_PUBLIC_APP_TITLE,
+};
 const TermOfUse = () => {
     return (
         <div className="max-w-7xl mx-auto p-6 bg-white my-10">

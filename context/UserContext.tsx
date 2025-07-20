@@ -35,10 +35,37 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
     const [user, setUser] = useState<LoggedUser | null>(null);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
+        const checkSession = async () => {
+            const storedUser = localStorage.getItem("user");
+
+            if (storedUser) {
+                const parsedUser: LoggedUser = JSON.parse(storedUser);
+                setUser(JSON.parse(storedUser)); // Temporarily set
+
+                try {
+                    await axios.get("../sanctum/csrf-cookie");
+                    const response = await axios.get("/check-user"); // Protected route
+                    if (!response?.data?.id) {
+                        // Session invalid
+                        setUserWithStorage(null);
+                    } else {
+                        // Optionally update with the latest user info
+                        setUserWithStorage({
+                            ...parsedUser,
+                            name: response.data.name,
+                            email: response.data.email,
+                            id: response.data.id,
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error during session check:", error);
+                    // Invalid session or error
+                    setUserWithStorage(null);
+                }
+            }
+        };
+
+        checkSession();
     }, []);
 
     // Function to set user data and persist to localStorage

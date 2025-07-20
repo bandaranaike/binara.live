@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Binara Medical Centre",
+    title: "Binara Medical & Dental Centre",
     description: "Created by Eranda Bandaranaike",
 };
 
