@@ -63,23 +63,23 @@ const Header: React.FC = () => {
                                 {item.name}
                             </Link>
                         ))}
-                        {user && (
-                            <>
-                                <Link href="/dashboard">
-                                    Dashboard
-                                </Link>
-                                <button onClick={logoutUser} className="flex gap-1 content-center"><PowerIcon width={16}/>Logout</button>
-                            </>
-                        ) || (
-                            <>
-                                <Link href="/login" className="text-sm/6 font-semibold">
-                                    Log in
-                                </Link>
-                                <Link href="/register" className="text-sm/6 font-semibold">
-                                    Register
-                                </Link>
-                            </>
-                        )}
+                        {/*{user && (*/}
+                        {/*    <>*/}
+                        {/*        <Link href="/dashboard">*/}
+                        {/*            Dashboard*/}
+                        {/*        </Link>*/}
+                        {/*        <button onClick={logoutUser} className="flex gap-1 content-center"><PowerIcon width={16}/>Logout</button>*/}
+                        {/*    </>*/}
+                        {/*) || (*/}
+                        {/*    <>*/}
+                        {/*        <Link href="/login" className="text-sm/6 font-semibold">*/}
+                        {/*            Log in*/}
+                        {/*        </Link>*/}
+                        {/*        <Link href="/register" className="text-sm/6 font-semibold">*/}
+                        {/*            Register*/}
+                        {/*        </Link>*/}
+                        {/*    </>*/}
+                        {/*)}*/}
                     </div>
                 </div>
             </nav>

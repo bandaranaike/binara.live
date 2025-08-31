@@ -344,11 +344,8 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                         </button>
                         <h2 className="text-2xl font-bold mb-2">Doctor Appointment</h2>
                         <div
-                            className="text-gray-500 flex-grow hidden md:block">{!user?.token ? 'If you\'re logged in' : 'If you visit the dashboard'},
-                            you can also view your
-                            booking history for
-                            easy
-                            access and management.
+                            className="text-gray-500 text-sm flex-grow hidden md:block">
+                            Thanks for booking with <b>{process.env.NEXT_PUBLIC_APP_TITLE}</b>. Please call us to confirm your appointment and the doctor’s availability
                         </div>
                     </div>
 
@@ -515,15 +512,15 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                         </div>
                     </div>
                 </div>
-                <div className="px-8 pb-8 pt-6 lg:flex justify-between">
+                <div className="px-8 pb-8 pt-6 lg:flex justify-between border-t mt-6">
                     <div className="text-sm">
-                        <span className="hidden md:inline-block">For inquiries, please contact us at </span>
+                        <span className="hidden md:block text-gray-500 mb-1">For inquiries, please contact us at </span>
                         <span className="md:hidden">Inquiries: </span>
-                        <span className="ml-0.5">{process.env.NEXT_PUBLIC_APP_TELEPHONE}</span>
+                        <span className="ml-0.5"><b> {process.env.NEXT_PUBLIC_APP_TELEPHONE}</b></span>
                     </div>
-                    {!user?.token && <div className="text-right text-sm lg:mt-0 mt-3">
-                        <a href="/login" className="mr-4 text-blue-500">Login</a>
-                        <a href="/register" className="text-blue-500">Register</a></div>}
+                    {/*{!user?.token && <div className="text-right text-sm lg:mt-0 mt-3">*/}
+                    {/*    <a href="/login" className="mr-4 text-blue-500">Login</a>*/}
+                    {/*    <a href="/register" className="text-blue-500">Register</a></div>}*/}
                 </div>
             </div>
         </div>
