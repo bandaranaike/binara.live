@@ -1,6 +1,10 @@
 import AboutUsTimeline from "@/components/AboutUsTimeLine";
 import ImageGallery from "@/components/ImageGallery";
 
+export const metadata = {
+    title: "About us - " + process.env.NEXT_PUBLIC_APP_TITLE,
+};
+
 export default function About() {
 
     const images = [
@@ -26,7 +30,7 @@ export default function About() {
     ];
 
     return (
-        <div className="bg-white max-w-7xl mx-auto lg:py-12 py-4 mt-4 px-4 lg:px-4">
+        <div className="bg-white max-w-7xl mx-auto lg:py-12 py-4 mt-8 px-4 lg:px-4">
             <h1 className="text-3xl font-extrabold text-center text-gray-900 sm:text-4xl">About Us</h1>
             <p className="text-gray-500 pt-6 lg:pt-10">Binara Medical Centre has been a
                 trusted name in healthcare since 2008. Located in the heart of Kundasale, Kandy, we are
@@ -36,7 +40,7 @@ export default function About() {
                 care and state-of-the-art facilities. Whether you need specialist consultations, OPD services, or dental care, we are here to serve you with compassion and
                 expertise.</p>
             <AboutUsTimeline/>
-            <div className="lg:pb-12 lg:pt-20 py-6">
+            <div className="lg:pb-12 lg:pt-20 pt-16 py-6">
                 <ImageGallery images={images}/></div>
         </div>
     );

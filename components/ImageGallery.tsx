@@ -37,7 +37,6 @@ export default function ImageGallery({images}: ImageGalleryProps) {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
-        console.log("e.key", e.key);
         if (e.key === "ArrowRight" && selectedIndex < images.length - 1) {
             setSelectedIndex(selectedIndex + 1);
         } else if (e.key === "ArrowLeft" && selectedIndex > 0) {

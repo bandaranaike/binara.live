@@ -1,6 +1,10 @@
 import React, {FC} from "react";
 import DoctorsAvailability from "@/components/DoctorsAvailability";
 
+export const metadata = {
+    title: "Doctors Availability - Binara Medical & Dental Centre",
+};
+
 const AvailabilityCalendar: FC = () => {
     return <div>
         <div className="lg:mx-8 mx-auto p-4 lg:mb-6">

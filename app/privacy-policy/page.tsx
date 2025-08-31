@@ -1,10 +1,12 @@
-import React from "react";
+export const metadata = {
+    title: "Privacy Policy - " + process.env.NEXT_PUBLIC_APP_TITLE,
+};
 
 const PrivacyPolicy = () => {
     return (
         <div className="max-w-7xl mx-auto p-6 bg-white my-10">
             <h1 className="text-3xl font-bold mb-8">Privacy Policy</h1>
-            <p><strong>Effective Date:</strong> [Insert Date]</p>
+            <p><strong>Effective Date:</strong> 2025-01-01</p>
 
             <h2 className="text-2xl font-semibold mt-4">1. Information We Collect</h2>
             <p>We collect user details, including name, email, phone number, and age, solely for the purpose of medical appointment booking and communication with doctors.</p>

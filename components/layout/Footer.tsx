@@ -10,21 +10,19 @@ const Footer: React.FC = () => {
             <div className="max-w-7xl mx-auto flex flex-wrap justify-between p-4 lg:p-0">
                 <div className="p-4 lg:p-0">
                     <h3 className="text-2xl font-semibold mb-2">Contact Us</h3>
-                    <p>Binara Medical Centre, No82. New Town, Kundasale</p>
-                    <p>Phone: +94 817 213 239 / +94 812 421 942</p>
-                    <p>Fax: +94 812 421 942 </p>
-                    <p>Email: info@binara.live / binara82@gmail.com</p>
+                    <p className="font-semibold mb-1">{process.env.NEXT_PUBLIC_APP_ADDRESS}</p>
+                    <p>Phone: <span> {process.env.NEXT_PUBLIC_APP_TELEPHONE} </span></p>
+                    <p>Fax: {process.env.NEXT_PUBLIC_APP_FAX} </p>
+                    <p>Email: {process.env.NEXT_PUBLIC_APP_EMAIL}</p>
                 </div>
                 <div className="p-4 lg:p-0">
-                    <h3 className="text-2xl font-semibold mb-2">Follow Us</h3>
-                    <p>Facebook | Instagram | Twitter</p>
+                    {/*<h3 className="text-2xl font-semibold mb-2">Follow Us</h3>*/}
+                    {/*<p>Facebook | Instagram | Twitter</p>*/}
                 </div>
                 <div className="p-4 lg:p-0">
-                    <h3 className="text-2xl font-semibold mb-2">Quick Links</h3>
+                    <h3 className="text-2xl font-semibold mb-2">About</h3>
                     <p>
-                        {!user?.token &&
-                            (<><a href="/login">Login </a> | <a href="/register"> Register </a> |</>) ||
-                            (<><a href="/dashboard">Dashboard</a> |</>)} <a href="/about">About Us</a>
+                    <a href="/about">About Us</a> | <a href="/contacts">Contact Us</a>
                     </p>
                 </div>
             </div>

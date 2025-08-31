@@ -4,7 +4,13 @@ import {Button, Select} from "flowbite-react";
 import {Input} from "@headlessui/react";
 import debounce from "debounce";
 import parsePhoneNumber from "libphonenumber-js";
-import {CalendarIcon, CheckCircleIcon, InformationCircleIcon, MinusCircleIcon, XCircleIcon} from "@heroicons/react/24/outline";
+import {
+    CalendarIcon,
+    CheckCircleIcon,
+    InformationCircleIcon,
+    MinusCircleIcon,
+    XCircleIcon
+} from "@heroicons/react/24/outline";
 import Loader from "@/components/form/Loader";
 import axios from "@/lib/axios";
 import {useUserContext} from "@/context/UserContext";
@@ -46,6 +52,7 @@ interface ApiError {
     };
 }
 
+
 const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doctorData, onAppointmentBooked}) => {
     const {user} = useUserContext();
     const [doctorType, setDoctorType] = useState(doctorData.type ?? "0");
@@ -63,7 +70,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     const [isDoctorsLoading, setIsDoctorsLoading] = useState<boolean>(false)
     const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false)
     const [searchQuery, setSearchQuery] = useState(doctorData.name ?? "");
-    const [availableDates, setAvailableDates] = useState([]);
+    const [availableDates, setAvailableDates] = useState<string[]>([]);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [phoneIsBusy, setPhoneIsBusy] = useState<boolean>(false)
     const [showOTPWindow, setShowOTPWindow] = useState<boolean>(false)
@@ -77,7 +84,8 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
             axios.get("doctor-availabilities/search-booking-doctors", {
                 params: {
                     type: doctorType,
-                    query: searchQuery
+                    query: searchQuery,
+                    date: selectedDate,
                 }
             }).then(response => {
                 setDoctors(response.data);
@@ -108,6 +116,25 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
             console.error(error.response?.data?.message || "An error occurred");
         }
     }, 200);
+
+    const generateDateArray = (startDate: Date, daysRange: number, intervalDays: number) => {
+        const result = [];
+        const currentDate = new Date(startDate);
+
+        while (currentDate <= new Date(startDate.getTime() + daysRange * 24 * 60 * 60 * 1000)) {
+            result.push(currentDate.toISOString().split('T')[0]); // Format as YYYY-MM-DD
+            currentDate.setDate(currentDate.getDate() + intervalDays);
+        }
+
+        return result;
+    }
+
+    useEffect(() => {
+        if (!selectedDoctor) {
+            setSearchQuery("");
+            fetchDoctors();
+        }
+    }, [selectedDate]);
 
     const sendOTPRequest = () => {
         setPhoneIsBusy(true);
@@ -161,6 +188,9 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
         setSelectedDoctor(0)
         setSelectedDate(null)
         if (doctorType) {
+            const today = new Date();
+            const array = generateDateArray(today, 30, 1);
+            setAvailableDates(array);
             fetchDoctors();
         }
     }, [doctorType]);
@@ -204,6 +234,10 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     }, 300)
 
     const handleDateChange = (date: Date | null) => {
+        // If the selected doctor is not set, and doctorType is set, fetch doctors for the selected type and selected data.
+        if (!selectedDoctor && doctorType) {
+            fetchDoctors();
+        }
         setSelectedDate(date);
     }
 
@@ -289,6 +323,9 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
     };
 
     const removeSelectedDoctor = () => {
+        const today = new Date();
+        const array = generateDateArray(today, 30, 1);
+        setAvailableDates(array);
         setSelectedDoctor(0)
         setSearchQuery("")
     };
@@ -296,23 +333,27 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 py-4">
-            <div className="max-w-2xl flex-grow max-h-full no-scrollbar overflow-y-scroll lg:mx-auto m-4 bg-white rounded-2xl">
+            <div
+                className="max-w-2xl flex-grow max-h-full no-scrollbar overflow-y-scroll lg:mx-auto m-4 bg-white rounded-2xl">
                 <div>
                     <div className="p-8 pb-0 relative">
-                        <button title="Close window" className="absolute right-0 mr-4 -mt-4 text-gray-500 hover:text-purple-500" onClick={onCloseBookingWindow}>
+                        <button title="Close window"
+                                className="absolute right-0 mr-4 -mt-4 text-gray-500 hover:text-purple-500"
+                                onClick={onCloseBookingWindow}>
                             <XCircleIcon width={30}/>
                         </button>
                         <h2 className="text-2xl font-bold mb-2">Doctor Appointment</h2>
-                        <div className="text-gray-500 flex-grow hidden md:block">{!user?.token ? 'If you\'re logged in' : 'If you visit the dashboard'}, you can also view your booking history for
-                            easy
-                            access and management.
+                        <div
+                            className="text-gray-500 text-sm flex-grow hidden md:block">
+                            Thanks for booking with <b>{process.env.NEXT_PUBLIC_APP_TITLE}</b>. Please call us to confirm your appointment and the doctor’s availability
                         </div>
                     </div>
 
                     <div className="px-4 md:px-8 pt-6 pb-2">
                         <div className="lg:grid lg:grid-cols-4 gap-4">
                             <div>
-                                <Select className="mb-3" value={doctorType} onChange={(e) => setDoctorType(e.target.value)}>
+                                <Select className="mb-3" value={doctorType}
+                                        onChange={(e) => setDoctorType(e.target.value)}>
                                     <option value="0">Please select...</option>
                                     <option value="dental">Dental</option>
                                     <option value="specialist">Specialist</option>
@@ -343,7 +384,8 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                                     <div className="pt-1.5 pb-1"><Loader/></div>}
 
                                 <div className="mb-3">
-                                    {doctorSelectError && (<div className="text-red-500 text-sm">{doctorSelectError}</div>)}
+                                    {doctorSelectError && (
+                                        <div className="text-red-500 text-sm">{doctorSelectError}</div>)}
                                 </div>
                             </div>
                         </div>
@@ -351,7 +393,7 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
 
                             <div className="mb-3">
                                 <AvailabilityDatePicker
-                                    disabled={!selectedDoctor}
+                                    disabled={!selectedDoctor && !doctorType}
                                     selectedDate={selectedDate}
                                     onDateChange={handleDateChange}
                                     availableDates={availableDates}
@@ -425,9 +467,11 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
 
                         </div>
                         {/* OTP Input */}
-                        {showOTPWindow && <div className="border-dashed border rounded-xl border-gray-300 mt-3 p-3 md:py-4">
-                            <OTPInput onOtpComplete={setOTP} emailOrPhone="phone" title='' resendEnabled={true} timer={30} onResend={handleOTPResend} onVerify={handleOTPVerify}/>
-                        </div>}
+                        {showOTPWindow &&
+                            <div className="border-dashed border rounded-xl border-gray-300 mt-3 p-3 md:py-4">
+                                <OTPInput onOtpComplete={setOTP} emailOrPhone="phone" title='' resendEnabled={true}
+                                          timer={30} onResend={handleOTPResend} onVerify={handleOTPVerify}/>
+                            </div>}
                     </div>
 
                     {bookingCreateError && <div className="text-red-500 text-sm px-8 py-3">{bookingCreateError}</div>}
@@ -437,20 +481,24 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                             <div className="pt-5 pb-4 px-6">
                                 <h3 className="text-lg font-bold mb-2">Booking Details</h3>
                                 <p>Doctor: <span className="font-semibold"> {bookingResponse.doctor_name}</span></p>
-                                <p>Appointment Number: <span className="font-semibold"> {bookingResponse.booking_number}</span></p>
+                                <p>Appointment Number: <span
+                                    className="font-semibold"> {bookingResponse.booking_number}</span></p>
                                 <p>Date: <span className="font-semibold"> {bookingResponse.date}</span></p>
                                 <p>Bill ID: <span className="font-semibold"> {bookingResponse.bill_id}</span></p>
                             </div>
                             <div className="bg-gray-100 rounded-b-xl pt-3 pb-5 px-6 text-sm text-gray-500">
                                 <p>Reference: <span className="font-semibold"> {bookingResponse.reference}</span></p>
-                                <p>Generated at: <span className="font-semibold"> {bookingResponse.generated_at}</span></p>
+                                <p>Generated at: <span className="font-semibold"> {bookingResponse.generated_at}</span>
+                                </p>
                             </div>
                         </div>
                     )}
                     <div className="flex justify-between px-8">
                         <div className="pt-4">
-                            {doctorData.id == "0" && <Link href="/availability-calendar" className="font-semibold text-sm" title="Full Calendar">
-                                <CalendarIcon width={38} className="text-gray-300 hover:text-purple-600"/></Link>}
+                            {doctorData.id == "0" &&
+                                <Link href="/availability-calendar" className="font-semibold text-sm"
+                                      title="Full Calendar">
+                                    <CalendarIcon width={38} className="text-gray-300 hover:text-purple-600"/></Link>}
                         </div>
                         <div className="flex gap-4 justify-end">
                             {bookingResponse && bookingResponse.bill_id &&
@@ -464,15 +512,15 @@ const DoctorBooking: React.FC<DoctorBookingProps> = ({onCloseBookingWindow, doct
                         </div>
                     </div>
                 </div>
-                <div className="px-8 pb-8 pt-6 lg:flex justify-between">
+                <div className="px-8 pb-8 pt-6 lg:flex justify-between border-t mt-6">
                     <div className="text-sm">
-                        <span className="hidden md:inline-block">For inquiries, please contact us at </span>
+                        <span className="hidden md:block text-gray-500 mb-1">For inquiries, please contact us at </span>
                         <span className="md:hidden">Inquiries: </span>
-                        <span className="ml-0.5">{process.env.NEXT_PUBLIC_APP_TELEPHONE}</span>
+                        <span className="ml-0.5"><b> {process.env.NEXT_PUBLIC_APP_TELEPHONE}</b></span>
                     </div>
-                    {!user?.token && <div className="text-right text-sm lg:mt-0 mt-3">
-                        <a href="/login" className="mr-4 text-blue-500">Login</a>
-                        <a href="/register" className="text-blue-500">Register</a></div>}
+                    {/*{!user?.token && <div className="text-right text-sm lg:mt-0 mt-3">*/}
+                    {/*    <a href="/login" className="mr-4 text-blue-500">Login</a>*/}
+                    {/*    <a href="/register" className="text-blue-500">Register</a></div>}*/}
                 </div>
             </div>
         </div>

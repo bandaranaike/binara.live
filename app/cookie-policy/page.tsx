@@ -1,4 +1,6 @@
-import React from "react";
+export const metadata = {
+    title: "Cookie Policy - " + process.env.NEXT_PUBLIC_APP_TITLE,
+};
 
 const CookiePolicy = () => {
     return (
