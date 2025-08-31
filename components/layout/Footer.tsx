@@ -1,10 +1,8 @@
 "use client"
 import React from "react";
 import Image from "next/image";
-import {useUserContext} from "@/context/UserContext";
 
 const Footer: React.FC = () => {
-    const {user} = useUserContext()
     return (
         <footer className="bg-gray-100 lg:pt-16 lg:pb-8 border-t ">
             <div className="max-w-7xl mx-auto flex flex-wrap justify-between p-4 lg:p-0">
@@ -16,8 +14,7 @@ const Footer: React.FC = () => {
                     <p>Email: {process.env.NEXT_PUBLIC_APP_EMAIL}</p>
                 </div>
                 <div className="p-4 lg:p-0">
-                    {/*<h3 className="text-2xl font-semibold mb-2">Follow Us</h3>*/}
-                    {/*<p>Facebook | Instagram | Twitter</p>*/}
+
                 </div>
                 <div className="p-4 lg:p-0">
                     <h3 className="text-2xl font-semibold mb-2">About</h3>

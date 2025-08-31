@@ -1,22 +1,13 @@
 "use client"
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import '@/app/globals.css'
 import Image from "next/image";
-import {Bars3Icon, PowerIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import {Dialog, DialogPanel} from "@headlessui/react";
-import {useUserContext} from "@/context/UserContext";
-import {setAxiosToken} from "@/lib/axios";
-import {useRouter} from 'next/navigation';
 
 const Header: React.FC = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    const {user, logout} = useUserContext()
-
-    useEffect(() => {
-        // Dynamically set token for Axios
-        setAxiosToken(user?.token || null);
-    }, [user]);
 
     const navigation = [
         {name: 'About us', href: 'about'},
@@ -24,13 +15,6 @@ const Header: React.FC = () => {
         {name: 'Doctors availability', href: 'availability-calendar'},
     ]
 
-
-    const router = useRouter();
-
-    const logoutUser = () => {
-        logout()
-        router.push('/login')
-    };
     return (
         <header className="absolute inset-x-0 top-0 z-50 bg-white">
             <nav aria-label="Global" className="p-3 lg:px-8 shadow">
@@ -63,23 +47,6 @@ const Header: React.FC = () => {
                                 {item.name}
                             </Link>
                         ))}
-                        {/*{user && (*/}
-                        {/*    <>*/}
-                        {/*        <Link href="/dashboard">*/}
-                        {/*            Dashboard*/}
-                        {/*        </Link>*/}
-                        {/*        <button onClick={logoutUser} className="flex gap-1 content-center"><PowerIcon width={16}/>Logout</button>*/}
-                        {/*    </>*/}
-                        {/*) || (*/}
-                        {/*    <>*/}
-                        {/*        <Link href="/login" className="text-sm/6 font-semibold">*/}
-                        {/*            Log in*/}
-                        {/*        </Link>*/}
-                        {/*        <Link href="/register" className="text-sm/6 font-semibold">*/}
-                        {/*            Register*/}
-                        {/*        </Link>*/}
-                        {/*    </>*/}
-                        {/*)}*/}
                     </div>
                 </div>
             </nav>
