@@ -1,5 +1,6 @@
 export const metadata = {
     title: "Cookie Policy - " + process.env.NEXT_PUBLIC_APP_TITLE,
+    description: "At Binara Medical Centre, we are committed to protecting your privacy. This Cookie Policy explains how we use cookies to enhance your browsing experience.",
 };
 
 const CookiePolicy = () => {

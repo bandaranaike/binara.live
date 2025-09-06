@@ -3,6 +3,7 @@ import ImageGallery from "@/components/ImageGallery";
 
 export const metadata = {
     title: "About us - " + process.env.NEXT_PUBLIC_APP_TITLE,
+    description: "At Binara Medical Centre, we are dedicated to providing high-quality medical care tailored to your needs",
 };
 
 export default function About() {
