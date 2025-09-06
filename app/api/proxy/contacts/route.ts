@@ -1,6 +1,11 @@
 import {NextResponse} from 'next/server';
 import axios from "@/lib/axios";
 
+export const metadata = {
+    title: "Contact us - " + process.env.NEXT_PUBLIC_APP_TITLE,
+    description: "At Binara Medical Centre, we are dedicated to providing high-quality medical care tailored to your needs",
+};
+
 export async function POST(request: Request) {
     try {
         // Extract the request body
