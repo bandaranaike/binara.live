@@ -1,5 +1,6 @@
 export const metadata = {
-    title: "Privacy Policy - " + process.env.NEXT_PUBLIC_APP_TITLE,
+    title: `Privacy Policy - ${process.env.NEXT_PUBLIC_APP_TITLE}`,
+    description: "At Binara Medical Centre, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and protect your personal information.",
 };
 
 const PrivacyPolicy = () => {

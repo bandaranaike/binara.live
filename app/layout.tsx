@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Binara Medical & Dental Centre",
-    description: "Created by Eranda Bandaranaike",
+    title: process.env.NEXT_PUBLIC_APP_TITLE,
+    description: "At Binara Medical Centre, we are dedicated to providing high-quality medical care tailored to your needs",
 };
 
 export default function RootLayout({children,}: Readonly<{ children: React.ReactNode; }>) {

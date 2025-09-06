@@ -1,5 +1,6 @@
 export const metadata = {
     title: "Terms of Use - " + process.env.NEXT_PUBLIC_APP_TITLE,
+    description: "At Binara Medical Centre, we are committed to providing high-quality medical care tailored to your needs. These Terms of Use outline the terms and conditions under which you can use our website.",
 };
 const TermOfUse = () => {
     return (
