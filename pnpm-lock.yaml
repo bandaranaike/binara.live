@@ -20,6 +20,9 @@ importers:
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
+      debounce:
+        specifier: ^2.2.0
+        version: 2.2.0
       flowbite-react:
         specifier: ^0.10.2
         version: 0.10.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss@3.4.17)
@@ -887,6 +890,10 @@ packages:
 
   debounce@2.1.0:
     resolution: {integrity: sha512-OkL3+0pPWCqoBc/nhO9u6TIQNTK44fnBnzuVtJAbp13Naxw9R6u21x+8tVTka87AhDZ3htqZ2pSSsZl9fqL2Wg==}
+    engines: {node: '>=18'}
+
+  debounce@2.2.0:
+    resolution: {integrity: sha512-Xks6RUDLZFdz8LIdR6q0MTH44k7FikOmnh5xkSjMig6ch45afc8sjTjRQf3P6ax8dMgcQrYO/AR2RGWURrruqw==}
     engines: {node: '>=18'}
 
   debug@3.2.7:
@@ -2956,6 +2963,8 @@ snapshots:
   date-fns@4.1.0: {}
 
   debounce@2.1.0: {}
+
+  debounce@2.2.0: {}
 
   debug@3.2.7:
     dependencies:

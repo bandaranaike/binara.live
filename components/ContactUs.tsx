@@ -34,17 +34,20 @@ const ContactUs: React.FC = () => {
         try {
             setError("")
             setResponse(undefined)
-            axios.post('/contacts', {name, phone, email, message}).then(response => {
-                setResponse(response.data);
+            axios.post('/contacts', {name, phone, email, message}).then(r => {
+                setResponse(r.data);
                 setName('');
                 setPhone('');
                 setEmail('');
                 setMessage('');
-            }).catch(error => setError('There was a problem with this request : ' + error.response.data)).finally(() => {
+            }).catch(error => {
+                console.error('Error:', error);
+                setError('There was a problem with this request. Please try again.');
+            }).finally(() => {
                 setLoading(false);
             })
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error :', error);
             setError('Failed to send message. Please try again.');
         }
     };
@@ -102,7 +105,7 @@ const ContactUs: React.FC = () => {
                     {loading && <Loader/>}
                 </div>
                 <div className="">
-                    {error && <div className="text-red-500 my-3">{error}</div>}
+                    {error && <div className="text-red-500 my-3 border border-red-400 bg-red-50 rounded-lg py-3 px-6 mt-4">{error}</div>}
                     {response && <div className="text-green-600 border border-green-400 bg-green-50 rounded-lg py-3 px-6 mt-4">
                         {response.message} Your reference is : <span className="font-semibold">{response.reference}</span>
                     </div>}
