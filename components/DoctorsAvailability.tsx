@@ -115,11 +115,11 @@ const DoctorsAvailability: React.FC = () => {
                                         <div className={`flex items-center px-1 py-1 border-l text-xs border-${doctorColor}-200`}>
                                             {item.time.substring(0, 5)}
                                         </div>
-                                        {item.seats > 0 && (
-                                            <div className={`flex items-center px-1 py-1 border-l text-xs border-${doctorColor}-200`}>
-                                                {item.available_seats}/{item.seats}
-                                            </div>
-                                        )}
+                                        {/*{item.seats > 0 && (*/}
+                                        {/*    <div className={`flex items-center px-1 py-1 border-l text-xs border-${doctorColor}-200`}>*/}
+                                        {/*        {item.available_seats}/{item.seats}*/}
+                                        {/*    </div>*/}
+                                        {/*)}*/}
                                     </li>
                                 );
                             })}
