@@ -17,7 +17,7 @@
     "debounce": "^2.2.0",
     "flowbite-react": "^0.10.2",
     "libphonenumber-js": "^1.12.10",
-    "next": "15.1.6",
+    "next": "15.1.9",
     "react": "^19.1.0",
     "react-calendar": "^5.1.0",
     "react-dom": "^19.1.0",
