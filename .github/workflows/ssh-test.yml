@@ -1,0 +1,22 @@
+name: SSH Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ssh-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H 147.93.111.8 >> ~/.ssh/known_hosts
+
+      - name: Test SSH
+        run: |
+          ssh -o PreferredAuthentications=publickey \
+              -o PasswordAuthentication=no \
+              deploy@147.93.111.8 "whoami && hostname"
