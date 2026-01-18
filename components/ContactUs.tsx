@@ -16,6 +16,7 @@ const ContactUs: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setResponse(undefined);
 
         // Validation
         if (!name || !message) {
@@ -40,14 +41,15 @@ const ContactUs: React.FC = () => {
                 setPhone('');
                 setEmail('');
                 setMessage('');
-            }).catch(error => {
-                console.error('Error:', error);
-                setError('There was a problem with this request. Please try again.');
+            }).catch((e) => {
+                const message = e.response?.data?.message ?? e.message ?? 'There was a problem with this request. Please try again.';
+                setError(message);
             }).finally(() => {
                 setLoading(false);
             })
-        } catch (error) {
+        } catch (error: unknown) {
             console.error('Error :', error);
+            setLoading(false);
             setError('Failed to send message. Please try again.');
         }
     };
@@ -57,7 +59,8 @@ const ContactUs: React.FC = () => {
             <form onSubmit={handleSubmit}>
                 <div className="lg:grid lg:grid-cols-3 lg:gap-4">
                     <div>
-                        <label className="text-gray-700" htmlFor="name">Name: <span className="text-red-500">*</span> </label>
+                        <label className="text-gray-700" htmlFor="name">Name: <span className="text-red-500">*</span>
+                        </label>
                         <input
                             type="text"
                             className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
@@ -99,16 +102,20 @@ const ContactUs: React.FC = () => {
                     </div>
                 </div>
                 <div className="flex gap-4 mt-4 items-center">
-                    <button type="submit" disabled={loading} className="px-6 py-3 border rounded-lg border-purple-800 bg-purple-700 text-white font-semibold inline-block">
+                    <button type="submit" disabled={loading}
+                            className="px-6 py-3 border rounded-lg border-purple-800 bg-purple-700 text-white font-semibold inline-block">
                         {loading ? 'Sending...' : 'Send Message'}
                     </button>
                     {loading && <Loader/>}
                 </div>
                 <div className="">
-                    {error && <div className="text-red-500 my-3 border border-red-400 bg-red-50 rounded-lg py-3 px-6 mt-4">{error}</div>}
-                    {response && <div className="text-green-600 border border-green-400 bg-green-50 rounded-lg py-3 px-6 mt-4">
-                        {response.message} Your reference is : <span className="font-semibold">{response.reference}</span>
-                    </div>}
+                    {error && <div
+                        className="text-red-500 my-3 border border-red-400 bg-red-50 rounded-lg py-3 px-6 mt-4">{error}</div>}
+                    {response &&
+                        <div className="text-green-600 border border-green-400 bg-green-50 rounded-lg py-3 px-6 mt-4">
+                            {response.message} Your reference is : <span
+                            className="font-semibold">{response.reference}</span>
+                        </div>}
                 </div>
             </form>
         </div>
