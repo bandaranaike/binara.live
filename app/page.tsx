@@ -76,8 +76,9 @@ export default function Home() {
 
 
     const showBookingWindow = (id: number = 0, type: string = "", name: string = "") => {
-        // setChannelingDoctor({id, type, name})
-        // setIsBookingWindowOpen(true)
+        return null;
+        setChannelingDoctor({id, type, name})
+        setIsBookingWindowOpen(true)
     };
     return (
         <div>
