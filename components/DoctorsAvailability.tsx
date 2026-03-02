@@ -72,8 +72,8 @@ const DoctorsAvailability: React.FC = () => {
     };
 
     const showBookingWindow = (data: DoctorBookingData) => {
-        setChannelingDoctor(data)
-        setIsBookingWindowOpen(true)
+        // setChannelingDoctor(data)
+        // setIsBookingWindowOpen(true)
     };
 
     const renderDays = () => {
