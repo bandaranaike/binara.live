@@ -4,7 +4,8 @@ export const metadata = {
 };
 const TermOfUse = () => {
     return (
-        <div className="max-w-7xl mx-auto p-6 bg-white my-10">
+        <div className="page-wrap py-6 lg:py-10">
+            <div className="content-panel prose prose-slate max-w-none">
             <h1 className="text-3xl font-bold mb-8">Terms of Use</h1>
             <p className="mb-4"><strong className="font-semibold">Effective Date:</strong> 2025-01-01</p>
 
@@ -56,6 +57,7 @@ const TermOfUse = () => {
             <p className="text-gray-700">
                 If you have any questions about these Terms of Use, please contact us at <a className="hover:text-purple-600" href="mailto:info@binara.live">info@binara.live</a>.
             </p>
+            </div>
         </div>
     );
 };

@@ -30,7 +30,7 @@ const PhoneNumberInput: React.FC<PhoneNUmberInputProps> = ({onValidPhoneNumber, 
     return (
         <div>
             <Input
-                className="mb-3 w-full border border-gray-300 py-2 px-4 rounded-lg"
+                className="theme-input mb-3"
                 name="phone"
                 placeholder="Your phone number"
                 required={isPhoneRequired}

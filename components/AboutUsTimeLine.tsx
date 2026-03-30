@@ -60,10 +60,11 @@ const AboutUsTimeline = () => {
     ];
 
     return (
-        <div className="bg-white pt-12 px-4 sm:px-6 lg:px-8">
+        <div className="section-card px-4 py-10 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-12">
-                    <h2 className="text-2xl font-extrabold text-gray-800 sm:text-3xl">
+                    <div className="section-kicker">Our journey</div>
+                    <h2 className="mt-4 text-2xl font-extrabold text-gray-800 sm:text-3xl">
                         Our Journey
                     </h2>
                     <p className="mt-4 text-xl text-gray-600">
@@ -84,7 +85,7 @@ const AboutUsTimeline = () => {
                                     ) : null}
                                     <div className="relative flex space-x-3">
                                         <div>
-                                            <span className={`h-12 w-12 rounded-full ${milestone.iconBgColor} flex items-center justify-center ring-8 ring-white`}>
+                                            <span className={`h-12 w-12 rounded-full ${milestone.iconBgColor} flex items-center justify-center ring-8 ring-purple-50`}>
                                                 {milestone.icon}
                                             </span>
                                         </div>

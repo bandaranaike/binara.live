@@ -100,20 +100,20 @@ const DoctorsSearch: React.FC<DoctorsSearchProps> = ({year, month, onDoctorsSele
                 <div className="relative">
                     <input
                         type="text"
-                        className={`border border-gray-200 rounded-lg w-full px-4 py-2 focus:ring-gray-200 focus:border-gray-200 ${showDropDown ? 'pb-4 mb-0' : 'mb-1 pb-2'}`}
+                        className={`theme-input ${showDropDown ? 'mb-0 pb-4' : 'mb-1 pb-3'}`}
                         placeholder="Search for doctors or specialties..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onClick={(e) => e.stopPropagation()} // Prevent event propagation
                     />
-                    <XCircleIcon className="absolute right-3 top-3 hover:text-red-500" width={20} onClick={handleCancel}/>
+                    <XCircleIcon className="absolute right-3 top-3 text-slate-400 hover:text-red-500" width={20} onClick={handleCancel}/>
                 </div>
 
                 {showDropDown && (
-                    <div className="absolute bg-white border border-gray-200 rounded-b-lg -mt-1 w-full shadow">
+                    <div className="absolute -mt-1 w-full rounded-b-2xl border border-purple-100 bg-white shadow-[0_18px_40px_-30px_rgba(91,33,182,0.35)]">
                         {doctors.map(doctor => (
                             <div key={`${doctor.id}-${doctor.date}`}
-                                 className="py-2 px-3 border-b max-w-xl flex gap-3 hover:bg-purple-50"
+                                 className="flex max-w-xl gap-3 border-b border-purple-50 px-3 py-3 hover:bg-purple-50"
                                  onClick={(e) => e.stopPropagation()} // Prevent event propagation
                             >
                                 <CustomCheckbox
@@ -125,9 +125,9 @@ const DoctorsSearch: React.FC<DoctorsSearchProps> = ({year, month, onDoctorsSele
                                 </div>
                             </div>
                         ))}
-                        <div className="w-full flex justify-between">
-                            <button className="border bg-white m-2 border-gray-300 py-2 px-3 rounded-lg hover:border-purple-500" onClick={handleDone}>Search</button>
-                            <button className="border bg-white m-2 border-gray-300 py-2 px-3 rounded-lg hover:border-yellow-500" onClick={handleCancel}>Cancel</button>
+                        <div className="flex w-full justify-between p-2">
+                            <button className="theme-button-secondary px-4 py-2" onClick={handleDone}>Search</button>
+                            <button className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 hover:border-rose-200 hover:text-rose-500" onClick={handleCancel}>Cancel</button>
                         </div>
                     </div>
                 )}

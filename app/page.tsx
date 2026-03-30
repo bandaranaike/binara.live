@@ -108,27 +108,25 @@ export default function Home() {
             {todayHolidayStatus?.is_closed && (
                 <section className="px-4 pt-4 lg:px-0">
                     <div className="max-w-7xl mx-auto">
-                        <div className="relative overflow-hidden rounded-xl border border-gray-200 bg-gradient-to-r from-purple-50 via-rose-50 to-violet-50 px-6 py-6 lg:px-10 lg:py-7">
-                            <div className="absolute -right-8 -top-10 h-32 w-32 rounded-full bg-purple-200/40 blur-2xl"/>
-                            <div className="absolute left-1/3 top-0 h-24 w-24 rounded-full bg-rose-200/30 blur-2xl"/>
-                            <div className="relative flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                        <div className="hero-panel">
+                            <div className="relative z-10 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                                 <div className="max-w-3xl">
-                                    <div className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-purple-600">
+                                    <div className="section-kicker">
                                         Important notice
                                     </div>
-                                    <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-900 lg:text-5xl">
+                                    <h1 className="mt-3 section-title">
                                         {closureTitle}
                                     </h1>
-                                    <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 lg:text-base">
+                                    <p className="mt-3 max-w-2xl section-copy">
                                         {closureMessage}
                                     </p>
                                 </div>
-                                <div className="rounded-xl border border-gray-200 bg-white p-5">
+                                <div className="content-panel p-5">
                                     <div className="text-sm font-semibold uppercase tracking-[0.2em] text-purple-600">Status</div>
                                     <div className="mt-2 text-2xl font-black text-slate-900">Closed today</div>
                                     <Link
                                         href={'availability-calendar'}
-                                        className="mt-4 inline-flex rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:bg-gradient-to-l"
+                                        className="theme-button mt-4"
                                     >
                                         View upcoming availability
                                     </Link>
@@ -140,33 +138,35 @@ export default function Home() {
             )}
             {/* Slider Section */}
             <section className="max-w-7xl mx-auto">
-                <div className="lg:grid lg:grid-cols-3 lg:gap-6 pb-12 px-4 lg:px-0">
-                    <Slider {...sliderSettings} className="lg:col-span-2 lg:my-0">
+                <div className={`lg:grid lg:grid-cols-3 lg:gap-6 pb-12 px-4 lg:px-0 ${todayHolidayStatus?.is_closed ? 'pt-6' : 'pt-0'}`}>
+                    <div className="section-card lg:col-span-2 overflow-hidden">
+                    <Slider {...sliderSettings} className="lg:my-0">
                         {sliders.map((slider, index) => (
                             <div className="relative" key={index}>
                                 <img src={`/images/${slider.image}`} alt={slider.title}/>
                             </div>
                         ))}
                     </Slider>
+                    </div>
                     <div className="content-center">
-                        {todayHolidayStatus?.is_closed && <div className="rounded-xl border mt-16 lg:mt-0 bg-gradient-to-br from-purple-50 to-rose-50">
-                            <div className="bg-white py-3 px-4 rounded-t-xl border-b border-gray-200">
+                        {todayHolidayStatus?.is_closed && <div className="section-card mt-16 lg:mt-0 bg-gradient-to-br from-purple-50 to-rose-50">
+                            <div className="rounded-t-xl border-b border-gray-200 bg-white py-3 px-4">
                                 <div className="text-xs font-semibold uppercase tracking-[0.22em] text-purple-600">Closure update</div>
                                 <h3 className="mt-2 text-2xl font-black text-slate-900">Today the centre is closed</h3>
                                 <p className="mt-2 text-sm leading-6 text-slate-600">{closureMessage}</p>
                             </div>
-                            <div className="bg-white p-4 rounded-b-xl">
-                                <div className="rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-5 py-4 text-white">
+                            <div className="rounded-b-xl bg-white p-4">
+                                <div className="rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-5 py-4 text-white">
                                     <div className="text-sm font-semibold text-purple-100">Need another date?</div>
                                     <div className="mt-1 text-sm text-white/90">Please use the full calendar to find the next available doctor sessions.</div>
-                                    <Link href={'availability-calendar'} className="mt-4 inline-flex rounded-lg bg-white px-4 py-2 text-sm font-semibold text-purple-600 transition duration-300 hover:bg-purple-50">
+                                    <Link href={'availability-calendar'} className="mt-4 inline-flex rounded-md bg-white px-4 py-2 text-sm font-semibold text-purple-600 transition duration-300 hover:bg-purple-50">
                                         Open full calendar
                                     </Link>
                                 </div>
                             </div>
                         </div>}
-                        {!todayHolidayStatus?.is_closed && todayDoctorsList.length > 0 && <div className="rounded-xl border mt-16 lg:mt-0 bg-gradient-to-br from-gray-50 to-purple-50">
-                            <div className="bg-white py-3 px-4 rounded-t-xl border-b border-gray-200">
+                        {!todayHolidayStatus?.is_closed && todayDoctorsList.length > 0 && <div className="section-card mt-16 lg:mt-0 bg-gradient-to-br from-gray-50 to-purple-50">
+                            <div className="rounded-t-xl border-b border-gray-200 bg-white py-3 px-4">
                                 <h3 className="font-semibold text-xl">Today&#39;s doctors list</h3>
                                 <div className="text-gray-500 text-xs">View available doctors and their specialties. Book your appointment now!</div>
                             </div>
@@ -189,9 +189,9 @@ export default function Home() {
                                     }
                                 )}
                             </ul>
-                            <div className="bg-white p-3 rounded-b-xl"><Link href={'availability-calendar'}>Full calendar</Link></div>
+                            <div className="rounded-b-xl bg-white p-3"><Link href={'availability-calendar'}>Full calendar</Link></div>
                         </div>}
-                        {todayDoctorsListError && <div className="rounded-xl border bg-gradient-to-br mt-16 lg:mt-0 from-purple-50 to-rose-50">
+                        {todayDoctorsListError && <div className="section-card mt-16 lg:mt-0 bg-gradient-to-br from-purple-50 to-rose-50">
                             <div className="text-red-500 py-6 px-8 text-xs">{todayDoctorsListError}</div>
                         </div>}
                         {loadingTodayList && <Loader/>}
@@ -199,37 +199,43 @@ export default function Home() {
                 </div>
             </section>
             {/* Services Section */}
-            <section className="bg-gradient-to-br from-amber-50 via-red-50 to-violet-50 lg:py-24 py-6">
+            <section className="lg:py-24 py-6">
                 <div className="max-w-7xl mx-auto p-4 lg:p-0">
+                    <div className="hero-panel">
                     <div className="text-center pb-12">
-                        <h2 className="text-4xl font-bold">Our Comprehensive Healthcare Services</h2>
-                        <p className="text-gray-500 mt-6">At Binara Medical Centre, we are dedicated to providing high-quality medical care tailored to your needs. From specialist
+                        <div className="section-kicker">What we offer</div>
+                        <h2 className="text-4xl font-black mt-4">Our Comprehensive Healthcare Services</h2>
+                        <p className="text-gray-500 mt-6 max-w-4xl mx-auto">At Binara Medical Centre, we are dedicated to providing high-quality medical care tailored to your needs. From specialist
                             consultations to routine checkups and advanced dental treatments, our experienced team is here to ensure your health and well-being. Explore our range
                             of services designed to keep you and your family healthy.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {services.map((service, index) => (
-                            <div className="text-center  border-gray-200 rounded-xl bg-white" key={index}>
+                            <div className="overflow-hidden rounded-xl border border-purple-100 bg-white/90 text-center" key={index}>
                                 <div className={`text-9xl p-8 rounded-t-xl ${service.cssClass}`}>{service.image}</div>
                                 <h2 className="text-2xl px-4 pt-10 font-semibold">{service.title}</h2>
                                 <p className="text-gray-600 pb-12 px-6 pt-4">{service.description}</p>
                             </div>
                         ))}
                     </div>
+                    </div>
                 </div>
             </section>
 
             {/* About Us Section */}
             <section className="about-us p-4 py-12 lg:py-24">
-                <div className="max-w-5xl mx-auto text-center">
-                    <h2 className="text-4xl font-bold">About Binara Medical Centre</h2>
-                    <p className="text-gray-500 mt-6">
+                <div className="max-w-5xl mx-auto text-center hero-panel">
+                    <div className="relative z-10">
+                    <div className="section-kicker">About Binara</div>
+                    <h2 className="text-4xl font-black mt-4">About Binara Medical Centre</h2>
+                    <p className="text-gray-600 mt-6">
                         Binara Medical Centre has been a trusted name in healthcare since 2008. Located in the heart of Kundasale, Kandy, we are dedicated to providing high-quality
                         medical services to our community. Our team of experienced doctors and staff are committed to ensuring your well-being through personalized care and
                         state-of-the-art facilities. Whether you need specialist consultations, OPD services, or dental care, we are here to serve you with compassion and
                         expertise.
                     </p>
-                    <a href={'/about'} className="mt-8 inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 px-4 rounded-lg hover:bg-gradient-to-l transition duration-300">Learn More</a>
+                    <a href={'/about'} className="theme-button mt-8">Learn More</a>
+                    </div>
                 </div>
             </section>
             {isBookingWindowOpen && channelingDoctor && <DoctorBooking doctorData={channelingDoctor} onCloseBookingWindow={() => setIsBookingWindowOpen(false)}/>}

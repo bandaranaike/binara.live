@@ -55,15 +55,20 @@ const ContactUs: React.FC = () => {
     };
 
     return (
-        <div className="">
+        <div className="content-panel">
+            <div className="mb-6">
+                <div className="section-kicker">Send a message</div>
+                <h2 className="section-subtitle mt-4">We’re here to help</h2>
+                <p className="section-copy mt-2">Share your question and our team will get back to you as soon as possible.</p>
+            </div>
             <form onSubmit={handleSubmit}>
                 <div className="lg:grid lg:grid-cols-3 lg:gap-4">
                     <div>
-                        <label className="text-gray-700" htmlFor="name">Name: <span className="text-red-500">*</span>
+                        <label className="theme-label" htmlFor="name">Name <span className="text-red-500">*</span>
                         </label>
                         <input
                             type="text"
-                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
+                            className="theme-input"
                             id="name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
@@ -71,30 +76,30 @@ const ContactUs: React.FC = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="phone">Phone: <span className="text-yellow-400">*</span></label>
+                        <label className="theme-label" htmlFor="phone">Phone <span className="text-yellow-400">*</span></label>
                         <input
                             type="tel"
-                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
+                            className="theme-input"
                             id="phone"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                         />
                     </div>
                     <div>
-                        <label htmlFor="email">Email:<span className="text-yellow-400">*</span></label>
+                        <label className="theme-label" htmlFor="email">Email <span className="text-yellow-400">*</span></label>
                         <input
                             type="email"
-                            className="border shadow-sm border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
+                            className="theme-input"
                             id="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
                     <div className="col-span-3">
-                        <label htmlFor="message">Message: <span className="text-red-500">*</span></label>
+                        <label className="theme-label" htmlFor="message">Message <span className="text-red-500">*</span></label>
                         <textarea
                             id="message"
-                            className="border shadow-sm  border-gray-200 rounded-lg w-full focus:ring-purple-400 focus:border-purple-400"
+                            className="theme-input min-h-36"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             required
@@ -102,17 +107,16 @@ const ContactUs: React.FC = () => {
                     </div>
                 </div>
                 <div className="flex gap-4 mt-4 items-center">
-                    <button type="submit" disabled={loading}
-                            className="px-6 py-3 border rounded-lg border-purple-800 bg-purple-700 text-white font-semibold inline-block">
+                    <button type="submit" disabled={loading} className="theme-button">
                         {loading ? 'Sending...' : 'Send Message'}
                     </button>
                     {loading && <Loader/>}
                 </div>
                 <div className="">
                     {error && <div
-                        className="text-red-500 my-3 border border-red-400 bg-red-50 rounded-lg py-3 px-6 mt-4">{error}</div>}
+                        className="mt-4 rounded-xl border border-red-200 bg-red-50 py-3 px-6 text-red-500">{error}</div>}
                     {response &&
-                        <div className="text-green-600 border border-green-400 bg-green-50 rounded-lg py-3 px-6 mt-4">
+                        <div className="mt-4 rounded-xl border border-green-200 bg-green-50 py-3 px-6 text-green-600">
                             {response.message} Your reference is : <span
                             className="font-semibold">{response.reference}</span>
                         </div>}

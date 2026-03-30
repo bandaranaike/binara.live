@@ -5,7 +5,8 @@ export const metadata = {
 
 const PrivacyPolicy = () => {
     return (
-        <div className="max-w-7xl mx-auto p-6 bg-white my-10">
+        <div className="page-wrap py-6 lg:py-10">
+            <div className="content-panel prose prose-slate max-w-none">
             <h1 className="text-3xl font-bold mb-8">Privacy Policy</h1>
             <p><strong>Effective Date:</strong> 2025-01-01</p>
 
@@ -29,6 +30,7 @@ const PrivacyPolicy = () => {
             <p>We may update this Privacy Policy from time to time. Continued use of our website constitutes acceptance of any changes.</p>
 
             <p className="mt-4">If you have any questions, please contact us at <a className="hover:text-purple-600" href="mailto:info@binara.live">info@binara.live</a>.</p>
+            </div>
         </div>
     );
 };

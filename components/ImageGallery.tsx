@@ -58,7 +58,7 @@ export default function ImageGallery({images}: ImageGalleryProps) {
                 <img
                     src={images[selectedIndex]}
                     alt="Selected"
-                    className="w-full object-cover rounded-xl shadow-lg max-h-[600px]"
+                    className="w-full max-h-[600px] rounded-[1.5rem] object-cover shadow-[0_24px_80px_-40px_rgba(91,33,182,0.45)]"
                 />
             </div>
             {/* Thumbnails */}
@@ -66,14 +66,14 @@ export default function ImageGallery({images}: ImageGalleryProps) {
                 {/* Left Arrow */}
                 {images.length > maxThumbnails && selectedIndex > 0 && (
                     <button
-                        className="absolute hidden lg:block left-0 z-10 p-2 bg-white/50 rounded-full shadow-md"
+                        className="absolute left-0 z-10 hidden rounded-full border border-purple-100 bg-white/80 p-2 shadow-md lg:block"
                         onClick={() => setSelectedIndex(selectedIndex - 1)}
                     >
                         <ChevronLeftIcon width={24}/>
                     </button>
                 )}
 
-                <div className="flex lg:space-x-2 space-x-1 overflow-y-auto py-1 lg:px-12">
+                <div className="flex space-x-1 overflow-y-auto py-1 lg:space-x-2 lg:px-12">
                     {(() => {
                         const half = Math.floor(maxThumbnails / 2);
                         let start = selectedIndex - half;
@@ -90,10 +90,10 @@ export default function ImageGallery({images}: ImageGalleryProps) {
                                     key={realIndex}
                                     src={img}
                                     alt={`Thumbnail ${realIndex}`}
-                                    className={`lg:w-20 lg:h-20 w-8 h-8 object-cover lg:rounded-xl rounded cursor-pointer lg:border-2 border-1 transition-all duration-300 ${
+                                    className={`h-8 w-8 cursor-pointer rounded object-cover transition-all duration-300 lg:h-20 lg:w-20 lg:rounded-xl lg:border-2 ${
                                         selectedIndex === realIndex
-                                            ? "border-blue-500 scale-105"
-                                            : "border-transparent"
+                                            ? "scale-105 border-purple-500"
+                                            : "border-transparent opacity-80"
                                     }`}
                                     onClick={() => handleSelect(realIndex)}
                                 />
@@ -105,7 +105,7 @@ export default function ImageGallery({images}: ImageGalleryProps) {
                 {/* Right Arrow */}
                 {images.length > maxThumbnails && selectedIndex < images.length - 1 && (
                     <button
-                        className="absolute hidden lg:block right-0 z-10 p-2 bg-white/50 rounded-full shadow-md"
+                        className="absolute right-0 z-10 hidden rounded-full border border-purple-100 bg-white/80 p-2 shadow-md lg:block"
                         onClick={() => setSelectedIndex(selectedIndex + 1)}
                     >
                         <ChevronRightIcon width={24}/>

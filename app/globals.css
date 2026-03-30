@@ -5,8 +5,13 @@
 @tailwind utilities;
 
 :root {
-    --background: #ffffff;
-    --foreground: #171717;
+    --background: #fffafc;
+    --foreground: #221b2f;
+    --surface: rgba(255, 255, 255, 0.92);
+    --surface-strong: #ffffff;
+    --border-soft: rgba(196, 181, 253, 0.34);
+    --theme-shadow: 0 20px 65px -42px rgba(91, 33, 182, 0.24);
+    --theme-gradient: linear-gradient(135deg, #faf5ff 0%, #fff1f2 48%, #f5f3ff 100%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,6 +28,123 @@ body {
 }
 
 @layer utilities {
+    .site-shell {
+        @apply relative overflow-x-hidden;
+    }
+
+    .site-shell::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        background:
+                radial-gradient(circle at top left, rgba(244, 114, 182, 0.16), transparent 28%),
+                radial-gradient(circle at top right, rgba(168, 85, 247, 0.18), transparent 30%),
+                linear-gradient(180deg, #fff8fb 0%, #fffdfd 42%, #faf5ff 100%);
+    }
+
+    .site-shell::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+        background-size: 32px 32px;
+        mask-image: radial-gradient(circle at center, black 45%, transparent 85%);
+        opacity: 0.3;
+    }
+
+    .page-wrap {
+        @apply max-w-7xl mx-auto px-4 lg:px-0;
+    }
+
+    .hero-panel {
+        background: var(--theme-gradient);
+        box-shadow: var(--theme-shadow);
+        @apply relative overflow-hidden rounded-xl border px-6 py-8 lg:px-10 lg:py-10;
+        border-color: var(--border-soft);
+    }
+
+    .hero-panel::before {
+        content: "";
+        position: absolute;
+        width: 14rem;
+        height: 14rem;
+        right: -3rem;
+        top: -5rem;
+        border-radius: 9999px;
+        background: rgba(192, 132, 252, 0.18);
+        filter: blur(40px);
+    }
+
+    .hero-panel::after {
+        content: "";
+        position: absolute;
+        width: 10rem;
+        height: 10rem;
+        left: 22%;
+        top: -2rem;
+        border-radius: 9999px;
+        background: rgba(251, 113, 133, 0.14);
+        filter: blur(34px);
+    }
+
+    .section-card {
+        box-shadow: var(--theme-shadow);
+        background: var(--surface);
+        @apply rounded-xl border backdrop-blur-sm;
+        border-color: var(--border-soft);
+    }
+
+    .section-card-strong {
+        @apply rounded-xl border bg-white;
+        border-color: var(--border-soft);
+        box-shadow: 0 16px 46px -36px rgba(91, 33, 182, 0.26);
+    }
+
+    .section-kicker {
+        @apply inline-flex items-center rounded-full border bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-purple-600;
+        border-color: var(--border-soft);
+    }
+
+    .section-title {
+        @apply text-3xl font-black tracking-tight text-slate-900 lg:text-5xl;
+    }
+
+    .section-subtitle {
+        @apply text-lg font-semibold text-slate-900 lg:text-xl;
+    }
+
+    .section-copy {
+        @apply text-sm leading-7 text-slate-600 lg:text-base;
+    }
+
+    .theme-button {
+        @apply inline-flex items-center justify-center rounded-md bg-gradient-to-r from-purple-500 to-pink-500 px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:bg-gradient-to-l;
+    }
+
+    .theme-button-secondary {
+        @apply inline-flex items-center justify-center rounded-md border bg-white px-5 py-3 text-sm font-semibold text-purple-600 transition hover:bg-purple-50;
+        border-color: var(--border-soft);
+    }
+
+    .theme-input {
+        @apply w-full rounded-lg border bg-white px-4 py-3 text-slate-800 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-200;
+        border-color: rgba(203, 213, 225, 0.9);
+    }
+
+    .theme-label {
+        @apply mb-2 block text-sm font-semibold text-slate-700;
+    }
+
+    .content-panel {
+        @apply rounded-lg border bg-white p-6 backdrop-blur-sm lg:p-8;
+        border-color: var(--border-soft);
+        box-shadow: 0 18px 55px -42px rgba(91, 33, 182, 0.24);
+    }
+
     /* Chrome, Safari and Opera */
     .no-scrollbar::-webkit-scrollbar {
         display: none;

@@ -51,30 +51,32 @@ const ResetPassword = () => {
     };
 
     return (
-        <div className="flex justify-center items-center py-24 shadow-sm">
-            <div className="bg-white p-12 rounded-2xl border border-gray-200 shadow-sm w-dvw max-w-2xl">
-                <h2 className="text-2xl font-bold mb-4">Reset Password</h2>
+        <div className="page-wrap py-6 lg:py-10">
+            <div className="mx-auto max-w-2xl hero-panel">
+                <div className="relative z-10">
+                <div className="section-kicker">Patient portal</div>
+                <h2 className="mt-4 text-3xl font-black text-slate-900">Reset Password</h2>
                 {error && <div className="text-red-500 mb-4">{error}</div>}
                 {message && <div className="text-green-500 mb-4">{message}</div>}
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label htmlFor="password" className="block text-gray-600 font-bold mb-2">New Password</label>
+                        <label htmlFor="password" className="theme-label">New Password</label>
                         <input
                             type="password"
                             id="password"
-                            className="border border-gray-300 rounded-lg w-full py-3 px-6 leading-tight focus:outline-none focus:shadow-outline"
+                            className="theme-input"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="passwordConfirmation" className="block text-gray-600 font-bold mb-2">Confirm Password</label>
+                        <label htmlFor="passwordConfirmation" className="theme-label">Confirm Password</label>
                         <input
                             type="password"
                             id="passwordConfirmation"
-                            className="border border-gray-300 rounded-lg w-full py-3 px-6 leading-tight focus:outline-none focus:shadow-outline"
+                            className="theme-input"
                             value={passwordConfirmation}
                             onChange={(e) => setPasswordConfirmation(e.target.value)}
                             required
@@ -83,7 +85,7 @@ const ResetPassword = () => {
                     <div className="flex items-center justify-between">
                         <button
                             type="submit"
-                            className={`bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-6 rounded-full focus:outline-none focus:shadow-outline ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            className={`theme-button ${loading ? 'cursor-not-allowed opacity-50' : ''}`}
                             disabled={loading}
                         >
                             {loading ? 'Resetting...' : 'Reset Password'}
@@ -91,6 +93,7 @@ const ResetPassword = () => {
                         {loading && <Loader/>}
                     </div>
                 </form>
+            </div>
             </div>
         </div>
     );
