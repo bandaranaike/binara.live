@@ -7,15 +7,24 @@ export const metadata = {
 };
 
 const AvailabilityCalendar: FC = () => {
-    return <div>
-        <div className="lg:mx-8 mx-auto p-4 lg:mb-6">
-            <h1 className="mb-1 text-3xl font-semibold">Doctor Availability Calendar</h1>
-            <p className="mb-5">See which doctors are available for the next month. Click any doctor’s block in the calendar to pick a time and book your appointment instantly.</p>
-            <DoctorsAvailability/>
-            <p className="text-gray-500 text-sm py-4">*Please note that the listed doctors and their availability times are subject to change. For the most accurate and up-to-date
-                schedule, we
-                recommend calling ahead to confirm appointment times. Thank you for your understanding!</p>
+    return <div className="">
+        <div className="page-wrap page-stack">
+            <div className="section-stack">
+                <section className="">
+                    <div className="max-w-3xl">
+                        <div className="section-kicker">Availability calendar</div>
+                        <h1 className="section-title mt-4">Find the right doctor and the right day.</h1>
+                        <p className="section-copy mt-4">See which doctors are available for the next month. Click any
+                            doctor’s block in the calendar to pick a time and book your appointment instantly.</p>
+                    </div>
+                </section>
+            </div>
         </div>
+        <section className="p-8">
+            <DoctorsAvailability/>
+            <p className="pt-6 text-sm text-slate-500">*Please note that listed doctors and their availability times are
+                subject to change. For the most accurate schedule, please call ahead to confirm appointment times.</p>
+        </section>
     </div>
 }
 

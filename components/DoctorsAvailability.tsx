@@ -99,7 +99,7 @@ const DoctorsAvailability: React.FC = () => {
 
             days.push(
                 <div key={i} className="min-h-24 border-b border-r border-gray-200 p-1 pb-0">
-                    <div className="font-bold mb-2">{i}</div>
+                    <div className="font-black mb-2 px-1 text-2xl">{i}</div>
                     {dayAvailability.length > 0 ? (
                         <ul className="">
                             {dayAvailability.map(item => {
@@ -153,42 +153,42 @@ const DoctorsAvailability: React.FC = () => {
 
     return (
         <div>
-            <div className="my-3 flex content-center max-w-lg min-w-">
+            <div className="my-3 flex max-w-lg content-center">
                 <DoctorsSearch clearDataKey={clearDataKey} onDoctorsSelect={fetchAvailabilityForDoctors} month={currentMonth.getMonth() + 1} year={currentMonth.getFullYear()}/>
             </div>
 
-            <div className="border border-gray-200 rounded-xl shadow-sm relative">
+            <div className="section-card-strong relative overflow-hidden">
                 {loading && <div className="absolute right-0 -mt-12"><Loader/></div>}
-                <div className="flex justify-between content-center p-2">
+                <div className="flex justify-between content-center p-4">
                     <button onClick={handlePrevMonth}
-                            className={`border border-gray-300 py-1 px-3 text-sm rounded-lg ${prevMonthAvailable ? 'hover:border-purple-500' : 'text-gray-400'}`}>
+                            className={`rounded-md border px-4 py-2 text-sm font-semibold ${prevMonthAvailable ? 'border-purple-200 bg-white text-slate-700 hover:border-purple-500' : 'border-gray-200 text-gray-400'}`}>
                         Previous
                     </button>
                     <div className="font-bold text-lg p-1">
                         {currentMonth.toLocaleString('default', {month: 'long'})} {currentMonth.getFullYear()}
                     </div>
-                    <button onClick={handleNextMonth} className="border border-gray-300 py-1 px-3 text-sm rounded-lg hover:border-purple-500">Next</button>
+                    <button onClick={handleNextMonth} className="rounded-md border border-purple-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-purple-500">Next</button>
                 </div>
-                <div className="hidden lg:grid last-item-rb-0 sm:grid-cols-2 lg:grid-cols-7 border-t border-gray-200">
+                <div className="hidden border-t border-purple-100 bg-purple-50/70 lg:grid last-item-rb-0 sm:grid-cols-2 lg:grid-cols-7">
                     {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
-                        <div key={day} className="border-r text-gray-500 text-sm text-center border-gray-200 p-2">{day}</div>
+                        <div key={day} className="border-r border-purple-100 p-2 text-center text-sm font-semibold text-purple-700">{day}</div>
                     ))}
                 </div>
-                <div className="grid last-item-rb-0 sm:grid-cols-2 border-t lg:grid-cols-7 border-gray-200">
+                <div className="grid border-t border-purple-100 last-item-rb-0 sm:grid-cols-2 lg:grid-cols-7">
                     {renderDays()}
                 </div>
-                <div className="p-2 calendar-bottom border-t border-gray-200 flex justify-between content-center">
+                <div className="calendar-bottom flex justify-between content-center border-t border-purple-100 p-4">
                     <button onClick={handlePrevMonth}
-                            className={`border border-gray-300 py-1 px-3 text-sm rounded-lg ${prevMonthAvailable ? 'hover:border-purple-500' : 'text-gray-400'}`}>
+                            className={`rounded-md border px-4 py-2 text-sm font-semibold ${prevMonthAvailable ? 'border-purple-200 bg-white text-slate-700 hover:border-purple-500' : 'border-gray-200 text-gray-400'}`}>
                         Previous
                     </button>
                     <div className="font-bold text-lg p-1">
                         {currentMonth.toLocaleString('default', {month: 'long'})} {currentMonth.getFullYear()}
                     </div>
-                    <button onClick={handleNextMonth} className="border border-gray-300 py-1 px-3 text-sm rounded-lg hover:border-purple-500">Next</button>
+                    <button onClick={handleNextMonth} className="rounded-md border border-purple-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-purple-500">Next</button>
                 </div>
             </div>
-            {loadingError && <div className="text-red-500 my-3">{loadingError}</div>}
+            {loadingError && <div className="my-3 rounded-xl border border-red-200 bg-red-50 p-4 text-red-500">{loadingError}</div>}
             {isBookingWindowOpen && channelingDoctor &&
                 <DoctorBooking onAppointmentBooked={() => fetchAvailability(currentMonth, [])} doctorData={channelingDoctor} onCloseBookingWindow={() => setIsBookingWindowOpen(false)}/>}
         </div>

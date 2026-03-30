@@ -41,30 +41,32 @@ const Login = () => {
     };
 
     return (
-        <div className="flex justify-center items-center lg:py-24 p-4 shadow-sm">
-            <div className="bg-white lg:p-12 p-4 rounded-2xl border border-gray-200 shadow-sm w-dvw max-w-2xl">
-                <h2 className="text-2xl font-bold mb-4 mt-2 lg:mt-0">Login</h2>
+        <div className="page-wrap py-6 lg:py-10">
+            <div className="mx-auto max-w-2xl">
+                    <div className="section-kicker">Patient portal</div>
+                    <h2 className="mt-4 text-3xl font-black text-slate-900">Login</h2>
+                    <p className="mt-2 text-sm text-slate-600">Access your dashboard, appointments, and account details.</p>
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label htmlFor="username" className="block text-gray-600 font-bold mb-2">Email or Phone</label>
+                        <label htmlFor="username" className="theme-label">Email or Phone</label>
                         <input
                             type="username"
                             id="username"
                             placeholder="Email or Phone"
-                            className="border border-gray-300 rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline"
+                            className="theme-input"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             required
                         />
                     </div>
                     <div className="mb-6">
-                        <label htmlFor="password" className="block text-gray-600 font-bold mb-2">Password</label>
+                        <label htmlFor="password" className="theme-label">Password</label>
                         <input
                             type="password"
                             id="password"
                             placeholder="Password"
-                            className="border border-gray-300 rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline"
+                            className="theme-input"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -77,7 +79,7 @@ const Login = () => {
                         <div className="flex gap-4 items-center">
                             <button
                                 type="submit"
-                                className={`bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-6 rounded-full focus:outline-none focus:shadow-outline ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                className={`theme-button ${loading ? 'cursor-not-allowed opacity-50' : ''}`}
                                 disabled={loading} // Disable button while loading
                             >
                                 {loading ? 'Logging in...' : 'Login'}
@@ -86,10 +88,10 @@ const Login = () => {
                             {error && <div className="text-red-500">{error}</div>}
                         </div>
                         <div className="flex gap-6">
-                            <a href="/forget-password" className="inline-block align-baseline text-sm text-blue-600 hover:text-blue-700">
+                            <a href="/forget-password" className="inline-block align-baseline text-sm text-purple-600 hover:text-pink-500">
                                 Forget password
                             </a>
-                            <a href="/register" className="inline-block align-baseline text-sm text-blue-600 hover:text-blue-700">
+                            <a href="/register" className="inline-block align-baseline text-sm text-purple-600 hover:text-pink-500">
                                 Register
                             </a>
                         </div>

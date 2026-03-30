@@ -20,7 +20,7 @@ const ContactMap: React.FC<{ iframeWidth: string | number }> = ({iframeWidth}) =
                 <iframe
                     src={mapUrl}
                     width={iframeWidth}
-                    height="450"
+                    height="516"
                     style={{border: 0}}
                     loading="lazy"
                 ></iframe>

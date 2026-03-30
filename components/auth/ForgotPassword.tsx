@@ -41,16 +41,17 @@ const ForgotPassword = () => {
     };
 
     return (
-        <div className="flex justify-center items-center py-24 shadow-sm">
-            <div className="bg-white p-12 rounded-2xl border border-gray-200 shadow-sm w-dvw max-w-2xl">
-                <h2 className="text-2xl font-bold mb-4">Forgot Password</h2>
+        <div className="page-wrap py-6 lg:py-10">
+            <div className="mx-auto max-w-2xl">
+                <div className="section-kicker">Patient portal</div>
+                <h2 className="mt-4 text-3xl font-black text-slate-900">Forgot Password</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-6">
-                        <label htmlFor="email" className="block text-gray-600 font-bold mb-2">Email</label>
+                        <label htmlFor="email" className="theme-label">Email</label>
                         <input
                             type="email"
                             id="email"
-                            className="border border-gray-300 rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline"
+                            className="theme-input"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -62,14 +63,14 @@ const ForgotPassword = () => {
                         <div className="flex gap-4 items-center">
                             <button
                                 type="submit"
-                                className={`bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-6 rounded-full focus:outline-none focus:shadow-outline ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                className={`theme-button ${loading ? 'cursor-not-allowed opacity-50' : ''}`}
                                 disabled={loading}
                             >
                                 {loading ? 'Sending...' : 'Send Reset Link'}
                             </button>
                             {loading && <Loader/>}
                         </div>
-                        <a href="/login" className="inline-block align-baseline text-sm text-blue-500 hover:text-blue-700">
+                        <a href="/login" className="inline-block align-baseline text-sm text-purple-600 hover:text-pink-500">
                             Back to Login
                         </a>
                     </div>

@@ -64,57 +64,59 @@ const Register = () => {
     };
 
     return (
-        <div className="flex justify-center items-center lg:py-24 p-4 shadow-sm">
-            <div className="bg-white lg:p-12 p-4 rounded-2xl border border-gray-200 shadow-sm w-dvw max-w-2xl">
-                <h2 className="text-2xl font-bold mb-4 mt-2 lg:mt-0">Register</h2>
+        <div className="page-wrap py-6 lg:py-10">
+            <div className="mx-auto max-w-2xl">
+                <div className="section-kicker">Patient portal</div>
+                <h2 className="mt-4 text-3xl font-black text-slate-900">Register</h2>
+                <p className="mt-2 text-sm text-slate-600">Create your patient account to manage bookings more easily.</p>
                 <form onSubmit={handleSubmit}>
                     <div className="">
-                        <label htmlFor="name" className="block text-gray-600 font-bold mb-2">Name <span className="text-red-500">*</span></label>
+                        <label htmlFor="name" className="theme-label">Name <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             placeholder="Your name"
                             id="name"
-                            className="mb-3 w-full border border-gray-300 py-2 px-4 rounded-lg"
+                            className="theme-input mb-3"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
                         />
                     </div>
                     <div className="">
-                        <label htmlFor="phone" className="block text-gray-600 font-bold mb-2">Phone <span className="text-red-500">*</span></label>
+                        <label htmlFor="phone" className="theme-label">Phone <span className="text-red-500">*</span></label>
                         <PhoneNumberInput onValidPhoneNumber={setPhone} isPhoneRequired={true}></PhoneNumberInput>
                     </div>
                     <div className="">
-                        <label htmlFor="email" className="block text-gray-600 font-bold mb-2">Email</label>
+                        <label htmlFor="email" className="theme-label">Email</label>
                         <input
                             type="email"
                             placeholder="Email"
                             id="email"
-                            className="mb-3 w-full border border-gray-300 py-2 px-4 rounded-lg"
+                            className="theme-input mb-3"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
                     </div>
                     <div className="">
-                        <label htmlFor="password" className="block text-gray-600 font-bold mb-2">Password <span className="text-red-500">*</span></label>
+                        <label htmlFor="password" className="theme-label">Password <span className="text-red-500">*</span></label>
                         <input
                             type="password"
                             placeholder="Password"
                             id="password"
-                            className="mb-3 w-full border border-gray-300 py-2 px-4 rounded-lg"
+                            className="theme-input mb-3"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="password_confirmation" className="block text-gray-600 font-bold mb-2">Confirm Password <span className="text-red-500">*</span></label>
+                        <label htmlFor="password_confirmation" className="theme-label">Confirm Password <span className="text-red-500">*</span></label>
                         <input
                             type="password"
                             placeholder="Confirm password"
                             id="password_confirmation"
-                            className="mb-3 w-full border border-gray-300 py-2 px-4 rounded-lg"
+                            className="theme-input mb-3"
                             value={password_confirmation}
                             onChange={(e) => setPasswordConfirmation(e.target.value)}
                             required
@@ -125,7 +127,7 @@ const Register = () => {
                         <div className="flex gap-4 items-center">
                             <button
                                 type="submit"
-                                className={`bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-6 rounded-full focus:outline-none focus:shadow-outline ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                className={`theme-button ${loading ? 'cursor-not-allowed opacity-50' : ''}`}
                                 disabled={loading}
                             >
                                 {loading ? 'Registering...' : 'Register'}
@@ -133,7 +135,7 @@ const Register = () => {
                             </button>
                             {loading && <Loader/>}
                         </div>
-                        <a href="/login" className="inline-block align-baseline text-sm text-blue-600 hover:text-blue-700">
+                        <a href="/login" className="inline-block align-baseline text-sm text-purple-600 hover:text-pink-500">
                             <span className="hidden lg:inline-block">Already have an account?</span> Log in
                         </a>
                     </div>
