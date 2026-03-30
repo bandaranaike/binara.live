@@ -99,7 +99,7 @@ const DoctorsAvailability: React.FC = () => {
 
             days.push(
                 <div key={i} className="min-h-24 border-b border-r border-gray-200 p-1 pb-0">
-                    <div className="font-bold mb-2">{i}</div>
+                    <div className="font-black mb-2 px-1 text-2xl">{i}</div>
                     {dayAvailability.length > 0 ? (
                         <ul className="">
                             {dayAvailability.map(item => {

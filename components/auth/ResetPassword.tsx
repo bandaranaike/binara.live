@@ -52,8 +52,7 @@ const ResetPassword = () => {
 
     return (
         <div className="page-wrap py-6 lg:py-10">
-            <div className="mx-auto max-w-2xl hero-panel">
-                <div className="relative z-10">
+            <div className="mx-auto max-w-2xl">
                 <div className="section-kicker">Patient portal</div>
                 <h2 className="mt-4 text-3xl font-black text-slate-900">Reset Password</h2>
                 {error && <div className="text-red-500 mb-4">{error}</div>}
@@ -93,7 +92,6 @@ const ResetPassword = () => {
                         {loading && <Loader/>}
                     </div>
                 </form>
-            </div>
             </div>
         </div>
     );

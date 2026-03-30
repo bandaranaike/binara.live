@@ -28,7 +28,7 @@ export default function RootLayout({children,}: Readonly<{ children: React.React
             <ThemeModeScript/>
         </head>
         <body
-            className={`${geistSans.variable} ${geistMono.variable} site-shell antialiased pt-28 text-gray-800`}
+            className={`${geistSans.variable} ${geistMono.variable} site-shell antialiased text-gray-800`}
         >
 
         <UserProvider>

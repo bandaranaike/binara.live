@@ -31,26 +31,28 @@ export default function About() {
     ];
 
     return (
-        <div className="page-wrap py-6 lg:py-10">
-            <section className="hero-panel">
-                <div className="relative z-10 max-w-3xl">
-                    <div className="section-kicker">About us</div>
-                    <h1 className="section-title mt-4">Serving Kundasale with trusted care since 2008.</h1>
-                    <p className="section-copy mt-4">
-                        Binara Medical Centre has been a trusted name in healthcare since 2008. Located in the heart of Kundasale, Kandy, we are dedicated to providing high-quality medical services to our community.
-                        Our team of experienced doctors and staff are committed to ensuring your well-being through personalized care and state-of-the-art facilities.
-                    </p>
-                </div>
-            </section>
-            <div className="mt-8">
-                <AboutUsTimeline/>
-            </div>
-            <div className="mt-8 content-panel">
-                <div className="mb-6">
-                    <div className="section-kicker">Gallery</div>
-                    <h2 className="section-subtitle mt-4">A closer look at our centre</h2>
-                </div>
-                <ImageGallery images={images}/>
+        <div className="page-wrap page-stack">
+            <div className="section-stack">
+                <section className="">
+                    <div className="max-w-3xl">
+                        <div className="section-kicker">About us</div>
+                        <h1 className="section-title mt-4">Serving Kundasale with trusted care since 2008.</h1>
+                        <p className="section-copy mt-4">
+                            Binara Medical Centre has been a trusted name in healthcare since 2008. Located in the heart of Kundasale, Kandy, we are dedicated to providing high-quality medical services to our community.
+                            Our team of experienced doctors and staff are committed to ensuring your well-being through personalized care and state-of-the-art facilities.
+                        </p>
+                    </div>
+                </section>
+                <section className="">
+                    <div className="mb-6">
+                        <div className="section-kicker">Gallery</div>
+                        <h2 className="section-subtitle mt-4">A closer look at our centre</h2>
+                    </div>
+                    <ImageGallery images={images}/>
+                </section>
+                <section className="">
+                    <AboutUsTimeline/>
+                </section>
             </div>
         </div>
     );

@@ -60,10 +60,9 @@ const AboutUsTimeline = () => {
     ];
 
     return (
-        <div className="section-card px-4 py-10 sm:px-6 lg:px-8">
+        <div className="px-1 py-1 sm:px-2 lg:px-4">
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-12">
-                    <div className="section-kicker">Our journey</div>
                     <h2 className="mt-4 text-2xl font-extrabold text-gray-800 sm:text-3xl">
                         Our Journey
                     </h2>
@@ -72,33 +71,34 @@ const AboutUsTimeline = () => {
                     </p>
                 </div>
 
-                <div className="flow-root">
-                    <ul className="-mb-8">
+                <div className="relative">
+                    <div className="absolute left-6 top-2 h-[calc(100%-1rem)] w-px bg-gradient-to-b from-purple-200 via-rose-200 to-transparent"/>
+                    <ul className="space-y-5">
                         {milestones.map((milestone, index) => (
                             <li key={index}>
-                                <div className="relative pb-8">
-                                    {index !== milestones.length - 1 ? (
-                                        <span
-                                            className="absolute top-6 left-6 -ml-px h-full w-0.5 bg-indigo-200"
-                                            aria-hidden="true"
-                                        />
-                                    ) : null}
-                                    <div className="relative flex space-x-3">
-                                        <div>
-                                            <span className={`h-12 w-12 rounded-full ${milestone.iconBgColor} flex items-center justify-center ring-8 ring-purple-50`}>
-                                                {milestone.icon}
-                                            </span>
-                                        </div>
-                                        <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+                                <div className="relative flex gap-4">
+                                    <div className="relative z-10 flex-shrink-0">
+                                        <span className={`flex h-12 w-12 items-center justify-center rounded-full ${milestone.iconBgColor} shadow-[0_12px_30px_-18px_rgba(15,23,42,0.55)] ring-4 ring-white`}>
+                                            {milestone.icon}
+                                        </span>
+                                    </div>
+                                    <div className="min-w-0 flex-1 rounded-xl border border-purple-100/80 bg-white/80 px-5 py-4 shadow-[0_18px_40px_-34px_rgba(91,33,182,0.22)] backdrop-blur-sm">
+                                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                                             <div>
-                                                <p className="text text-gray-700">
-                                                    <span className={`font-bold ${milestone.color}`}>{milestone.year}</span> - {milestone.title}
-                                                </p>
-                                                <p className="text-sm text-gray-500 mt-1">
-                                                    {milestone.description}
-                                                </p>
+                                                <div className={`inline-flex rounded-full bg-slate-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] ${milestone.color}`}>
+                                                    {milestone.year}
+                                                </div>
+                                                <h3 className="mt-3 text-lg font-bold text-slate-900">
+                                                    {milestone.title}
+                                                </h3>
+                                            </div>
+                                            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                                                Milestone {index + 1}
                                             </div>
                                         </div>
+                                        <p className="mt-3 text-sm leading-7 text-slate-600">
+                                            {milestone.description}
+                                        </p>
                                     </div>
                                 </div>
                             </li>

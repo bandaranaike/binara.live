@@ -60,6 +60,14 @@ body {
         @apply max-w-7xl mx-auto px-4 lg:px-0;
     }
 
+    .page-stack {
+        @apply py-6 lg:py-10;
+    }
+
+    .section-stack {
+        @apply space-y-16 lg:space-y-24;
+    }
+
     .hero-panel {
         background: var(--theme-gradient);
         box-shadow: var(--theme-shadow);
@@ -102,6 +110,22 @@ body {
         @apply rounded-xl border bg-white;
         border-color: var(--border-soft);
         box-shadow: 0 16px 46px -36px rgba(91, 33, 182, 0.26);
+    }
+
+    .section-surface {
+        @apply rounded-[2rem] px-5 py-10 lg:px-8 lg:py-14;
+    }
+
+    .section-surface-muted {
+        @apply section-surface bg-white/45;
+    }
+
+    .section-surface-contrast {
+        @apply section-surface bg-gradient-to-r from-purple-50/80 via-rose-50/75 to-white/65;
+    }
+
+    .section-surface-warm {
+        @apply section-surface bg-gradient-to-r from-white/55 via-amber-50/80 to-rose-50/70;
     }
 
     .section-kicker {

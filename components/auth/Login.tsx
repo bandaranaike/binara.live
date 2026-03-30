@@ -42,8 +42,7 @@ const Login = () => {
 
     return (
         <div className="page-wrap py-6 lg:py-10">
-            <div className="mx-auto max-w-2xl hero-panel">
-                <div className="relative z-10">
+            <div className="mx-auto max-w-2xl">
                     <div className="section-kicker">Patient portal</div>
                     <h2 className="mt-4 text-3xl font-black text-slate-900">Login</h2>
                     <p className="mt-2 text-sm text-slate-600">Access your dashboard, appointments, and account details.</p>
@@ -98,7 +97,6 @@ const Login = () => {
                         </div>
                     </div>
                 </form>
-            </div>
             </div>
         </div>
     );

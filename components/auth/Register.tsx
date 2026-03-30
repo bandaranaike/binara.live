@@ -65,8 +65,7 @@ const Register = () => {
 
     return (
         <div className="page-wrap py-6 lg:py-10">
-            <div className="mx-auto max-w-2xl hero-panel">
-                <div className="relative z-10">
+            <div className="mx-auto max-w-2xl">
                 <div className="section-kicker">Patient portal</div>
                 <h2 className="mt-4 text-3xl font-black text-slate-900">Register</h2>
                 <p className="mt-2 text-sm text-slate-600">Create your patient account to manage bookings more easily.</p>
@@ -141,7 +140,6 @@ const Register = () => {
                         </a>
                     </div>
                 </form>
-            </div>
             </div>
         </div>
     );
