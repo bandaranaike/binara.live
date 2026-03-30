@@ -20,12 +20,20 @@ interface TodayDoctors {
     available_seats: string;
 }
 
+interface TodayHolidayStatus {
+    date: string;
+    is_closed: boolean;
+    holiday_name: string | null;
+    message: string | null;
+}
+
 export default function Home() {
     const [isBookingWindowOpen, setIsBookingWindowOpen] = useState<boolean>(false)
     const [todayDoctorsList, setTodayDoctorsList] = useState<TodayDoctors[]>([])
     const [todayDoctorsListError, setTodayDoctorsListError] = useState("")
     const [channelingDoctor, setChannelingDoctor] = useState<DoctorBookingData>()
     const [loadingTodayList, setLoadingTodayList] = useState<boolean>(true)
+    const [todayHolidayStatus, setTodayHolidayStatus] = useState<TodayHolidayStatus | null>(null)
 
     const sliderSettings = {
         dots: true,
@@ -63,16 +71,31 @@ export default function Home() {
 
     useEffect(() => {
         setLoadingTodayList(true)
-        fetchDoctors()
+        fetchHomePageData()
     }, []);
 
-    const fetchDoctors = useCallback(() => {
-        axios.get(`/doctor-availabilities/get-today-doctors`).then(response => {
-            setTodayDoctorsList(response.data);
+    const fetchHomePageData = useCallback(() => {
+        Promise.all([
+            axios.get(`/holidays/today-status`),
+            axios.get(`/doctor-availabilities/get-today-doctors`),
+        ]).then(([holidayResponse, doctorsResponse]) => {
+            setTodayHolidayStatus(holidayResponse.data);
+            setTodayDoctorsList(doctorsResponse.data);
+            setTodayDoctorsListError("");
         }).catch(error => {
-            setTodayDoctorsListError('Error fetching doctors: ' + error.response.data);
+            setTodayDoctorsListError('Error loading homepage data. Please try again later.');
+            setTodayHolidayStatus(null);
+            setTodayDoctorsList([]);
+            console.error(error);
         }).finally(() => setLoadingTodayList(false));
     }, []);
+
+    const closureTitle = todayHolidayStatus?.holiday_name
+        ? `${todayHolidayStatus.holiday_name} closure`
+        : "Today we are closed";
+
+    const closureMessage = todayHolidayStatus?.message
+        || "Our medical centre is closed today. Please check back tomorrow or review the availability calendar for upcoming sessions.";
 
 
     const showBookingWindow = (id: number = 0, type: string = "", name: string = "") => {
@@ -82,6 +105,39 @@ export default function Home() {
     };
     return (
         <div>
+            {todayHolidayStatus?.is_closed && (
+                <section className="px-4 pt-4 lg:px-0">
+                    <div className="max-w-7xl mx-auto">
+                        <div className="relative overflow-hidden rounded-xl border border-gray-200 bg-gradient-to-r from-purple-50 via-rose-50 to-violet-50 px-6 py-6 lg:px-10 lg:py-7">
+                            <div className="absolute -right-8 -top-10 h-32 w-32 rounded-full bg-purple-200/40 blur-2xl"/>
+                            <div className="absolute left-1/3 top-0 h-24 w-24 rounded-full bg-rose-200/30 blur-2xl"/>
+                            <div className="relative flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                                <div className="max-w-3xl">
+                                    <div className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-purple-600">
+                                        Important notice
+                                    </div>
+                                    <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-900 lg:text-5xl">
+                                        {closureTitle}
+                                    </h1>
+                                    <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 lg:text-base">
+                                        {closureMessage}
+                                    </p>
+                                </div>
+                                <div className="rounded-xl border border-gray-200 bg-white p-5">
+                                    <div className="text-sm font-semibold uppercase tracking-[0.2em] text-purple-600">Status</div>
+                                    <div className="mt-2 text-2xl font-black text-slate-900">Closed today</div>
+                                    <Link
+                                        href={'availability-calendar'}
+                                        className="mt-4 inline-flex rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:bg-gradient-to-l"
+                                    >
+                                        View upcoming availability
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
             {/* Slider Section */}
             <section className="max-w-7xl mx-auto">
                 <div className="lg:grid lg:grid-cols-3 lg:gap-6 pb-12 px-4 lg:px-0">
@@ -93,7 +149,23 @@ export default function Home() {
                         ))}
                     </Slider>
                     <div className="content-center">
-                        {todayDoctorsList.length > 0 && <div className="rounded-xl border mt-16 lg:mt-0 bg-gradient-to-br from-gray-50 to-purple-50">
+                        {todayHolidayStatus?.is_closed && <div className="rounded-xl border mt-16 lg:mt-0 bg-gradient-to-br from-purple-50 to-rose-50">
+                            <div className="bg-white py-3 px-4 rounded-t-xl border-b border-gray-200">
+                                <div className="text-xs font-semibold uppercase tracking-[0.22em] text-purple-600">Closure update</div>
+                                <h3 className="mt-2 text-2xl font-black text-slate-900">Today the centre is closed</h3>
+                                <p className="mt-2 text-sm leading-6 text-slate-600">{closureMessage}</p>
+                            </div>
+                            <div className="bg-white p-4 rounded-b-xl">
+                                <div className="rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-5 py-4 text-white">
+                                    <div className="text-sm font-semibold text-purple-100">Need another date?</div>
+                                    <div className="mt-1 text-sm text-white/90">Please use the full calendar to find the next available doctor sessions.</div>
+                                    <Link href={'availability-calendar'} className="mt-4 inline-flex rounded-lg bg-white px-4 py-2 text-sm font-semibold text-purple-600 transition duration-300 hover:bg-purple-50">
+                                        Open full calendar
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>}
+                        {!todayHolidayStatus?.is_closed && todayDoctorsList.length > 0 && <div className="rounded-xl border mt-16 lg:mt-0 bg-gradient-to-br from-gray-50 to-purple-50">
                             <div className="bg-white py-3 px-4 rounded-t-xl border-b border-gray-200">
                                 <h3 className="font-semibold text-xl">Today&#39;s doctors list</h3>
                                 <div className="text-gray-500 text-xs">View available doctors and their specialties. Book your appointment now!</div>
