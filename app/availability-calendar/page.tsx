@@ -1,10 +1,12 @@
 import React, {FC} from "react";
 import DoctorsAvailability from "@/components/DoctorsAvailability";
+import {createPageMetadata, siteConfig} from "@/lib/site";
 
-export const metadata = {
-    title: "Doctors Availability - Binara Medical & Dental Centre",
-    description: "Check doctor availability and book appointments online. Find the best doctors in your area. Book your appointment with Binara Medical & Dental Centre.",
-};
+export const metadata = createPageMetadata({
+    title: `Doctors availability | ${siteConfig.name}`,
+    description: "Check doctor availability at Binara Medical Centre and book appointments online.",
+    path: "/availability-calendar",
+});
 
 const AvailabilityCalendar: FC = () => {
     return <div className="">

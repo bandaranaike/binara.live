@@ -1,7 +1,6 @@
 "use client"
 import React, {useState, useEffect} from 'react';
 import axios from '@/lib/axios';
-import '@/app/calendar-styles.css';
 import DoctorsSearch from "@/components/form/DoctorsSearch";
 import Loader from "@/components/form/Loader";
 import getDoctorColor from "@/lib/doctor_color";

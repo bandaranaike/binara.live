@@ -1,10 +1,12 @@
 import AboutUsTimeline from "@/components/AboutUsTimeLine";
 import ImageGallery from "@/components/ImageGallery";
+import {createPageMetadata, siteConfig} from "@/lib/site";
 
-export const metadata = {
-    title: "About us - " + process.env.NEXT_PUBLIC_APP_TITLE,
-    description: "At Binara Medical Centre, we are dedicated to providing high-quality medical care tailored to your needs",
-};
+export const metadata = createPageMetadata({
+    title: `About us | ${siteConfig.name}`,
+    description: "Learn about Binara Medical Centre in Kundasale, Kandy, our story, facilities, and patient-first healthcare services since 2008.",
+    path: "/about",
+});
 
 export default function About() {
 

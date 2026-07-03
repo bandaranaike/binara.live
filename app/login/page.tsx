@@ -1,10 +1,13 @@
 import React from "react";
 import {notFound} from "next/navigation";
+import {createPageMetadata, siteConfig} from "@/lib/site";
 
-export const metadata = {
-    title: "Login - " + process.env.NEXT_PUBLIC_APP_TITLE,
-    description: "At Binara Medical Centre, we are dedicated to providing high-quality medical care tailored to your needs",
-};
+export const metadata = createPageMetadata({
+    title: `Login | ${siteConfig.name}`,
+    description: "Login to your patient account to manage appointments and profile details.",
+    path: "/login",
+    noindex: true,
+});
 
 const LoginPage: React.FC = () => {
     notFound()

@@ -1,7 +1,10 @@
-export const metadata = {
-    title: `Privacy Policy - ${process.env.NEXT_PUBLIC_APP_TITLE}`,
-    description: "At Binara Medical Centre, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and protect your personal information.",
-};
+import {createPageMetadata, siteConfig} from "@/lib/site";
+
+export const metadata = createPageMetadata({
+    title: `Privacy Policy | ${siteConfig.name}`,
+    description: "How Binara Medical Centre collects, uses, and protects personal information shared through the website.",
+    path: "/privacy-policy",
+});
 
 const PrivacyPolicy = () => {
     return (

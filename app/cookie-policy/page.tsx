@@ -1,7 +1,10 @@
-export const metadata = {
-    title: "Cookie Policy - " + process.env.NEXT_PUBLIC_APP_TITLE,
-    description: "At Binara Medical Centre, we are committed to protecting your privacy. This Cookie Policy explains how we use cookies to enhance your browsing experience.",
-};
+import {createPageMetadata, siteConfig} from "@/lib/site";
+
+export const metadata = createPageMetadata({
+    title: `Cookie Policy | ${siteConfig.name}`,
+    description: "How Binara Medical Centre uses cookies and analytics to support core functionality and improve the browsing experience.",
+    path: "/cookie-policy",
+});
 
 const CookiePolicy = () => {
     return (

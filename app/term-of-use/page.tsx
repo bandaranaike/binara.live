@@ -1,7 +1,10 @@
-export const metadata = {
-    title: "Terms of Use - " + process.env.NEXT_PUBLIC_APP_TITLE,
-    description: "At Binara Medical Centre, we are committed to providing high-quality medical care tailored to your needs. These Terms of Use outline the terms and conditions under which you can use our website.",
-};
+import {createPageMetadata, siteConfig} from "@/lib/site";
+
+export const metadata = createPageMetadata({
+    title: `Terms of Use | ${siteConfig.name}`,
+    description: "Terms and conditions for using the Binara Medical Centre website, booking services, and account features.",
+    path: "/term-of-use",
+});
 const TermOfUse = () => {
     return (
         <div className="page-wrap page-stack">
