@@ -5,7 +5,7 @@ export const siteConfig = {
     shortName: "Binara",
     description:
         "Binara Medical Centre in Kundasale, Kandy offers specialist channeling, OPD services, dental care, and online doctor availability booking.",
-    url: process.env.NEXT_PUBLIC_WEBSITE_URL?.trim() || "https://binara.live",
+    url: normalizeSiteUrl(process.env.NEXT_PUBLIC_WEBSITE_URL?.trim() || "https://binara.live"),
     locale: "en_LK",
     keywords: [
         "Binara Medical Centre",
@@ -21,6 +21,18 @@ export const siteConfig = {
     email: "info@binara.live",
     address: process.env.NEXT_PUBLIC_APP_ADDRESS || "No82. New Town, Kundasale",
 };
+
+function normalizeSiteUrl(value: string): string {
+    if (!value) {
+        return "https://binara.live";
+    }
+
+    if (/^https?:\/\//i.test(value)) {
+        return value.replace(/\/+$/, "");
+    }
+
+    return `https://${value.replace(/\/+$/, "")}`;
+}
 
 export const defaultOpenGraphImage = {
     url: "/original-logo.png",
