@@ -1,7 +1,5 @@
 import type {Metadata} from "next";
 import Script from "next/script";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import "./calendar-styles.css";
 import "./globals.css";
 import Header from "@/components/layout/Header";
